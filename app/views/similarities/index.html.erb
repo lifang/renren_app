@@ -1,0 +1,42 @@
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
+<div class="wrap renren_border">
+  <div class="main_Div">
+    <div class="m_box">
+      <h1>新大学英语四级真题（2006.12-2011.12）</h1>
+      <div class="zhenti_list">
+        <ul>
+          <% if @similarities.blank? %>
+            <p>暂无大学英语四级真题</p>
+          <% else %>
+            <% @similarities.each do |similarity| %>
+              <li>
+                <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                     onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                  <% if @objects[similarity.id]&&@objects[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                  <h2><%= similarity.title %></h2>
+                </a>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+        <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
+      </div>
+
+      <script type="text/javascript">
+
+        function already_submit(eu_id,sheet_url){
+          if(confirm("你已经做完了该真题，你想重做该真题么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
+            sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
+            window.location.href="/similarities/"+eu_id+"/redo?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=similarities";
+            return false;
+          }else{
+            return true;
+          }
+        }
+      </script>
+    </div>
+  </div>
+  <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
+</div>
+
+

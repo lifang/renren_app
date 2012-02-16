@@ -1,0 +1,53 @@
+<script type="text/javascript" src="/assets/flowplayer/flowplayer-3.2.6.min.js"></script>
+<div id="flowplayer_hidden_position" style="display:none">
+  <div id="flowplayer_loader">
+    <div id="flowplayer" style="display:block;width:350px;height:30px;margin:auto;margin-top:10px;"
+         href="http://test.mp3"></div>
+  </div>
+</div>
+<script type="text/javascript">
+    $f("flowplayer", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        plugins: {
+            controls: {
+                fullscreen: false,
+                height: 30,
+                autoHide: false
+            }
+        },
+        clip: {
+            autoPlay: false,
+            onBeforeBegin: function() {
+                this.close();
+            }
+        },
+        onLoad: function() {
+            this.setVolume(90);
+        }
+    });
+</script>
+
+<div id="audio-word" style="display:block;width:1px;height:1px;" href="http://test.mp3"></div>
+<script type="text/javascript">
+  $f("audio-word", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+    plugins: {
+      controls: {
+        fullscreen: false,
+        height: 30,
+        autoHide: false
+      }
+    },
+    clip: {
+      autoPlay: false,
+      onBeforeBegin: function() {
+        this.close();
+      }
+    },
+    onLoad: function() {
+      this.setVolume(90);
+      this.hide();
+    }
+  });
+  function play_audio(src){
+    $f("audio-word").play("<%= Constant::BACK_SERVER_PATH %>"+src);
+  }
+</script>

@@ -1,0 +1,41 @@
+<% category_id = params[:category].nil? ? 2 : params[:category] %>
+<div class="head">
+  <div class="head_info">
+    <% if cookies[:user_id] %>
+      <% order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and types=#{Order::TYPES[:TRIAL_SEVEN]}  and status=#{Order::STATUS[:NOMAL]}") %>
+      <div class="h_user"><a href="#" class="h_email email_u">邮件</a><a href="/users/<%= cookies[:user_id] %>"><%= if order.nil?
+            cookies[:user_name]
+          else
+            time=((order.end_time-Time.now.to_datetime)/1.day).to_i
+            if time<=0
+              "#{cookies[:user_name]}"
+            else
+              "#{cookies[:user_name]}(试用剩#{((order.end_time-Time.now.to_datetime)/1.day).to_i}天)"
+            end
+          end %></a>|<a href="/users/delete_user">退出</a>
+        <div class="email_tab" style="display: none; ">
+          <ul>
+            <li><a href="/users/<%= cookies[:user_id] %>/info?target=0">收件箱:<span class="orange"><%=Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SINGLE]} and target_id=#{cookies[:user_id]}")  %></span></a></li>
+            <li><a href="/users/<%= cookies[:user_id] %>/info?target=1">通&nbsp;&nbsp;知:<span class="orange"><%= Notice.count(:id, :conditions =>"send_types=#{Notice::SEND_TYPE[:SYSTEM]} and TO_DAYS(ended_at)>TO_DAYS('#{Time.now}')") %></span></a></li>
+          </ul>
+        </div>
+
+      </div>
+    <% else %>
+      <div class="h_user"><a href="/logins">登录</a></div>
+    <% end %>
+    <div class="h_banner"><a href="#"><img src="/assets/banner.png" /></a></div>
+  </div>
+  <div class="logo"><a href="/"><img src="/assets/logo.png" alt="专业英语在线训练" /></a></div>
+  <div class="nav">
+    <ul>
+      <li><a href="/similarities?category=<%= category_id %>" <% if controller.controller_name=="similarities" || (controller.controller_name=="exam_users"&&params["type"]=="similarities") %> class="hover" <% end %> >真题</a></li>
+      <li><a href="/specials?category=<%= category_id %>" <% if controller.controller_name=="specials" || (controller.controller_name=="exam_users"&&params["type"]=="specials") %> class="hover" <% end %> >专题</a></li>
+      <li><a href="/words?category=<%= category_id %>"       <% if controller.controller_name=="words" %> class="hover" <% end %> >词汇</a></li>
+      <li><a href="/simulations?category=<%= category_id %>" <% if controller.controller_name=="simulations" %> class="hover" <% end %> >模考</a></li>
+      <li><a href="/study_plans?category=<%= category_id %>" <% if controller.controller_name=="study_plans" %> class="hover" <% end %> >计划</a></li>
+      <li><a href="/collections?category=<%= category_id %>" <% if controller.controller_name=="collections" %> class="hover" <% end %> >收藏</a></li>
+    </ul>
+  </div>
+  <div class="clear"></div>
+</div>

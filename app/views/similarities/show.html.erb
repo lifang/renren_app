@@ -1,0 +1,387 @@
+
+<%= javascript_include_tag "/assets/jquery.ui.core.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.widget.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.mouse.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.draggable.js" %>
+<%= javascript_include_tag "/assets/jquery.ui.droppable.js" %>
+<%= javascript_include_tag "#{@answer_js_url}" %>
+<%= javascript_include_tag "/assets/similarity.js" %>
+<script type="text/javascript" >
+  category = '<%= params[:category].nil? ? 2 : params[:category] %>';
+  init_problem = '<%= @sheet.attributes["init"] %>';
+  init_exam_user_id ='<%= params[:id] %>';
+  init_paper_id = '<%= @paper_id %>';
+  sheet_url = '<%= @sheet_url %>';
+  var attrs = [];
+  //将变量转化为数组 具体 ： null => [] , 'abc'=>['abc'] , 1=>[1] , {}=>[{}]  若是数组，则返回本身
+  function transform_array(object){
+    var result = [];
+    var resource = object;
+    if(resource){
+      if(resource.length){
+        result = resource;
+      }else{
+        result.push(resource);
+      }
+    }
+    return result;
+  }
+
+  //组合标准答案和用户答案
+  var answers=[];
+  var a = transform_array(answer.paper.problems.problem);
+  for(var i=0;i<a.length;i++){
+    if(a[i]!=null){
+      var a2 = transform_array(a[i].question);
+      answers.push(a2);
+    }
+  }
+</script>
+
+<!-- 初始化播放器  -->
+<%= render :partial=>"/common/flowplayer" %>
+<% constant_question_type = {"0"=>"单选题","1"=>"多选题","2"=>"判断题","3"=>"填空题","5"=>"简答题"} %>
+<div class="m_top">
+  <h1 class="ex_paper_h"><%= @paper["base_info"]["title"] %></h1>
+  <div class="icon_func">
+    <div class="float_right">
+      <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="problem_title"><font id="global_problem_index"><%= @sheet.attributes["init"].to_i+1 %></font>/<font id="global_problem_sum"></font></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
+      <span class="icon_return"><a href="/similarities" class="tooltip" name="返回">返回</a></span>
+    </div>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo();">重做</a></span>
+  </div>
+</div>
+<% blocks = @paper["blocks"]["block"] %>
+<% problem_index=-1 ; blocks.each do |block| %>
+  <% problems = block["problems"].nil? ? [] : block["problems"]["problem"] %>
+  <% problems.each do |problem|; next unless problem["questions"]; problem_index+=1; %>
+    <% if problem["question_type"]=="0" || problem["question_type"].nil? %>
+      <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
+        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
+        <div class="m_side m_problem_bg">
+          <div class="problem_box">
+            <div id='jplayer_location_<%= problem_index %>'></div>
+            <div class="question_explain">
+              <p><em><%= "#{problem["description"]}" %></em></p>
+            </div>
+            <div class="problem_text">
+              <!-- 题面后大题  初始化音频 -->
+              <% audio_title_arr = problem["title"].nil? ? [] : problem["title"].split("((mp3))"); audio_src = audio_title_arr[1]; %>
+              <% if audio_src != nil %>
+                <% audio_title_arr[1]="<input type='button' style='display:none;' id='jplayer_play_button_#{problem_index}' value='更新音频' />" %>
+                <script type='text/javascript'>
+                  //绑定音频播放事件
+                  $(function(){
+                    $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+                      clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= "#{Constant::BACK_SERVER_PATH}#{audio_src}" %>");
+                    });
+                  })
+                </script>
+              <% end %>
+              <% resource_problem_title = audio_title_arr.join("") %>
+              <%= resource_problem_title.html_safe %>
+            </div>
+          </div>
+        </div>
+        <div class="m_side">
+          <div class="problem_box">
+            <% questions = problem["questions"]["question"] %>
+            <% question_index=-1; questions.each do |question| ; question_index+=1; %>
+              <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line">
+                <div class="pql_left">
+                  <div id="color_flag<%= "_#{problem_index}_#{question_index}" %>" class="un_white">未做</div>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){normal_add_collect(<%= "'#{problem_index}','#{question_index}'" %>)});">收藏</a></span>
+                </div>
+                <div class="pql_right">
+                  <div class="pro_qu_t pro_qu_t_<%= problem_index %>" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
+                    <div class="question_tx"><%= constant_question_type[question["correct_type"]] %></div>
+                    <div <% if "#{question["description"]}".strip!="" %> class="pro_t_con"<% end %>><%= question["description"] %></div>
+                  </div>
+                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer exam_user_answer<%= "_#{problem_index}" %>" value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>" />
+                  <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
+                  <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/>
+                  </div>
+                  <div class="green_dui" id="green_dui<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/green_dui.png"/>
+                  </div>
+                  <div class="pro_qu_div" style="display: none; ">
+                    <div class="pro_qu_ul">
+                      <input type="hidden" id="questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>"/>
+                      <% if question["correct_type"]=="0" %>
+                        <ul>
+                          <% question["questionattrs"].split(";-;").each do |attr| ; attr=attr.split(") "); if attr.length>1 ; sign=attr[0] ; content=attr[1] ; else ; sign="" ; content=attr[0] ; end ; %>
+                            <li>
+                              <span class="single_choose_li single_choose_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_single_choose(this,$('#questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);" ><%= sign %></span>
+                              <p>
+                                <%= content %>
+                              </p>
+                            </li>
+                          <% end %>
+                        </ul>
+                      <% elsif question["correct_type"]=="1" %>
+                        <ul>
+                          <% question["questionattrs"].split(";-;").each do |attr| ;attr=attr.split(") "); if attr.length>1 ; sign=attr[0] ; content=attr[1] ; else ; sign="" ; content=attr[0] ; end ; %>
+                            <li>
+                              <span class="multi_choose_li multi_choose_li<%= "_#{problem_index}_#{question_index}" %>"  onclick="javascript:do_multi_choose(this,$('#questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);"><%= sign %></span>
+                              <p>
+                                <%= content %>
+                              </p>
+                            </li>
+                          <% end %>
+                        </ul>
+                      <% elsif question["correct_type"]=="2" %>
+                        <ul>
+                          <li>
+                            <span class="single_choose_li judge_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_judge(this,'1',<%= problem_index %>,<%=  question_index %>);" ></span>
+                            <p>
+                              对/是
+                            </p>
+                          </li>
+                          <li>
+                            <span class="single_choose_li judge_li<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_judge(this,'0',<%= problem_index %>,<%=  question_index %>);" ></span>
+                            <p>
+                              错/否
+                            </p>
+                          </li>
+                        </ul>
+                      <% elsif question["correct_type"]=="3" %>
+                        <input type="text" id="fill_input<%= "_#{problem_index}_#{question_index}" %>" class="input_xz" onchange="javascript:do_fill_blank(this,this.value,<%= problem_index %>,<%= question_index %>)" />
+                      <% elsif question["correct_type"]=="5" %>
+                        <textarea cols="" rows="" id="fill_input<%= "_#{problem_index}_#{question_index}" %>" class="textarea_xz1" onchange="javascript:do_fill_blank(this,this.value,<%= problem_index %>,<%= question_index %>);"></textarea>
+                      <% end %>
+                    </div>
+                    <div class="jiexi" style="display:none;" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
+                      <span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
+                      <div class="padding_r">正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>"></span></div>
+                      <div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>"></div>
+                    </div>
+                    <div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>
+                    <div class="pro_btn">
+                      <input type="hidden" id="resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>" />
+                      <button style='display:none;' id='refer_btn<%= "_#{problem_index}_#{question_index}" %>' onclick="javascript:refer_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$('#resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">更新</button>
+                      <button class="t_btn" id="check_question_btn<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:check_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$('#resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>').val(),<%= problem_index %>,<%= question_index %>);">核对</button>
+                      <button class="t_btn" style="display:none;" id="next_question_btn<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:do_next_question(<%= problem_index %>,<%= question_index %>);">下一题</button>
+                      <a href="javascript:void(0);" onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a>
+                      <% unless question["words"].nil?||question["words"]=="" %>
+                        <a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a>
+                      <% end %>
+                      <a href="javascript:void(0);" style="display:none;" id="open_display_answer<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:open_display_answer(<%= problem_index %>,<%= question_index %>);">答案解析</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="problem_resource" name="<%= problem_index %>" <% if (problem_index!=@sheet.attributes["init"].to_i) %> style="display:none;" <% end %> >
+        <input type="hidden" id="problem_json_<%= problem_index %>" value="<%= problem.to_json %>" />
+        <div class="m_side m_problem_bg">
+          <div class="problem_box">
+            <div id='jplayer_location_<%= problem_index %>'></div>
+            <div class="question_explain">
+              <p><em><%= "#{problem["description"]}" %></em></p>
+            </div>
+            <div class="problem_text">
+              <script type="text/javascript">all_attrs = [];</script>
+              <!-- 题面内大题  初始化小题 -->
+              <% source_title_arr = problem["title"].nil? ? [] : problem["title"].split("((sign))"); result_title_arr = [] ; result_title_arr << source_title_arr[0] %>
+              <% questions = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] %>
+              <% sign_index=-1;has_drag = false; questions.each do |question| ; sign_index+=1;
+                element_str="<span class='span_tk' id='inner_span_tk_#{problem_index}_#{sign_index}' onmouseover='javascript:show_hedui(#{problem_index},#{sign_index});' onmouseout='javascript:hide_hedui(#{problem_index},#{sign_index});'>";
+                if question["correct_type"]=="0";
+                  element_str += "<select class='select_tk' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(0,#{problem_index},#{sign_index});'>";element_str += "<option value=''></option>";
+                  question["questionattrs"].split(";-;").each do |attr|;element_str += "<option value='#{attr}'>#{attr}</option>";end;element_str += "</select>";
+                elsif question["correct_type"]=="1";
+                  element_str += "<span class='dragDrop_box' id='droppable_#{problem_index}_#{sign_index}'></span>";
+                  has_drag = true;
+                elsif question["correct_type"]=="3";
+                  element_str += "<input class='input_tk' type='text' id='input_inner_answer_#{problem_index}_#{sign_index}' onchange='javascript:do_inner_question(3,#{problem_index},#{sign_index});'></input>";
+                end;
+                element_str += "<span class='button_span' style='display:none;' ><button id='hedui_btn_#{problem_index}_#{sign_index}' class='button_tk'>核对</button></span>";
+                element_str += "</span>";
+                element_str += "<button style='display:none;' id='refer_btn_#{problem_index}_#{sign_index}' >更新</button>"
+                result_title_arr << element_str << source_title_arr[sign_index+1]; %>
+                <script type="text/javascript" >
+                  if('<%= question["correct_type"] %>'=="1"){
+                    attrs = "<%= question["questionattrs"] %>".split(";-;");
+                    for(var i=0;i<attrs.length;i++){
+                      all_attrs.push(attrs[i]);
+                    }
+                  }
+                  $(function(){
+                    $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").bind("click",function(){
+                      check_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$("#resource_questionattrs<%= "_#{problem_index}_#{sign_index}" %>").val(),<%= problem_index %>,<%= sign_index %>);
+                    })
+                    $("#refer_btn<%= "_#{problem_index}_#{sign_index}" %>").bind("click",function(){
+                      refer_question('<%= problem["question_type"] %>','<%= question["correct_type"] %>',$("#resource_questionattrs<%= "_#{problem_index}_#{sign_index}" %>").val(),<%= problem_index %>,<%= sign_index %>);
+                    })
+                    if('<%= question["correct_type"] %>'=="1"){
+                      $("#droppable<%= "_#{problem_index}_#{sign_index}" %>").droppable({
+                        drop: function( event, ui ) {
+                          $(this).html(ui.draggable.attr("name"));
+                          $("#exam_user_answer<%= "_#{problem_index}_#{sign_index}" %>").val(ui.draggable.attr("name"));
+                          $("#hedui_btn<%= "_#{problem_index}_#{sign_index}" %>").parent().show();
+                        }
+                      });
+                    }
+                  })
+                </script>
+              <% end %>
+              <!-- 题面内大题 初始化音频  -->
+              <% audio_title_arr = result_title_arr.join("").split("((mp3))"); audio_src = audio_title_arr[1]; %>
+              <% audio_element = "" ;if audio_src != nil ; %>
+                <% audio_element="<input type='button' style='display:none;' id='jplayer_play_button_#{problem_index}' value='更新音频' />" ;%>
+                <% audio_title_arr[1]="" ; end ; %>
+              <%= "#{audio_element}#{audio_title_arr.join('')}".html_safe %>
+            </div>
+            <div id="hold_20px_height" style="height:20px;"></div>
+            <div class="drag_tk_box" id="drag_tk_box_<%= problem_index %>" <% unless has_drag %>style="display:none;"<% end %> >
+              <div class="drag_tk border_radius" id="drag_tk_<%= problem_index %>">
+                <ul id="draggable_list_<%= problem_index %>"></ul>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //设置可拖动元素，排序，以及绑定音频播放事件
+              attrs_elements_str="";
+              all_attrs = all_attrs.sort();
+              for(var i=0;i<all_attrs.length;i++){
+                attrs_elements_str += "<li name='"+all_attrs[i]+"' class='draggable_attr_<%= problem_index %>'>"+all_attrs[i]+"</li>"
+              }
+              $("#draggable_list_<%= problem_index %>").html(attrs_elements_str);
+              $(function(){
+                $(".draggable_attr_<%= problem_index %>").draggable({
+                  helper: "clone"});
+                $("#jplayer_play_button_<%= problem_index %>").bind("click",function(){
+                  clone_flowplayer("#jplayer_location_<%= problem_index %>","<%= "#{Constant::BACK_SERVER_PATH}#{audio_src}" %>");
+                });
+              })
+            </script>
+          </div>
+        </div>
+        <div class="m_side">
+          <div class="problem_box">
+            <% question_index=-1; questions.each do |question| ; question_index+=1;%>
+              <div class="pro_question_list border_rb pro_question_list_<%= problem_index %> p_q_line" style='display:none;'>
+                <div class="pql_left">
+                  <div id="color_flag<%= "_#{problem_index}_#{question_index}" %>" class="un_white">未做</div>
+                  <span class="icon_shoucang"><a href="javascript:void(0);" id="shoucang<%= "_#{problem_index}_#{question_index}" %>" class="tooltip" name="收藏" onclick="javascript:$(function(){special_add_collect(<%= "'#{problem_index}','#{question_index}','#{problem["id"]}','#{question["id"]}'" %>)});">收藏</a></span>
+                </div>
+                <div class="pql_right">
+                  <div class="pro_qu_t pro_qu_t_<%= problem_index %>" id="pro_qu_t<%= "_#{problem_index}_#{question_index}" %>">
+                    <div <% if "#{question["description"]}".strip!="" %> class="pro_t_con"<% end %>><%= question["description"] %></div>
+                  </div>
+                  <input type="hidden" id="exam_user_answer<%= "_#{problem_index}_#{question_index}" %>" class="exam_user_answer"  value="<%= @sheet.elements["_#{problem_index}_#{question_index}"].text if @sheet.elements["_#{problem_index}_#{question_index}"] %>"  />
+                  <input type="hidden" id="pass_check<%= "_#{problem_index}_#{question_index}" %>" class="pass_check" />
+                  <div class="red_cuo" id="red_cuo<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/red_cuo.png"/>
+                  </div>
+                  <div class="green_dui" id="green_dui<%= "_#{problem_index}_#{question_index}" %>" style="display:none;"><img src="/assets/green_dui.png"/>
+                  </div>
+                  <div class="pro_qu_div" style="display:none;">
+                    <input type="hidden" id="resource_questionattrs<%= "_#{problem_index}_#{question_index}" %>" value="<%= question["questionattrs"] %>" />
+                    <div class="jiexi" id="display_jiexi<%= "_#{problem_index}_#{question_index}" %>">
+                      <span class="xx_x" onclick="javascript:close_display_answer(<%= problem_index %>,<%= question_index %>);" ><img src="/assets/x.gif"/></span>
+                      <div class="padding_r">正确答案：<span class="red" id="display_answer<%= "_#{problem_index}_#{question_index}" %>"></span></div>
+                      <div id="display_analysis<%= "_#{problem_index}_#{question_index}" %>"></div>
+                    </div>
+                    <div id="about_words_position<%= "_#{problem_index}_#{question_index}" %>"></div>
+                    <div class="pro_btn">
+                      <a href="javascript:void(0);"  onclick="javascript:open_report_error('<%= question["id"] %>');">报告错误</a>
+                      <% unless question["words"].nil?||question["words"]=="" %>
+                        <a href="javascript:void(0);" onclick="javascript:ajax_load_about_words('<%= question["words"] %>',<%= problem_index %>,<%= question_index %>)">相关词汇</a>
+                      <% end %>
+                      <a href="javascript:void(0);"  style="display:none;" id="open_display_answer<%= "_#{problem_index}_#{question_index}" %>" onclick="javascript:open_display_answer(<%= problem_index %>,<%= question_index %>);">答案解析</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+<script type="text/javascript">
+  // 更新总题数
+  $("#global_problem_sum").html("<%= problem_index+1 %>");
+</script>
+
+<!-- 相关词汇框 -->
+<div id="about_words_loader" style="display:none;">
+  <div class="jiexi" id="about_words">
+    <span class="xx_x" onclick="javascript:close_about_words();" ><img alt="gankao" src="/assets/x.gif"/></span>
+    <div class="xg_words">
+      <ul id="about_words_list"></ul>
+    </div>
+    <div class="xg_words_ny">
+      <div class="ch_text">
+        <div class="ch_words_line">
+          <span class="font_size_24" id='about_word_name'></span>
+          <div class="ch_words_line">
+            <span id='about_word_types'></span><span id='about_word_phonetic'></span>
+            <input type="hidden" id="about_word_enunciate_url" />
+            <input type="hidden" id="about_word_id" />
+            <a href="javascript:void(0);" class="tooltip" name="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
+            <a href="javascript:void(0);" class="tooltip" name="加入背诵列表" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
+          </div>
+        </div>
+        <div class="ch_words_line">
+          <p class="font_size_16" id='about_word_en_mean'></p>
+          <p id='about_word_ch_mean'></p>
+        </div>
+        <div class="ch_words_line">
+          <ul class="words_ul_font14" id="about_word_sentences"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 报告错误框  -->
+<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 450px; display: none; ">
+  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:close_report_error();"/></span>
+  <input type="hidden" id="report_error_paper_id" value="<%= @paper["id"] %>" />
+  <input type="hidden" id="report_error_paper_title" value="<%= @paper["base_info"]["title"] %>" />
+  <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id] %>" />
+  <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
+  <input type="hidden" id="report_error_question_id" />
+  <h3>错误类型:</h3>
+  <ul>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>"/>题目错误</li>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANSWER] %>"/>答案错误</li>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>"/>解析错误</li>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
+  </ul>
+  <h3>错误说明:</h3>
+  <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
+  <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
+</div>
+
+
+<script type="text/javascript">
+  //还原用户之前操作,以及标注收藏过的题
+  $(function(){
+<% @sheet.each_element do |ele| %>
+      $("#refer_btn<%= ele.name %>").trigger("click");
+<% end %>
+<% @sheet.elements["collection"].text.split(",").each do |str| %>
+      $("#shoucang<%= str %>").addClass("hover");
+      $("#shoucang<%= str %>").attr("name","已收藏");
+      $("#shoucang<%= str %>").attr("onclick","");
+<% end if @sheet.elements["collection"] && @sheet.elements["collection"].text %>
+  })
+
+  //初始化大题
+  $(function(){
+    if($("#drag_tk_"+init_problem).length>0 &&$("#drag_tk_"+init_problem).height()){
+      $("#drag_tk_box_"+init_problem).css("height",$("#drag_tk_"+init_problem).height()+20);
+    }
+    $("#jplayer_play_button_"+init_problem).trigger("click");
+  })
+</script>
+

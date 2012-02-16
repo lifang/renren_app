@@ -1,0 +1,29 @@
+<div id='flash_notice' class="tishi_tab border_radius">
+  <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+  <p>
+    <%  show=0; if flash[:warn] ;show=1;%>
+      <%= flash[:warn] %><% flash[:warn] = nil %>
+    <% elsif flash[:error] ;show=1;%>
+      <%= flash[:error] %><% flash[:error] = nil %>
+    <% elsif flash[:notice] ;show=1;%>
+      <%= flash[:notice] %><% flash[:notice] = nil %>
+    <% elsif flash[:success] ;show=1;%>
+      <%= flash[:success] %><% flash[:success] = nil %>
+    <% elsif flash[:pic_warn] ;show=1;%>
+      <%= flash[:pic_warn] %><% flash[:pic_warn] = nil %>
+    <% elsif flash[:failure] ;show=1;%>
+      <%= flash[:failure] %><% flash[:failure] = nil %>
+    <% else %>
+      欢迎来到赶考网
+    <% end %>
+  </p>
+</div>
+<% if show==1 %>
+  <script type='text/javascript'>show_flash_div();</script>
+<% end %>
+
+
+
+
+
+
