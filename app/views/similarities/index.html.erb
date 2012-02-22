@@ -20,9 +20,9 @@
                     <h2><%= similarity.title %></h2>
                   </a>
                 <% elsif is_nomal?(category_id) %>
-                  <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                  <a href="javascript:void(0);" class="tooltip_vip"
                      onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");'>
-                    <% unless similarity.is_free %><span><img src="/assets/icon_tx.png" /></span><% end %>
+                    <% unless similarity.is_free %><span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
                     <h2><%= similarity.title %></h2>
                   </a>
                 <% else %>
@@ -33,9 +33,9 @@
                       <h2><%= similarity.title %></h2>
                     </a>
                   <% else %>
-                    <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                    <a href="javascript:void(0);" class="tooltip_vip"
                        onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");'>
-                      <span><img src="/assets/icon_tx.png" /></span>
+                      <span><img  title="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                       <h2><%= similarity.title %></h2>
                     </a>
                   <% end %>

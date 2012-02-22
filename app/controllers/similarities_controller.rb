@@ -79,7 +79,7 @@ class SimilaritiesController < ApplicationController
 
   #创建答卷
   def create_sheet(sheet_outline,exam_user_id)
-    dir = "#{Rails.root}/public/sheets"
+    dir = "#{Constant::PUBLIC_PATH}/sheets"
     Dir.mkdir(dir) unless File.directory?(dir)
     dir = "#{dir}/#{Time.now.strftime("%Y%m%d")}"
     Dir.mkdir(dir) unless File.directory?(dir)
