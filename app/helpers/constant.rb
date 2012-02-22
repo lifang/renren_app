@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Constant
 
   BACK_SERVER_PATH = "http://localhost:3000"

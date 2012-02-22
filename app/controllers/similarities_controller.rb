@@ -1,3 +1,4 @@
+# encoding: utf-8
 class SimilaritiesController < ApplicationController
   require 'oauth2'
   require 'net/http'
