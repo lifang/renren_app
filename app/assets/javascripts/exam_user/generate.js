@@ -61,6 +61,7 @@ function load_problem(problem_index){
     pro_qu_t(init_problem); //小题列表展开关闭功能
     check_answer(init_problem); //载入存储的答案
     afterload();
+    tooltip();
     finish_index = init_problem;
 }
 
@@ -83,7 +84,6 @@ function afterload(){
     if(problems[init_problem].question_type!="1"){
         $("#pro_qu_t_"+init_problem+"_0").trigger("click");
     }
-    tooltip();
 }
 
 //鼠标移动提示
