@@ -966,7 +966,6 @@
         },
 
         createUI : function(opts) {
-
             if (opts.display === 'page') {
                 return Dom.currentWindow(opts);
             }
@@ -974,9 +973,6 @@
                 return Dom.popupWindow(opts);
             }
             var dialog = document.createElement('div'), dstyle = dialog.style;
-            if (root_flag == 1) {
-                dialog.style.display = "none";
-            }
             dstyle.position = 'absolute';
             dstyle.top = '-10000px';
             dstyle.zIndex = '10001';
@@ -1022,6 +1018,7 @@
                         style.height = '10px';
                         style.width = '100%';
                     }
+                    style.display = "none";
                     dialog.appendChild(span);
                 });
             } else {
@@ -1029,6 +1026,10 @@
                 dstyle.backgroundColor = 'rgba(82, 82, 82, 0.7)';
                 dstyle.MozBorderRadius = '8px';
                 dstyle.borderRadius = '8px';
+                dstyle.display = "none";
+            }
+            if (root_flag == 0) {
+                dialog.style.display = "block";
             }
 
             var dialogContent = document.createElement('div'), cstyle = dialogContent.style;
@@ -1344,8 +1345,9 @@
                 if (req && req.xd) {
                     if (req.xd.transport != 'fragment'
                         && (!msg.origin || msg.origin
-                            .indexOf(rrUrls.widgetOrigin) != 0))
+                            .indexOf(rrUrls.widgetOrigin) != 0)){
                         return;
+                    }
                     req.handleResponse(msg.data);
                 }
             }
@@ -1392,8 +1394,9 @@
 	 * 发送请求
 	 */
         send : function() {
-            if (!this.check())
+            if (!this.check()){
                 return this;
+            }
             this.running = true;
             var params = this.options.params;
             if (!params['redirect_uri']) {
@@ -1406,6 +1409,9 @@
                 err.name = 'UICreateError';
                 throw err;
             }
+            //            else{
+            //                this.ui.style.display="block";
+            //            }
             return this;
         },
 
@@ -1524,7 +1530,7 @@
             }
             if(uri.indexOf("xn_sig_user=")==-1){
                 root_flag = 0;
-//                this.ui.parentNode.removeChild(this.ui);
+            //   this.ui.parentNode.removeChild(this.ui);
             } else {
                 root_flag = 1;
             }

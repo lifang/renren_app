@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   require 'rexml/document'
   include REXML
+  include ApplicationHelper
 
   before_filter  :set_p3p
 

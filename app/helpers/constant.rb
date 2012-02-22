@@ -8,4 +8,9 @@ module Constant
 
   #后台项目文件目录
   BACK_PUBLIC_PATH = "d:/exam_season2/public"
+
+    #充值vip有效期
+  DATE_LONG={:vip=>90,:trail=>7} #试用七天
+
+
 end

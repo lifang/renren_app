@@ -3,18 +3,14 @@ class SimilaritiesController < ApplicationController
   require 'net/http'
 
   layout "application"
-
-  @@secret_key = "f4fa7ef75e934c2b884a6512a32d625f"
-
+  @@api_key4 = "d96ca54ba92f4f25bc86a8b6f93b209d"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
+  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
   def index
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
-    #    if !params[:category_type].nil? and params[:category_type] == Examination::IS_FREE[:YES].to_s
-    #      sql += " and e.is_free = #{Examination::IS_FREE[:YES]}"
-    #    elsif !params[:category_type].nil? and params[:category_type] == Examination::IS_FREE[:NO].to_s
-    #      sql += " and (e.is_free = #{Examination::IS_FREE[:NO]} or e.is_free is null)"
-    #    end
     @similarities = Examination.paginate_by_sql(sql,
       :per_page => 10, :page => params[:page])
     examination_ids = []
@@ -49,32 +45,26 @@ class SimilaritiesController < ApplicationController
   def show
     eu = ExamUser.find(params[:id])
     @paper_id = eu.paper_id
-    p = Paper.find(@paper_id)
-    paper = File.open("#{Constant::BACK_PUBLIC_PATH}#{p.paper_js_url}")
-    @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{p.paper_js_url}".gsub("paperjs/","answerjs/")
-    @paper = (JSON paper.read()[8..-1])["paper"]
-    #组织 @paper
-    #    @title = @paper["base_info"]["title"]
-    @paper["blocks"]["block"] = @paper["blocks"]["block"].nil? ? [] : (@paper["blocks"]["block"].class==Array) ? @paper["blocks"]["block"] : [@paper["blocks"]["block"]]
-    @paper["blocks"]["block"].each do |block|
-      if block["problems"]
-        block["problems"]["problem"] = (block["problems"]["problem"].nil?) ? [] : ((block["problems"]["problem"].class==Array) ? block["problems"]["problem"] : [block["problems"]["problem"]])
-        block["problems"]["problem"].each do |problem|
-          problem["questions"]["question"] = problem["questions"]["question"].nil? ? [] : (problem["questions"]["question"].class==Array) ? problem["questions"]["question"] : [problem["questions"]["question"]] if problem["questions"]
-        end
-      end
-    end
-    #生成考生答卷
+    @paper = Paper.find(@paper_id)
+    @answer_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
     s_url = ExamUser.find(params[:id]).answer_sheet_url
-    @sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
-    @sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(@sheet_url))
-    @sheet = get_doc("#{@sheet_url}")
-    close_file("#{@sheet_url}")
+    sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
+    sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
+    @sheet_url = sheet_url
+    sheet = get_doc("#{sheet_url}")
+    @init_problem = sheet.attributes["init"]
+    @sheet = {}
+    sheet.each_element do |ele|
+      @sheet["#{ele.name}"]="#{ele.text}"
+    end
+    collection = CollectionInfo.find_by_paper_id_and_user_id(@paper_id,cookies[:user_id])
+    @collection = collection.nil? ? [] : collection.question_ids.split(",")
+    close_file("#{sheet_url}")
     render :layout=>"similarity"
   end
 
   #重做卷子
-  def redo
+  def redo_paper
     category_id = params[:category].nil? ? 2 : params[:category]
     url=params[:sheet_url]
     doc = get_doc(url)
@@ -141,19 +131,15 @@ class SimilaritiesController < ApplicationController
   def ajax_add_collect
     if params[:sheet_url]!="" && params[:sheet_url]!=nil
       #解析参数
-      this_problem = JSON params["problem"]
+      this_problem = params["problem"]
       problem_id = this_problem["id"]
-      this_question = this_problem["questions"]["question"][params["question_index"].to_i]
+      this_question = this_problem["questions"]["#{params["question_index"]}"]
       question_id = this_question["id"]
       Collection.update_collection(cookies[:user_id].to_i, this_problem, problem_id, this_question, question_id,
         params["paper_id"], params["addition"]["answer"], params["addition"]["analysis"], params["user_answer"])
-      #在sheet中记录小题的收藏状态
-      doc = get_doc(params[:sheet_url])
-      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-      collection =doc.root.elements["collection"]
-      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-      write_xml(doc, params[:sheet_url])
+      CollectionInfo.update_collection_infos(params["paper_id"].to_i, cookies[:user_id].to_i, [question_id])
     end
+    
     respond_to do |format|
       format.json {
         render :json=>""
@@ -172,7 +158,7 @@ class SimilaritiesController < ApplicationController
     file = File.open(Constant::PUBLIC_PATH + collection.collection_url)
     last_problems = file.read
     unless last_problems.nil? or last_problems.strip == ""
-      already_hash = JSON(last_problems.gsub("collections = ", ""))#ActiveSupport::JSON.decode(().to_json)
+      already_hash = JSON(last_problems.gsub("collections = ", ""))
     else
       already_hash = {"problems" => {"problem" => []}}
     end
@@ -180,7 +166,9 @@ class SimilaritiesController < ApplicationController
       params[:problem_id].to_i, params[:question_id].to_i,
       params[:question_answer], params[:question_analysis], params[:user_answer])
     if is_problem_in == false
-      new_col_problem = collection.update_problem_hash(params[:problem_json], params[:paper_id],
+      problem_json = params[:problem_json].class.to_s == "String" ?
+        JSON(params[:problem_json]) : params[:problem_json]
+      new_col_problem = collection.update_problem_hash(problem_json, params[:paper_id],
         params[:question_answer], params[:question_analysis], params[:user_answer], params[:question_id].to_i)
       already_hash["problems"]["problem"] << new_col_problem
     end
@@ -188,19 +176,7 @@ class SimilaritiesController < ApplicationController
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(collection_js, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
 
-    if params[:exam_user_id]
-      exam_user = ExamUser.find(params[:exam_user_id])
-      exam_user.update_user_collection(params[:question_id]) if exam_user
-    end
-
-    if params[:sheet_url]
-      #在sheet中记录小题的收藏状态
-      doc = get_doc(params[:sheet_url])
-      new_str = "_#{params["problem_index"]}_#{params["question_index"]}"
-      collection =doc.root.elements["collection"]
-      collection.text.nil? ? collection.add_text(new_str) : collection.text="#{collection.text},#{new_str}"
-      write_xml(doc, params[:sheet_url])
-    end
+    CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
 
     respond_to do |format|
       format.json {
@@ -282,29 +258,47 @@ class SimilaritiesController < ApplicationController
     end
   end
 
+  #改变答卷状态（即做完了最后一题）
+  def ajax_change_status
+    if params[:sheet_url]!="" && params[:sheet_url]!=nil
+      ExamUser.find(params[:id]).update_attribute("is_submited",true)
+      url=params[:sheet_url]
+      doc = get_doc(url)
+      doc.attributes["status"] = "1"
+      doc.attributes["init"] = "0"
+      write_xml(doc, url)
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>""
+      }
+    end
+  end
+
+
   def cet4
-    #    if cookies[:user_id]
-    #      redirect_to "/similarities?category=#{Category::LEVEL_FOUR}"
-    #      return false
-    #    end
+    
   end
 
   #oauth登录(四级登录)
   def oauth_login_cet4
-    user_info = return_user(params[:access_token])[0]
+    user_info = return4_user(params[:access_token])[0]
+    cookies[:access_token] = params[:access_token]
     @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
     @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
+    cookies.delete(:user_role)
+    user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
     redirect_to "/similarities?category=#{Category::LEVEL_FOUR}"
   end
 
-  def return_user(access_token)
+  def return4_user(access_token)
     str = "access_token=#{access_token}"
     str << "format=JSON"
     str << "method=xiaonei.users.getInfo"
     str << "v=1.0"
-    str << "#{@@secret_key}"
+    str << "#{@@secret_key4}"
     sig = Digest::MD5.hexdigest(str)
 
     query = {
@@ -317,6 +311,131 @@ class SimilaritiesController < ApplicationController
     return JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
   end
 
+  def cet6
+    
+  end
+
+  def return6_user(access_token)
+    str = "access_token=#{access_token}"
+    str << "format=JSON"
+    str << "method=xiaonei.users.getInfo"
+    str << "v=1.0"
+    str << "#{@@secret_key6}"
+    sig = Digest::MD5.hexdigest(str)
+
+    query = {
+      :access_token => "#{access_token}",
+      :format => 'JSON',
+      :method => 'xiaonei.users.getInfo',
+      :v => '1.0',
+      :sig => sig
+    }
+    return JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
+  end
+
+  #oauth登录(六级登录)
+  def oauth_login_cet6
+    user_info = return6_user(params[:access_token])[0]
+    cookies[:access_token] = params[:access_token]
+    @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
+    @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+    cookies[:user_id]=@user.id
+    cookies[:user_name]=@user.username
+    cookies.delete(:user_role)
+    user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+    redirect_to "/similarities?category=#{Category::LEVEL_SIX}"
+  end
+
+  #分享，提供权限(四级)
+  def share4
+    str = "access_token=#{cookies[:access_token]}"
+    str << "comment=众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
+    str << "format=JSON"
+    str << "method=share.share"
+    str << "type=6"
+    str << "url=http://apps.renren.com/english_iv"
+    str << "v=1.0"
+    str << "#{@@secret_key4}"
+    sig = Digest::MD5.hexdigest(str)
+
+    query = {
+      :access_token => "#{cookies[:access_token]}",
+      :comment=>"众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。",
+      :format => 'JSON',
+      :method => 'share.share',
+      :type=>"6",
+      :url=>"http://apps.renren.com/english_iv",
+      :v => '1.0',
+      :sig => sig
+    }
+    ret =  JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
+
+    if ret[:error_code]
+      data = {:error=>1,:message=>"分享失败，请重新尝试"}
+    else
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
+      end
+      data = {:message=>"升级成功"}
+    end
+
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+  #分享，提供权限(六级)
+  def share6
+    str = "access_token=#{cookies[:access_token]}"
+    str << "comment=众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
+    str << "format=JSON"
+    str << "method=share.share"
+    str << "type=6"
+    str << "url=http://apps.renren.com/english_vi"
+    str << "v=1.0"
+    str << "#{@@secret_key6}"
+    sig = Digest::MD5.hexdigest(str)
+
+    query = {
+      :access_token => "#{cookies[:access_token]}",
+      :comment=>"众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。",
+      :format => 'JSON',
+      :method => 'share.share',
+      :type=>"6",
+      :url=>"http://apps.renren.com/english_vi",
+      :v => '1.0',
+      :sig => sig
+    }
+    ret =  JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
+    if ret[:error_code]
+      data = {:error=>1,:message=>"分享失败，请重新尝试"}
+    else
+      order = Order.first(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])
+      if order && order.types==Order::TYPES[:TRIAL_SEVEN]
+        order.update_attribute(:status => Order::STATUS[:INVALIDATION])
+        Order.create(:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
+      end
+      data = {:message=>"升级成功"}
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+
+  def refresh
+    cookies.delete(:user_role)
+    user_role?(cookies[:user_id])
+    redirect_to request.referer
+  end
   
   
 end
