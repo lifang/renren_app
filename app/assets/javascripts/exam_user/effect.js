@@ -275,9 +275,9 @@ function check_question(question_type,correct_type,problem_index,question_index)
     }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
-    var answer = answers[problem_index][question_index].answer;
+    var answer = answers[problem_index][question_index].answer.trim();
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val();
+    var user_answer = $("#exam_user_answer_"+problem_index+"_"+question_index).val().trim();
     if(sheet_url!=""){
         //保存用户答案
         $.ajax({
@@ -326,9 +326,9 @@ function refer_question(question_type,correct_type,problem_index,question_index)
     if(question_type!="0" && question_type!="1"){
         question_type="0";
     }
-    var answer = answers[problem_index][question_index].answer;
+    var answer = answers[problem_index][question_index].answer.trim();
     var analysis = answers[problem_index][question_index].analysis;
-    var user_answer = sheet["_"+problem_index+"_"+question_index];
+    var user_answer = sheet["_"+problem_index+"_"+question_index].trim();
     //直接改变小题的背景颜色
     if(user_answer==answer){
         change_color("1",problem_index,question_index);

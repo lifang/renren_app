@@ -112,7 +112,7 @@ class Collection < ActiveRecord::Base
         break
       end
     end
-
+    this_problem["paper_id"]=paper_id
     this_question["answer"]=answer
     this_question["analysis"]=analysis
     this_question["user_answer"]=user_answer
@@ -126,17 +126,7 @@ class Collection < ActiveRecord::Base
         end        
       end
     else
-      problem={}
-      problem["id"]=this_problem["id"]
-      p_question_type = (this_problem["question_type"].nil? || this_problem["question_type"]=="") ? "0" : this_problem["question_type"]
-      problem["question_type"]=p_question_type
-      problem["description"]=this_problem["description"]
-      problem["title"]=this_problem["title"]
-      problem["category"]=this_problem["category"]
-      problem["paper_id"] = paper_id
-      problem["questions"]={}
-      problem["questions"]["question"]=[this_question]
-      problems << problem
+      problems << this_problem
     end
 
     #更新collection.js内容

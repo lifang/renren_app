@@ -62,7 +62,6 @@ function load_problem(problem_index){
     check_answer(init_problem); //载入存储的答案
     afterload();
     finish_index = init_problem;
-
 }
 
 
