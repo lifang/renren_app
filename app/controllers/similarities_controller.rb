@@ -415,10 +415,10 @@ class SimilaritiesController < ApplicationController
     if ret[:error_code]
       data = {:error=>1,:message=>"分享失败，请重新尝试"}
     else
-      order = Order.first(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])
-      if order && order.types==Order::TYPES[:TRIAL_SEVEN]
-        order.update_attribute(:status => Order::STATUS[:INVALIDATION])
-        Order.create(:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
           :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
       end
       data = {:message=>"升级成功"}
