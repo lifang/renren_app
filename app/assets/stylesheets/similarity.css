@@ -11,6 +11,9 @@ button { cursor: pointer;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
+.span_right {background: #EEFFEE;}
+.span_error {background: #FFEAEA;}
+
 button.green { color:#009900;}
 .blue { color: #2875AE;}
 .xx_x { cursor: pointer; position: absolute; top: 5px; right: 5px;}
@@ -34,7 +37,7 @@ button.green { color:#009900;}
 .welcome { width: 380px; line-height: 40px; height: 40px; margin: 20px auto; font-size: 16px; font-weight: bold;}
 .welcome img { float: left; margin-right: 10px;}
 
-.main { background: #effaff; overflow: hidden; width: 790px; height: 600px; border: 1px #CEE1EE solid;}
+.main { background: #fff; overflow: hidden; width: 100%;}
 
 
 .main_Div { background: #FFF; overflow: hidden; width: 790px;  height: 600px; overflow-y: auto; border: 1px #CEE1EE solid;}
@@ -232,7 +235,6 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     line-height: 20px;
     text-align: center;
     border: 1px #e2e2e2 solid;
-    background: #FFF;
     cursor: pointer;
 }
 
@@ -303,3 +305,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .foot { padding: 0 10px; height: 20px; line-height: 20px; background: #595D63; color: #FFF; text-align: right; font-family:Arial;}
 .foot a { color: #FFF;}
 
+.tk_zuoda { padding-top: 50px; text-align: center; color: #F00;}
+
+.backg_blue { background: #ebf9ff;}
+.link_c {color: red;}

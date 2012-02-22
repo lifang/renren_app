@@ -2,20 +2,47 @@
 <div class="wrap renren_border">
   <div class="main_Div">
     <div class="m_box">
-      <h1>新大学英语四级真题（2006.12-2011.12）</h1>
+      <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
       <div class="zhenti_list">
         <ul>
           <% if @similarities.blank? %>
-            <p>暂无大学英语四级真题</p>
+            <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
           <% else %>
             <% @similarities.each do |similarity| %>
               <li>
-                <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                     onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
-                  <% if @objects[similarity.id]&&@objects[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
-                  <h2><%= similarity.title %></h2>
-                </a>
+                <% if is_vip?(category_id) %>
+                  <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                       onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                       <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                      <span><img title="已完成" src="/assets/icon_wc.png" /></span>
+                    <% elsif !similarity.is_free %><span><img src="/assets/icon_tx.png" /></span>
+                    <% end %>
+                    <h2><%= similarity.title %></h2>
+                  </a>
+                <% elsif is_nomal?(category_id) %>
+                  <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                     onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");'>
+                    <% unless similarity.is_free %><span><img src="/assets/icon_tx.png" /></span><% end %>
+                    <h2><%= similarity.title %></h2>
+                  </a>
+                <% else %>
+                  <% if similarity.is_free %>
+                    <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                         onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                      <% if @objects[similarity.id]&&@objects[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                      <h2><%= similarity.title %></h2>
+                    </a>
+                  <% else %>
+                    <a href="javascript:void(0);" class="tooltip_vip" title="仅供正式用户使用"
+                       onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");'>
+                      <span><img src="/assets/icon_tx.png" /></span>
+                      <h2><%= similarity.title %></h2>
+                    </a>
+                  <% end %>
+                <% end %>
               </li>
+
+
             <% end %>
           <% end %>
         </ul>
@@ -27,12 +54,27 @@
         function already_submit(eu_id,sheet_url){
           if(confirm("你已经做完了该真题，你想重做该真题么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
             sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-            window.location.href="/similarities/"+eu_id+"/redo?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=similarities";
+            window.location.href="/similarities/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=similarities";
             return false;
           }else{
             return true;
           }
         }
+
+        function share(){
+          $.ajax({
+            type: "GET",
+            url: "/similarities/share"+<%= "#{(category_id == '2') ? '4' : '6'}" %>+".json",
+            dataType: "json",
+            success: function(data){
+              tishi_alert(data.message);
+              if(data["error"]==null){
+                window.location.href="/similarities/refresh"
+              }
+            }
+          });
+        }
+
       </script>
     </div>
   </div>

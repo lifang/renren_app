@@ -2,15 +2,16 @@ RenrenApp::Application.routes.draw do
 
   
   match "/cet4" => "similarities#cet4"
+  match "/cet6" => "similarities#cet6"
 
   resources :similarities do
     member do
-      get :join,:redo
-      post :ajax_save_question_answer
+      get :join,:redo_paper
+      post :ajax_save_question_answer,:ajax_change_status
     end
     collection do
       post :ajax_add_collect,:add_collection,:ajax_report_error,:ajax_load_about_words,:ajax_add_word
-      get :cet4,:oauth_login_cet4
+      get :cet4,:oauth_login_cet4,:cet6,:oauth_login_cet6,:share4,:share6,:refresh
     end
   end
 
