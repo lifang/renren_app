@@ -1,6 +1,9 @@
 # encoding: utf-8
 module Constant
 
+  #赶考网链接
+  GANKAO_URL = "http://localhost:3001"
+
   BACK_SERVER_PATH = "http://localhost:3000"
   SERVER_PATH = "http://localhost:3002"
 
@@ -13,5 +16,8 @@ module Constant
     #充值vip有效期
   DATE_LONG={:vip=>90,:trail=>7} #试用七天
 
+  #设置通过人人分享获得会员的数量限制
+  RENREN_ORDERS_SUM = {:cet_4=>1000,:cet_6=>1000}
+  
 
 end

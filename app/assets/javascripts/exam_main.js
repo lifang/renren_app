@@ -1,4 +1,25 @@
 
+//tooltip提示
+$(function(){
+    var x = -20;
+    var y = 15;
+    $(".tooltip").mouseover(function(e){
+        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.name+"</div></div>";
+        $("body").append(tooltip);
+        $(".tooltip_box").css({
+            "top":(e.pageY+y)+"px",
+            "left":(e.pageX+x)+"px"
+        }).show("fast");
+    }).mouseout(function(){
+        $(".tooltip_box").remove();
+    }).mousemove(function(e){
+        $(".tooltip_box").css({
+            "top":(e.pageY+y)+"px",
+            "left":(e.pageX+x)+"px"
+        })
+    });
+})
+
 //提示框样式设定
 function generate_flash_div(style) {
     var scolltop = document.body.scrollTop|document.documentElement.scrollTop;

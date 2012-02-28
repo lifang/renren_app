@@ -57,7 +57,7 @@ class Collection < ActiveRecord::Base
 
   #修改需要添加的题目
   def update_problem_hash(problem_json, paper_id, answer, analysis, user_answer, question_id)
-    new_col_problem = problem_json 
+    new_col_problem = problem_json
     questions=new_col_problem["questions"]
     new_col_problem.delete("questions")
     new_col_problem.merge!({"paper_id" => paper_id})
@@ -66,7 +66,8 @@ class Collection < ActiveRecord::Base
       new_col_questions = new_col_problem["questions"]["question"]
       if new_col_questions.class.to_s == "Hash"
         if new_col_questions["id"].to_i == question_id
-          new_col_questions.merge!({"c_flag" => "1", "answer" => answer, "analysis" => analysis, "user_answer" => user_answer})
+          new_col_questions.merge!({"c_flag" => "1", "answer" => answer,
+              "analysis" => analysis, "user_answer" => user_answer})
         end
       else
         new_col_questions.each do |question|
@@ -81,10 +82,9 @@ class Collection < ActiveRecord::Base
     return  new_col_problem
   end
   
-  def self.update_collection(user_id, this_problem,problem_id,
-      this_question,question_id, paper_id, answer, analysis, user_answer)
+  def self.update_collection(user_id, this_problem,problem_id, this_question,question_id, paper_id, answer, analysis, user_answer, category_id)
     #读取collection.js文件
-    collection = Collection.find_or_create_by_user_id(user_id)
+    collection = Collection.find_or_create_by_user_id_and_category_id(user_id, category_id)
     path = Collection::COLLECTION_PATH + "/" + Time.now.to_date.to_s
     url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, url)
@@ -112,38 +112,28 @@ class Collection < ActiveRecord::Base
         break
       end
     end
-
+    this_problem["paper_id"]=paper_id
     this_question["answer"]=answer
     this_question["analysis"]=analysis
     this_question["user_answer"]=user_answer
+    this_problem["questions"]["question"]=[this_question]
     #收藏新题
     if problem_exist
-      unless question_exist        
+      unless question_exist
         if problems[p_index]["questions"]["question"].class.to_s == "Hash"
           problems[p_index]["questions"]["question"] = [problems[p_index]["questions"]["question"], this_question]
         else
           problems[p_index]["questions"]["question"] << this_question
-        end        
+        end
       end
     else
-      problem={}
-      problem["id"]=this_problem["id"]
-      p_question_type = (this_problem["question_type"].nil? || this_problem["question_type"]=="") ? "0" : this_problem["question_type"]
-      problem["question_type"]=p_question_type
-      problem["description"]=this_problem["description"]
-      problem["title"]=this_problem["title"]
-      problem["category"]=this_problem["category"]
-      problem["paper_id"] = paper_id
-      problem["questions"]={}
-      problem["questions"]["question"]=[this_question]
-      problems << problem
+      problems << this_problem
     end
 
     #更新collection.js内容
     content = "collections = #{resource.to_json}"
     path_url = collection.collection_url.split("/")
     collection.generate_collection_url(content, "/" + path_url[1] + "/" + path_url[2], collection.collection_url)
-
   end
 
 
@@ -306,8 +296,8 @@ class Collection < ActiveRecord::Base
 
 
   #错误核对，记录错误答案
-  def self.record_user_answer(user_id,problem_id,question_id,user_answer)
-    collection = Collection.find_or_create_by_user_id(user_id)
+  def self.record_user_answer(user_id,problem_id,question_id,user_answer,category_id)
+    collection = Collection.find_or_create_by_user_id_and_category_id(user_id,category_id)
     path =  COLLECTION_PATH + "/" + Time.now.to_date.to_s
     collection_url = path + "/#{collection.id}.js"
     collection.set_collection_url(path, collection_url)

@@ -31,17 +31,23 @@ for(var i=0;i<b.length;i++){
         var b1 = transform_array(b[i].problems.problem);
         for(var j=0;j<b1.length;j++){
             if(b1[j].questions!=null){
-                b1[j].questions =  transform_array(b1[j].questions.question);
+                b1[j].questions.question =  transform_array(b1[j].questions.question);
                 problems.push(b1[j]);
             }
         }
     }
 }
-//alert(JSON.encode(problems));
-$(function(){
-    //写入总题数
-    $("#global_problem_sum").html(problems.length);
-})
+
+function rp(str){
+    str = str.replace(/&amp;/g,"&");
+    str = str.replace(/&lt;/g,"<");
+    str = str.replace(/&gt;/g,">");
+    str = str.replace(/&acute;/g,"'");
+    str = str.replace(/&quot;/g, '"');
+    str = str.replace(/&brvbar;/g, '|');
+    return str;
+}
+
 
 
 

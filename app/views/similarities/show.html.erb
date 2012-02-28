@@ -1,31 +1,28 @@
+
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 
-<script type="text/javascript" >
-  
-  //初始化参数
-  back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
-  category = '<%= category_id %>';
-  init_problem = <%= @init_problem %>;
-  init_exam_user_id ='<%= params[:id] %>';
-  init_paper_id = '<%= @paper_id %>';
-  sheet_url = '<%= @sheet_url %>';
-  sheet = {};
-<% @sheet.each do |key,value| %>
-    sheet["<%= key %>"]="<%= value %>";
-<% end %>
-  collection = <%= array_or_string_for_javascript(@collection) %>; //记录@collection
-
-</script>
 <%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.widget.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.mouse.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.draggable.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.droppable.min.js" %>
-<%= javascript_include_tag "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}" %>
-<%= javascript_include_tag "#{@answer_url}" %>
+<%= javascript_include_tag "#{@answer_js_url}" %>
+<%= javascript_include_tag "#{@paper_js_url}" %>
+
 <%= javascript_include_tag "/assets/exam_user/init.js" %>
+
+<script type="text/javascript" >
+  //初始化参数
+  var sheet = null;
+  var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
+  var category = '<%= category_id %>';
+  var init_exam_user_id ='<%= params[:id] %>';
+  var init_paper_id = "<%= @paper_id %>";
+  var sheet_url = "<%= @sheet_url %>";
+  var init_problem = 0;
+  var collection = <%= array_or_string_for_javascript(@collection) %>;
+</script>
 <%= javascript_include_tag "/assets/exam_user/effect.js" %>
-<%= javascript_include_tag "/assets/exam_user/generate.js" %>
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
 <div id="log"></div>
@@ -34,7 +31,7 @@
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
-      <span class="problem_title"><font id="global_problem_index"><%= @init_problem.to_i+1 %></font>/<font id="global_problem_sum"></font></span>
+      <span class="problem_title"><font id="global_problem_index"></font>/<font id="global_problem_sum"></font></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
@@ -45,7 +42,7 @@
 </div>
 
 <!-- 试题生成入口 generate.js -->
-<div id="generate"></div>
+<div id="generate"><div style="height: 554px;"><center style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div></div>
 
 <!-- 相关词汇框 -->
 <div id="about_words_loader" style="display:none;">
@@ -63,8 +60,8 @@
           <span id='about_word_types'></span><span id='about_word_phonetic'></span>
           <input type="hidden" id="about_word_enunciate_url" />
           <input type="hidden" id="about_word_id" />
-          <a href="javascript:void(0);" title="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
-          <a href="javascript:void(0);" title="加入背诵单词" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
+          <a href="javascript:void(0);" class="tooltip" name="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
+          <a href="javascript:void(0);" class="tooltip" name="加入背诵单词" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
         </div>
         <div class="ch_words_line">
           <p class="font_size_16" id='about_word_en_mean'></p>
@@ -97,3 +94,5 @@
   <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
+
+<%= javascript_include_tag "/assets/exam_user/generate.js" %>

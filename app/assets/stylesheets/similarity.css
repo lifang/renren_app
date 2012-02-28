@@ -1,6 +1,6 @@
 @charset "utf-8";
 * { padding: 0; margin: 0;}
-body {  font-family: "宋体", Arial; font-size: 12px; color: #333;}
+body { background: url(/assets/body_bg.png) repeat; font-family: "宋体", Arial; font-size: 12px; color: #333;}
 a { text-decoration: none;}
 ul { list-style: none;}
 img { border: none;}
@@ -11,8 +11,8 @@ button { cursor: pointer;}
 .red { color: #F00;}
 .orange { color: #ff6c00;}
 .gray { color: #999;}
-.span_right {background: #EEFFEE;}
-.span_error {background: #FFEAEA;}
+.span_right, span.span_right, input.span_right {background: #EEFFEE;}
+.span_error, span.span_error, input.span_error {background: #FFEAEA;}
 
 button.green { color:#009900;}
 .blue { color: #2875AE;}
@@ -40,14 +40,18 @@ button.green { color:#009900;}
 .main { background: #fff; overflow: hidden; width: 100%;}
 
 
+
+
+
+
 .main_Div { background: #FFF; overflow: hidden; width: 790px;  height: 600px; overflow-y: auto; border: 1px #CEE1EE solid;}
 .m_box { width: 792px; margin: 0 auto;}
 .m_box h1 { height: 32px; line-height: 32px; margin: 20px 0 10px 0; font-size: 18px; text-align: center;}
 .m_box h3 { font-size: 14px; height: 32px; line-height: 32px; text-align: center;}
 
 .m_top { height: 34px; line-height: 34px; background: #595d63;}
-.m_side { width: 50%; _width: 49%; display: inline; float: left; height: 566px; overflow-y: scroll;}
-.m_problem_bg { background: #fff;}
+.m_side { width: 50%; _width: 49%; display: inline; float: left; height: 566px; overflow-y: auto;}
+.m_problem_bg { background: #efede7;}
 
 
 
@@ -92,8 +96,19 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 /*题面-------------------*/
 .problem_box { padding: 10px; font-family:Arial;}
 
+
+
+
+
+
+
+
+
+
 .problem_text { line-height: 24px; padding: 10px; text-align:justify;}
-.problem_text div { padding: 5px 0;}
+.problem_text div { padding: 5px 0; width:100%}
+.problem_text p { padding: 5px 0; width: 100%}
+
 
 /*选择题小题------------------*/
 
@@ -107,11 +122,11 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
-    background: #fff;
+    position: relative;
 }
 
-.pql_left { width: 9%; float: left; height: 32px; line-height: 32px; margin-right:5px;}
-.pql_right { width: 89%; float: left;}
+.pql_left { width: 25px; height: 32px; line-height: 32px; position: absolute; top: 0; left: 0;}
+.pql_right { padding-left: 30px;}
 
 /* 小题收藏  */
 
@@ -125,7 +140,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 
 .p_q_line { overflow: hidden; height: 32px;}
-.false_red { background: #F00; width: 5px; height: 32px; float: left; margin-right: 5px; text-indent: -999px; overflow: hidden;
+.false_red { background: #fd2f13; width: 5px; height: 32px; float: left; margin-right: 5px; text-indent: -999px; overflow: hidden;
              -moz-border-radius: 5px 0 0 5px;
              -webkit-border-radius:  5px 0 0 5px;
              -ms-border-radius:  5px 0 0 5px;
@@ -146,6 +161,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
             -o-border-radius:  5px 0 0 5px;
             border-radius:  5px 0 0 5px;
 }
+
 .pro_qu_t { min-height: 32px; line-height: 32px; overflow: hidden; cursor: pointer;}
 .pro_t_con { border-bottom: 1px #CCC solid;}
 
@@ -153,33 +169,35 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 .pro_qu_div {}
 .pro_qu_ul { padding: 10px 0 0 0;}
-.pro_qu_ul li { line-height: 24px; padding: 5px 0; overflow: hidden;}
+.pro_qu_ul li { line-height: 24px; padding: 5px 0; overflow: hidden; position: relative; padding-left: 50px;}
 .pro_qu_ul li span {
     cursor: pointer;
-    width: 23px;
-    height: 23px;
-    line-height: 23px;
+    width: 17px;
+    height: 17px;
+    line-height: 17px;
     display: block;
     float: left;
     text-align: center;
-    margin-right: 10px;
+    position: absolute; top: 9px; left: 0;
+    padding-left: 20px;
 }
 .pro_qu_ul li p { width: 88%; float: left;}
 
-.single_choose_li {background: url(/assets/li.png) no-repeat 0 0;
+.single_choose_li {
+    background: url(/assets/li.png) no-repeat 0 0;
 }
-.single_choose_li.hover { background: url(/assets/li.png) no-repeat 0 -23px; color: #FFF;}
+.single_choose_li.hover { background: url(/assets/li.png) no-repeat 0 -17px;}
 
 .multi_choose_li {
     background: url(/assets/li0.png) no-repeat 0 0;
 }
-.multi_choose_li.hover { background: url(/assets/li0.png) no-repeat 0 -23px; color: #FFF;}
+.multi_choose_li.hover { background: url(/assets/li0.png) no-repeat 0 -17px;}
 
 
 .green_dui { color: #090; margin-top: 10px;}
 .red_cuo { color: #F00; margin-top: 10px;}
 
-.pro_btn { padding: 10px 0 5px 0;}
+.pro_btn { padding: 10px 0;overflow: hidden;}
 .pro_btn button { margin: 0 10px 0 0;}
 .pro_btn a { margin: 0 10px;}
 
@@ -191,7 +209,22 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid; float: left;}
+.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;background: #EFEDE7;}
+.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
+
+.select_span {
+    display: inline-block;
+    float: left;
+    min-width: 150px;
+    height: 20px;
+    line-height: 20px;
+    border-bottom: 1px #000 solid;
+}
+
+.select_ul {position: absolute; top: 21px; left: 0; z-index: 200; border: 1px #999 solid;}
+.select_li { min-width: 138px; display: inline-block; padding: 0 5px; height: 24px; line-height: 24px; cursor: pointer; background: #EFEDE7;}
+.select_li:hover { background: #c7c5bf;}
+
 .button_tk {
     width: 81px;
     height: 27px;
@@ -202,12 +235,11 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     color: #333;
 }
 
-.select_tk { min-width: 148px; height: 22px; line-height: 22px; border: 1px #e2e2e2 solid;}
 
 .button_span {
     position: absolute;
     left: 0px;
-    top: 22px;
+    top: 21px;
     z-index:100;
     display: inline-block;
     width: 81px;
@@ -215,17 +247,15 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 }
 
 /*拖拽---*/
-.drag_tk_box {}
 .drag_tk {
-    width: 43%;
-    padding: 10px;
-    background: #e7e7e7;
-    z-index: 100;
-    position: fixed;
-    bottom: 23px;
+        padding: 10px;
+	background: #c4c4c4;
+	position: relative;
 }
+.drag_tk ul { display: block; position: fixed; z-index: 1000; bottom: 3PA5px;}
+.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
+.tuozhuai_box { overflow-y: auto;}
 
-.drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; float: left; margin: 5px; cursor:move;}
 
 .dragDrop_box {
     display: inline-block;
@@ -233,9 +263,8 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
     min-width: 148px;
     height: 20px;
     line-height: 20px;
-    text-align: center;
-    border: 1px #e2e2e2 solid;
-    cursor: pointer;
+    border-bottom: 1px #000 solid;
+    cursor: move;
 }
 
 /*相关词汇---------------*/
@@ -247,22 +276,13 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .xg_words_ny { width: 62%; padding-left: 5px; margin-left: 2px; overflow: hidden; float: left; border-left: 1px #CCC solid;}
 
 
-.ch_words_line { padding: 10px;}
-.ch_words_line span { margin-right: 10px;}
-.ch_text { line-height: 24px;}
-.font_size_24 { font-size: 24px; font-family: Arial;}
-
-
-
-/*翻页-----------------------*/
-/*CSS sabrosus style pagination*/
-.sabrosus { padding: 6px; margin: 6px; text-align: center; font-size: 14px;}
-.sabrosus a { border: #c1c1c1 1px solid; padding: 6px 10px; color: #2e6ab1; margin-right: 4px; text-decoration: none;}
-.sabrosus a:hover { border: #289FDB 1px solid; color: #289FDB; background: #d0e7ee;}
+/*翻页*/
+.pagination { padding: 6px; margin: 6px; text-align: center; font-size: 14px;}
+.pagination a { border: #c1c1c1 1px solid; padding: 6px 10px; color: #2e6ab1; margin-right: 4px; text-decoration: none;}
+.pagination a:hover { border: #289FDB 1px solid; color: #289FDB; background: #d0e7ee;}
 .pagination a:active {border: #c1c1c1 1px solid; color: #000; background: #d0e7ee;}
-.sabrosus span.current { border: #289FDB 1px solid;  padding: 6px 10px; font-weight: bold; color: #289FDB; margin-right: 4px; background: #d0e7ee;}
-.sabrosus span.disabled { border: #c1c1c1 1px solid; padding: 6px 10px; color: #929292; margin-right: 4px;}
-
+.pagination em { border: #289FDB 1px solid;  padding: 6px 10px; font-weight: bold; color: #289FDB; margin-right: 4px; background: #d0e7ee;}
+.pagination span.disabled { border: #c1c1c1 1px solid; padding: 6px 10px; color: #929292; margin-right: 4px;}
 
 
 
@@ -300,6 +320,12 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .upErrorTo_tab li { height: 24px; line-height: 24px; color: #fff; display: block; text-decoration: none;}
 .upErrorTo_tab li input { margin-right: 5px;}
 .upErrorTo_tab textarea { width: 100%; margin: 5px 0; background: none; border: 1px #666 solid; color: #FFF; font-size: 12px;}
+.upErrorTo_btn {float: right;}
+
+.ch_words_line { padding: 10px;}
+.ch_words_line span { margin-right: 10px;}
+.ch_text { line-height: 24px;}
+.font_size_24 { font-size: 24px; font-family: Arial;}
 
 /*foot*/
 .foot { padding: 0 10px; height: 20px; line-height: 20px; background: #595D63; color: #FFF; text-align: right; font-family:Arial;}
@@ -307,5 +333,5 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 .tk_zuoda { padding-top: 50px; text-align: center; color: #F00;}
 
-.backg_blue { background: #ebf9ff;}
+.backg_blue input.backg_blue, span.backg_blue, select.backg_blue { border-bottom: 2px #0033ff solid;}
 .link_c {color: red;}
