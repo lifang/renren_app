@@ -14,28 +14,27 @@
                   <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
                        onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
                        <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                      <span><img title="已完成" src="/assets/icon_wc.png" /></span>
-                    <% elsif !similarity.is_free %><span><img src="/assets/icon_tx.png" /></span>
+                      <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
+                    <% elsif !similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                     <% end %>
                     <h2><%= similarity.title %></h2>
                   </a>
                 <% elsif is_nomal?(category_id) %>
-                  <a href="javascript:void(0);" class="tooltip_vip"
-                     onclick='javascript:tishi_alert("您的试用期已结束。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");'>
-                    <% unless similarity.is_free %><span><img title="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
+                  <a href="javascript:void(0);" onclick='javascript:tishi_share();'>
+                    <% unless similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
                     <h2><%= similarity.title %></h2>
                   </a>
                 <% else %>
                   <% if similarity.is_free %>
                     <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
                          onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
-                      <% if @objects[similarity.id]&&@objects[similarity.id][1] %><span><img title="已完成" src="/assets/icon_wc.png" /></span><% end %>
+                      <% if @objects[similarity.id]&&@objects[similarity.id][1] %><span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span><% end %>
                       <h2><%= similarity.title %></h2>
                     </a>
                   <% else %>
-                    <a href="javascript:void(0);" class="tooltip_vip"
-                       onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");'>
-                      <span><img  title="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
+                    <a href="javascript:void(0);"
+                       onclick='javascript:tishi_share();'>
+                      <span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                       <h2><%= similarity.title %></h2>
                     </a>
                   <% end %>
@@ -50,7 +49,7 @@
       </div>
 
       <script type="text/javascript">
-
+        var shared = 0;
         function already_submit(eu_id,sheet_url){
           if(confirm("你已经做完了该真题，你想重做该真题么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
             sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
@@ -61,14 +60,23 @@
           }
         }
 
+        function tishi_share(){
+          if(shared == 0){
+            tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");
+          }else{
+            tishi_alert("请等待页面刷新");
+          }
+        }
+
         function share(){
           $.ajax({
             type: "GET",
-            url: "/similarities/share"+<%= "#{(category_id == '2') ? '4' : '6'}" %>+".json",
+            url: "/similarities/renren_share"+<%= "#{(category_id == '2') ? '4' : '6'}" %>+".json",
             dataType: "json",
             success: function(data){
               tishi_alert(data.message);
               if(data["error"]==null){
+                shared = 1;
                 window.location.href="/similarities/refresh"
               }
             }
