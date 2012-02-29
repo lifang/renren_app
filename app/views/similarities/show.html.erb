@@ -1,4 +1,10 @@
 
+<script type="text/javascript">
+  var load_time = setTimeout(function(){
+    $("#load_message").html("SORRY,此份试题好像存在问题，管理员会尽快解决此问题，给您带来的不便敬请谅解。");
+  },10000);
+</script>
+
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 
 <%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
@@ -8,8 +14,6 @@
 <%= javascript_include_tag "/assets/jquery.ui.droppable.min.js" %>
 <%= javascript_include_tag "#{@answer_js_url}" %>
 <%= javascript_include_tag "#{@paper_js_url}" %>
-
-<%= javascript_include_tag "/assets/exam_user/init.js" %>
 
 <script type="text/javascript" >
   //初始化参数
@@ -22,7 +26,7 @@
   var init_problem = 0;
   var collection = <%= array_or_string_for_javascript(@collection) %>;
 </script>
-<%= javascript_include_tag "/assets/exam_user/effect.js" %>
+
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
 <div id="log"></div>
@@ -42,7 +46,7 @@
 </div>
 
 <!-- 试题生成入口 generate.js -->
-<div id="generate"><div style="height: 554px;"><center style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div></div>
+<div id="generate"><div style="height: 467px;"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div></div>
 
 <!-- 相关词汇框 -->
 <div id="about_words_loader" style="display:none;">
@@ -95,4 +99,4 @@
   <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
 </div>
 
-<%= javascript_include_tag "/assets/exam_user/generate.js" %>
+<%= javascript_include_tag "/assets/exam_user/init.js" %>
