@@ -59,16 +59,18 @@ class SimilaritiesController < ApplicationController
 
   #重做卷子
   def redo_paper
-    category_id = params[:category].nil? ? 2 : params[:category]
-    url=params[:sheet_url]
-    doc = get_doc(url)
-    collection = ""
-    collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
-    f=File.new(url,"w+")
-    f.write("#{sheet_outline(collection).force_encoding('UTF-8')}")
-    f.close
-    ExamUser.find(params[:id]).update_attribute("is_submited",false)
-    redirect_to "/similarities/#{params[:id]}?category=#{category_id}"
+    exam_user = ExamUser.find(params[:id])
+    url="#{Constant::PUBLIC_PATH}#{exam_user.answer_sheet_url}"
+    if File.exist?(url)
+      doc = get_doc(url)
+      collection = ""
+      collection = doc.root.elements["collection"].text if doc.root.elements["collection"]
+      f=File.new(url,"w+")
+      f.write("#{sheet_outline.force_encoding('UTF-8')}")
+      f.close
+    end
+    exam_user.update_attribute("is_submited",false)
+    redirect_to "/similarities/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
   end
 
   #创建答卷
@@ -91,9 +93,6 @@ class SimilaritiesController < ApplicationController
   def sheet_outline(collection_str = "")
     outline = "<?xml version='1.0' encoding='UTF-8'?>"
     outline += "<sheet init='0' status='0'>"
-    outline += "<collection>"
-    outline += "#{collection_str}"
-    outline += "</collection>"
     outline += "</sheet>"
     return outline
   end

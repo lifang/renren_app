@@ -33,7 +33,7 @@ button.green { color:#009900;}
 .padding_r { padding-right: 25px;}
 
 
-.renren_border { width: 792px; margin: 0 auto; border: 3px #f7f7f7 solid;}
+.renren_border { width: 794px; margin: 0 auto; border: 3px #f7f7f7 solid;}
 .welcome { width: 380px; line-height: 40px; height: 40px; margin: 20px auto; font-size: 16px; font-weight: bold;}
 .welcome img { float: left; margin-right: 10px;}
 
@@ -44,13 +44,13 @@ button.green { color:#009900;}
 
 
 
-.main_Div { background: #FFF; overflow: hidden; width: 790px;  height: 600px; overflow-y: auto; border: 1px #CEE1EE solid;}
+.main_Div { background: #FFF; overflow: hidden; width: 792px;  height: 600px; overflow-y: auto; border: 1px #CEE1EE solid;}
 .m_box { width: 792px; margin: 0 auto;}
 .m_box h1 { height: 32px; line-height: 32px; margin: 20px 0 10px 0; font-size: 18px; text-align: center;}
 .m_box h3 { font-size: 14px; height: 32px; line-height: 32px; text-align: center;}
 
 .m_top { height: 34px; line-height: 34px; background: #595d63;}
-.m_side { width: 50%; _width: 49%; display: inline; float: left; height: 566px; overflow-y: auto;}
+.m_side { width: 50%; _width: 49%; display: inline; float: left; height: 567px; overflow-y: auto;}
 .m_problem_bg { background: #efede7;}
 
 
@@ -96,16 +96,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 /*题面-------------------*/
 .problem_box { padding: 10px; font-family:Arial;}
 
-
-
-
-
-
-
-
-
-
-.problem_text { line-height: 24px; padding: 10px; text-align:justify;}
+.problem_text {font-size: 12px;  line-height: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0; width:100%}
 .problem_text p { padding: 5px 0; width: 100%}
 
@@ -209,10 +200,11 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 .input_xz { width: 90%; height: 20px;}
 
 .span_tk {min-width: 150px; display: inline-block; height: 15px; position: relative;}
-.input_tk { min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;background: #EFEDE7;}
-.select_tk { min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
+.input_tk {font-weight: bold;  min-width: 148px; height: 20px; line-height: 20px; border: none; border-bottom: 1px #000 solid; float: left;background: #EFEDE7;}
+.select_tk {font-weight: bold; min-width: 148px; height: 20px; line-height: 20px;  border: none; border-bottom: 1px #000 solid;}
 
 .select_span {
+    font-weight: bold;
     display: inline-block;
     float: left;
     min-width: 150px;
@@ -252,19 +244,19 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 	background: #c4c4c4;
 	position: relative;
 }
-.drag_tk ul { display: block; position: fixed; z-index: 1000; bottom: 3PA5px;}
+.drag_tk ul { display: block; position: fixed; z-index: 1000; bottom: 35px;}
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
 .tuozhuai_box { overflow-y: auto;}
 
 
 .dragDrop_box {
+    font-weight: bold;
     display: inline-block;
     float: left;
     min-width: 148px;
     height: 20px;
     line-height: 20px;
     border-bottom: 1px #000 solid;
-    cursor: move;
 }
 
 /*相关词汇---------------*/
@@ -333,5 +325,5 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 
 .tk_zuoda { padding-top: 50px; text-align: center; color: #F00;}
 
-.backg_blue input.backg_blue, span.backg_blue, select.backg_blue { border-bottom: 2px #0033ff solid;}
+.borde_blue, input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033ff solid;}
 .link_c {color: red;}
