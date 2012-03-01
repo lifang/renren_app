@@ -61,7 +61,7 @@ button.green { color:#009900;}
 .icon_func span { padding: 0 5px; overflow: hidden; width: 25px; height: 25px; display: block; float: left; }
 .icon_func span a { width: 25px; height: 25px; display: block; text-indent: -999px; overflow: hidden;}
 
-span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inline-block; color: #CCC; text-align: center;}
+span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24px; display: inline-block; color: #CCC; text-align: center;}
 
 .icon_again {}
 .icon_again a { background: url(/assets/icon_func.png) no-repeat 0 0;}
@@ -96,7 +96,7 @@ span.problem_title { width: 42px; height: 24px; line-height: 24px; display: inli
 /*题面-------------------*/
 .problem_box { padding: 10px; font-family:Arial;}
 
-.problem_text {font-size: 12px;  line-height: 24px; padding: 10px; text-align:justify;}
+.problem_text {font-size: 12px; line-height: 24px; padding: 10px; text-align:justify;}
 .problem_text div { padding: 5px 0; width:100%}
 .problem_text p { padding: 5px 0; width: 100%}
 
