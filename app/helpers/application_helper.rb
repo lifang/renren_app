@@ -23,7 +23,7 @@ module ApplicationHelper
   end
 
   #判断是否vip、试用用户或普通用户
-  def user_role?(user_id)
+  def user_role?(user_id) 
     if cookies[:user_role].nil?
       cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
       orders = Order.find(:all, :conditions => ["user_id = ? and status = ?", user_id.to_i , Order::STATUS[:NOMAL] ])
