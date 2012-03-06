@@ -4,8 +4,10 @@ class SimilaritiesController < ApplicationController
   require 'net/http'
 
   layout "application"
+  @@client_id4 = "180526"
   @@api_key4 = "d96ca54ba92f4f25bc86a8b6f93b209d"
   @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id6 = "180533"
   @@api_key6= "18037029bfb344349197e7e37c2d72fb"
   @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
   def index
@@ -296,20 +298,27 @@ class SimilaritiesController < ApplicationController
 
 
   def cet4
-    
+    redirect_to "http://graph.renren.com/oauth/authorize?display=iframe&response_type=token&client_id=#{@@client_id4}&redirect_uri=#{Constant::SERVER_PATH}/similarities/oauth_login_cet4" if params[:xn_sig_added]=="1"
   end
 
   #oauth登录(四级登录)
   def oauth_login_cet4
-    user_info = return4_user(params[:access_token])[0]
-    cookies[:access_token] = params[:access_token]
-    @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
-    @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
-    cookies[:user_id]=@user.id
-    cookies[:user_name]=@user.username
-    cookies.delete(:user_role)
-    user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_FOUR}"
+    if cookies[:oauth2_url_generate]
+      cookies.delete(:oauth2_url_generate)
+      puts params[:access_token]
+      user_info = return4_user(params[:access_token])[0]
+      cookies[:access_token] = params[:access_token]
+      @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+      cookies[:user_id]=@user.id
+      cookies[:user_name]=@user.username
+      cookies.delete(:user_role)
+      user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+      redirect_to "/similarities?category=#{Category::LEVEL_FOUR}"
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
   end
 
   def return4_user(access_token)
@@ -331,7 +340,7 @@ class SimilaritiesController < ApplicationController
   end
 
   def cet6
-    
+    redirect_to "http://graph.renren.com/oauth/authorize?display=iframe&response_type=token&client_id=#{@@client_id6}&redirect_uri=#{Constant::SERVER_PATH}/similarities/oauth_login_cet6" if params[:xn_sig_added]=="1"
   end
 
   def return6_user(access_token)
@@ -354,15 +363,21 @@ class SimilaritiesController < ApplicationController
 
   #oauth登录(六级登录)
   def oauth_login_cet6
-    user_info = return6_user(params[:access_token])[0]
-    cookies[:access_token] = params[:access_token]
-    @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
-    @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
-    cookies[:user_id]=@user.id
-    cookies[:user_name]=@user.username
-    cookies.delete(:user_role)
-    user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_SIX}"
+    if cookies[:oauth2_url_generate]
+      cookies.delete(:oauth2_url_generate)
+      user_info = return6_user(params[:access_token])[0]
+      cookies[:access_token] = params[:access_token]
+      @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+      cookies[:user_id]=@user.id
+      cookies[:user_name]=@user.username
+      cookies.delete(:user_role)
+      user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+      redirect_to "/similarities?category=#{Category::LEVEL_SIX}"
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
   end
 
   #人人分享，提供权限(四级)
