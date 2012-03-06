@@ -1,3 +1,5 @@
+=========================================================
+=========================================================
 about=
 assets\:clean=
 assets\:clean\:all=
@@ -93,3 +95,4 @@ tmp\:create=
 tmp\:pids\:clear=
 tmp\:sessions\:clear=
 tmp\:sockets\:clear=
+weibo=
