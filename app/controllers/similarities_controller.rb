@@ -4,8 +4,10 @@ class SimilaritiesController < ApplicationController
   require 'net/http'
 
   layout "application"
+  #@@client_id4 = "166937"
   @@client_id4 = "180526"
   @@api_key4 = "d96ca54ba92f4f25bc86a8b6f93b209d"
+  #@@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
   @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
   @@client_id6 = "180533"
   @@api_key6= "18037029bfb344349197e7e37c2d72fb"
@@ -298,7 +300,7 @@ class SimilaritiesController < ApplicationController
 
 
   def cet4
-    redirect_to "http://graph.renren.com/oauth/authorize?display=iframe&response_type=token&client_id=#{@@client_id4}&redirect_uri=#{Constant::SERVER_PATH}/similarities/oauth_login_cet4" if params[:xn_sig_added]=="1"
+
   end
 
   #oauth登录(四级登录)
@@ -308,7 +310,7 @@ class SimilaritiesController < ApplicationController
       puts params[:access_token]
       user_info = return4_user(params[:access_token])[0]
       cookies[:access_token] = params[:access_token]
-      @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
+      @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
       @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
       cookies[:user_id]=@user.id
       cookies[:user_name]=@user.username
