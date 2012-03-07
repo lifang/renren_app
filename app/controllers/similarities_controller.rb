@@ -342,7 +342,6 @@ class SimilaritiesController < ApplicationController
   end
 
   def cet6
-    redirect_to "http://graph.renren.com/oauth/authorize?display=iframe&response_type=token&client_id=#{@@client_id6}&redirect_uri=#{Constant::SERVER_PATH}/similarities/oauth_login_cet6" if params[:xn_sig_added]=="1"
   end
 
   def return6_user(access_token)
