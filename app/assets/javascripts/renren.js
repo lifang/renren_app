@@ -1741,7 +1741,7 @@
             display : 'popup',
             style : {
                 width : 475,
-                height : 340
+                height : 342
             },
             params : {
                 app_id : rrUrls.widget == p[1]
@@ -1791,7 +1791,7 @@
             display : 'page',
             style : {
                 width : 570,
-                height : 340
+                height : 342
             }
         },
         'request' : {

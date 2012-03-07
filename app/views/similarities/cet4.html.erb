@@ -1,11 +1,10 @@
-
+<%# @client_id = "166937" %>
 <% @client_id = "180526" %>
 <script type="text/javascript" src="/assets/renren.js"></script>
-
 <div class="wrap renren_border">
   <div class="main_Div">
     <img style="height:597px;" src="/assets/login_pic4.png" />
-
+    <% unless params[:xn_sig_added]=="1" %>
       <div id="hidden_iframe" style="display:none;">
         <script type="text/javascript">
           var uiOpts = {
@@ -20,7 +19,15 @@
           Renren.ui(uiOpts);
         </script>
       </div>
-    
+    <% else %>
+      <script type="text/javascript">
+        $(function(){
+          setTimeout(function(){
+            window.location.href = "http://graph.renren.com/oauth/authorize?display=iframe&response_type=token&client_id=<%= @client_id %>&redirect_uri=<%= Constant::SERVER_PATH %>/similarities/oauth_login_cet4";
+          },1500)
+        })
+      </script>
+    <% end %>
   </div>
   <div class="foot">Powered by <a href="http://www.gankao.co">赶考网</a> &copy; 2010-2012</div>
 </div>
