@@ -254,26 +254,12 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
-
   #单词加入背诵列表
   def ajax_add_word
-    word_id = params[:word_id]
-    @message=""
-    if Word.find(word_id).level && Word.find(word_id).level<=Word::WORD_LEVEL[:SECOND]
-      @message="该单词为必备单词，无须添加"
-    else
-      relation = UserWordRelation.find_by_sql("select id from user_word_relations where user_id=#{cookies[:user_id]} and word_id=#{word_id}")[0]
-      if relation
-        @message="该单词已经添加。您可以登录赶考网进行背诵"
-      else
-        relation = UserWordRelation.new(:user_id=>cookies[:user_id],:word_id=>word_id.to_i,:status=>UserWordRelation::STATUS[:NOMAL])
-        if relation.save
-          @message="单词添加成功。您可以登录赶考网进行背诵"
-        else
-          @message="单词添加失败"
-        end
-      end
-    end
+    puts params[:word_id]
+    word = Word.find(params[:word_id].to_i)
+    UserWordRelation.add_nomal_ids(cookies[:user_id], word.id, word.category_id) if word
+    @message="该单词已经添加到背诵列表中。"
     respond_to do |format|
       format.json {
         render :json=>{:message=>@message}
