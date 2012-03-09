@@ -39,10 +39,12 @@
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
       <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" name="缩小">缩小</a></span>
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
-      <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
+      <span class="icon_return"><a href="/similarities?category=<%= category_id %>" class="tooltip" name="返回">返回</a></span>
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= params["type"] %>');">重做</a></span>
   </div>
+  <% share_url = category_id=="2" ? "http://apps.renren.com/english_iv" : "http://apps.renren.com/english_vi" %>
+<span class="renren_share tooltip" name="分享到人人"><a name="xn_share" type="button" href="<%= share_url %>">分享</a><script src="http://static.connect.renren.com/js/share.js" type="text/javascript"></script></span>
 </div>
 
 <!-- 试题生成入口 generate.js -->

@@ -299,7 +299,7 @@ class SimilaritiesController < ApplicationController
 
 
   def cet4
-
+    @client_id = @@client_id4
   end
 
   #oauth登录(四级登录)
@@ -341,6 +341,7 @@ class SimilaritiesController < ApplicationController
   end
 
   def cet6
+    @client_id = @@client_id6
   end
 
   def return6_user(access_token)
