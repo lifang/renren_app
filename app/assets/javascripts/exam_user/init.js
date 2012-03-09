@@ -57,14 +57,14 @@ function rp(str){
 
 //字体放大、缩小
 var tgs = new Array( 'div','td','tr');
-var szs = new Array( 'xx-small','x-small','small','medium','large','x-large','xx-large' );
-var startSz = 2;
+var szs = new Array('x-small','small','medium','large');
+var startSz = 1;
 function ts( trgt,inc ) {
     if (!document.getElementById) return
     var d = document,cEl = null,sz = startSz,i,j,cTags;
     sz += inc;
     if ( sz < 0 ) sz = 0;
-    if ( sz > 6 ) sz = 6;
+    if ( sz > 3 ) sz = 3;
     startSz = sz;
     if ( !( cEl = d.getElementById( trgt ) ) ) cEl = d.getElementsByTagName( trgt )[ 0 ];
     cEl.style.fontSize = szs[ sz ];
@@ -767,7 +767,7 @@ function call_me(problem_index,question_index) {
     var max_length = $("#m_side_"+problem_index).width();
     var text_length=$("#input_inner_answer_" + id).val().length*8;
     if(($("#input_inner_answer_" + id).length>0) || ($("#input_inner_answer_" + id).val() != "" )) {
-         var max=text_length>(max_length-40)?(max_length-40): text_length;
+        var max=text_length>(max_length-40)?(max_length-40): text_length;
         $("#input_inner_answer_" + id).css("width", max + "px");
     }
 }
@@ -901,7 +901,7 @@ function tooltip(){
     var x = -20;
     var y = 15;
     $(".tooltip_"+init_problem).mouseover(function(e){
-        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+this.name+"</div></div>";
+        var tooltip = "<div class='tooltip_box'><div class='tooltip_next'>"+$(this).attr("name")+"</div></div>";
         $("body").append(tooltip);
         $(".tooltip_box").css({
             "top":(e.pageY+y)+"px",
