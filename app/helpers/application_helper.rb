@@ -24,12 +24,13 @@ module ApplicationHelper
   end
 
   #判断是否vip、试用用户或普通用户
-  def user_role?(user_id) 
+  def user_role?(user_id)
     if cookies[:user_role].nil?
       cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
-      orders = Order.find(:all, :conditions => ["user_id = ? and status = ?", user_id.to_i , Order::STATUS[:NOMAL] ])
+      orders = Order.find(:all, :conditions => ["user_id = ? and status = #{Order::STATUS[:NOMAL]}", user_id.to_i])
       orders.each do |order|
-        if order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:RENREN]
+        if order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or
+            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:RENREN]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         elsif order.types == Order::TYPES[:TRIAL_SEVEN]

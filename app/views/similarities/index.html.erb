@@ -46,8 +46,6 @@
                   <% end %>
                 <% end %>
               </li>
-
-
             <% end %>
           <% end %>
         </ul>
@@ -83,12 +81,11 @@
               tishi_alert(data.message);
               if(data["error"]==null){
                 shared = 1;
-                window.location.href="/similarities/refresh"
+                window.location.href="/similarities/refresh?category=<%= category_id %>"
               }
             }
           });
         }
-
       </script>
     </div>
   </div>
