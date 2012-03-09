@@ -485,9 +485,10 @@ class SimilaritiesController < ApplicationController
 
   #更新用户权限
   def refresh
+    category = params[:category].nil? ? "2" : params[:category]
     cookies.delete(:user_role)
     user_role?(cookies[:user_id])
-    redirect_to request.referer
+    redirect_to "/similarities?category=#{category}"
   end
 
   #载入用户答案
