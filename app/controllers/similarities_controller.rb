@@ -511,9 +511,7 @@ class SimilaritiesController < ApplicationController
     if signed_request
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
-      @data = JSON (Base64.decode64(pay_load)+"}")
-#      render :inline=>"#{@data}"
-#      return false
+      @data = JSON (Base64.decode64(pay_load))
       @login = false
       if @data["user_id"] && @data["oauth_token"]
         @login = true
@@ -537,7 +535,7 @@ class SimilaritiesController < ApplicationController
     if signed_request
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
-      @data = JSON (Base64.decode64(pay_load)+"}")
+      @data = JSON (Base64.decode64(pay_load))
       @login = false
       if @data["user_id"] && @data["oauth_token"]
         @login = true
