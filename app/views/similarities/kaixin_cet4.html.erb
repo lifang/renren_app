@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script src="http://s.kaixin001.com.cn/js/openapp-8.js" language="JavaScript"></script>
+
+
+<%#*<script type="text/javascript">%>
+<%#*function openAuthDlg()%>
+<%#*{%>
+<%#*var p = {"app_id":<%=  @app_id %>,"display":"popup","redirect_uri":"http://www.baidu.com","scope":"basic create_records friends_intro send_message"};%>
+<%#*KX.login(p);%>
+<%#*}%>
+<%#*</script>%>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-26018499-1']);
+      _gaq.push(['_setDomainName', 'gankao.co']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <title><%= @title.nil? ? "赶考网" : @title %></title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= stylesheet_link_tag    "/assets/similarity.css" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body onload="openAuthDlg();">
+    <div class="wrap renren_border">
+      <div class="main_Div">
+        <p><%= "#{@data}"   %></p>
+        <img style="height:597px;" src="/assets/login_pic4.png" />
+      </div>
+      <div class="foot">Powered by <a href="http://www.gankao.co">赶考网</a> &copy; 2010-2012</div>
+    </div>
+  </body>
+</html>
+

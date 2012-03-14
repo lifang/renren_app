@@ -1,6 +1,7 @@
 class SimilaritiesController < ApplicationController
   require 'oauth2'
   require 'net/http'
+  require 'base64'
 
   layout "application"
   #@@client_id4 = "166937"
@@ -11,6 +12,8 @@ class SimilaritiesController < ApplicationController
   @@client_id6 = "180533"
   @@api_key6= "18037029bfb344349197e7e37c2d72fb"
   @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
+
+  
   def index
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
@@ -253,6 +256,7 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
+  
   #单词加入背诵列表
   def ajax_add_word
     puts params[:word_id]
@@ -354,7 +358,7 @@ class SimilaritiesController < ApplicationController
       cookies.delete(:oauth2_url_generate)
       user_info = return6_user(params[:access_token])[0]
       cookies[:access_token] = params[:access_token]
-      @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
+      @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
       @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
       cookies[:user_id]=@user.id
       cookies[:user_name]=@user.username
@@ -378,7 +382,7 @@ class SimilaritiesController < ApplicationController
       str << "format=JSON"
       str << "method=share.share"
       str << "type=6"
-      str << "url=http://apps.renren.com/english_iv"
+      str << "url=http://www.gankao.co"
       str << "v=1.0"
       str << "#{@@secret_key4}"
       sig = Digest::MD5.hexdigest(str)
@@ -389,7 +393,7 @@ class SimilaritiesController < ApplicationController
         :format => 'JSON',
         :method => 'share.share',
         :type=>"6",
-        :url=>"http://apps.renren.com/english_iv",
+        :url=>"http://www.gankao.co",
         :v => '1.0',
         :sig => sig
       }
@@ -426,7 +430,7 @@ class SimilaritiesController < ApplicationController
       str << "format=JSON"
       str << "method=share.share"
       str << "type=6"
-      str << "url=http://apps.renren.com/english_vi"
+      str << "url=http://www.gankao.co"
       str << "v=1.0"
       str << "#{@@secret_key6}"
       sig = Digest::MD5.hexdigest(str)
@@ -437,7 +441,7 @@ class SimilaritiesController < ApplicationController
         :format => 'JSON',
         :method => 'share.share',
         :type=>"6",
-        :url=>"http://apps.renren.com/english_vi",
+        :url=>"http://www.gankao.co",
         :v => '1.0',
         :sig => sig
       }
@@ -491,5 +495,37 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
+
+
+  # START 开心网相关
   
+  def kaixin_cet4
+    @app_id = "100027856"
+    @api_key = "973611984877870d390a4e301e9e1c95"
+    @secret_key = "2483635b97ec589755a1c344d3b95740"
+
+    signed_request = params[:signed_request]
+    list = signed_request.split(".")
+    encoded_sig,pay_load =list[0],list[1]
+    
+#    @data = JSON (Base64.decode64(pay_load)+"}")
+    if @data["user_id"] && @data["oauth_token"]
+      cookies[:access_token] = @data["oauth_token"]
+#      @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
+#      @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>@data["name"],:username=>@data["name"]) unless @user
+
+
+    end
+
+    render :layout=>false
+  end
+
+  def kaixin_cet6
+    
+    @app_id = "100027880"
+    @api_key = "9382265778146f1c5a5e56e235e38861"
+    @secret_key = "f6cde3945d6448a3bebee4da5d0ac9f3"
+    render :layout=>false
+  end
+  # END 开心网相关
 end

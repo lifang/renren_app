@@ -3,6 +3,8 @@ RenrenApp::Application.routes.draw do
   
   match "/cet4" => "similarities#cet4"
   match "/cet6" => "similarities#cet6"
+  match "/kaixin4" => "similarities#kaixin_cet4"
+  match "/kaixin6" => "similarities#kaixin_cet6"
 
   resources :similarities do
     member do
@@ -12,6 +14,7 @@ RenrenApp::Application.routes.draw do
     collection do
       post :ajax_add_collect,:add_collection,:ajax_report_error,:ajax_load_about_words,:ajax_add_word,:ajax_load_sheets
       get :cet4,:oauth_login_cet4,:cet6,:oauth_login_cet6,:renren_share4,:renren_share6,:refresh
+      get :kaixin_cet4,:kaixin_cet6
     end
   end
 
