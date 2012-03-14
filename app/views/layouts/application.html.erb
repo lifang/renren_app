@@ -14,14 +14,41 @@
   </script>
   <head>
     <title><%= @title.nil? ? "赶考网" : @title %></title>
-    <%= stylesheet_link_tag    "application" %>
+    <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
     <%= stylesheet_link_tag    "/assets/similarity.css" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+    <% if @web=="kaixin" %>
+      <style type="text/css">
+        .renren_border {width: 809px;}
+        .main_Div {width: 807px;}
+      </style>
+      <script type="text/javascript">
+        function setHeight(){
+          var dHeight = 628;
+          if("\v"=="v")
+          {
+            dHeight = 628;
+          }
+          var t = document.createElement("div");
+          t.innerHTML = '<iframe id="kxiframeagent" src="http://rest.kaixin001.com/api/agent.html#'+dHeight+'" scrolling="yes" height="0px" width="0px"></iframe>';
+          document.documentElement.appendChild(t.firstChild);
+        }
+      </script>
+
+    <% end %>
+    <!--[if IE 6]>
+		<script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
+		<script>
+		/* EXAMPLE */
+		DD_belatedPNG.fix('*');
+		/* string argument can be any CSS selector */
+		/* .png_bg example is unnecessary */
+		/* change it to what suits you! */
+		</script>
+		<![endif]-->
   </head>
-  <body>
 
     <%= yield %>
 
-  </body>
 </html>

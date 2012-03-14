@@ -1,32 +1,31 @@
+<body <% if @login==false %> onload="openAuthDlg();setHeight();" <% else %> onload="setHeight();" <% end %>>
 
-<script type="text/javascript" src="/assets/renren.js"></script>
-<div class="wrap renren_border">
-  <div class="main_Div">
-    <img style="height:597px;" src="/assets/login_pic6.png" />
-    <% unless params[:xn_sig_added]=="1" %>
-      <div id="hidden_iframe" style="display:none;">
-        <script type="text/javascript">
-          var uiOpts = {
-            url : "http://graph.renren.com/oauth/authorize",
-            display : "iframe",
-            params : {"response_type":"token","client_id":"<%= @client_id %>"},
-            onSuccess: function(r){
-              window.location = "<%= Constant::SERVER_PATH %>/similarities/oauth_login_cet6?access_token="+escape(r.access_token);
-            }
-          };
-          var root_flag = 0;
-          Renren.ui(uiOpts);
-        </script>
-      </div>
-    <% else %>
-      <script type="text/javascript">
-        $(function(){
-          setTimeout(function(){
-            window.location.href = "http://graph.renren.com/oauth/authorize?display=iframe&response_type=token&client_id=<%= @client_id %>&redirect_uri=<%= Constant::SERVER_PATH %>/similarities/oauth_login_cet6";
-          },1500)
-        })
-      </script>
-    <% end %>
+  <% if @login %>
+    <script type="text/javascript">
+      $(function(){
+        setTimeout(function(){
+          window.location.href = "<%= Constant::SERVER_PATH %>/similarities?category=<%= Category::LEVEL_SIX %>&web=kaixin";
+        },1500)
+      })
+    </script>
+  <% else %>
+    <script type="text/javascript" src="http://s.kaixin001.com.cn/js/openapp-8.js"></script>
+    <script type="text/javascript">
+      function openAuthDlg()
+      {
+        var p = {"app_id":"<%=  @app_id %>","display":"iframe","redirect_uri":"http://localhost:3002/kaixin6","scope":"basic create_records friends_intro send_message"};
+        KX.login(p);
+      }
+    </script>
+  <% end %>
+
+
+  <div class="wrap renren_border">
+    <div class="main_Div">
+      <img style="height:597px;" src="/assets/login_pic6.png" />
+    </div>
+    <div class="foot">Powered by <a href="http://www.gankao.co">赶考网</a> &copy; 2010-2012</div>
   </div>
-  <div class="foot">Powered by <a href="http://www.gankao.co">赶考网</a> &copy; 2010-2012</div>
-</div>
+
+</body>
+
