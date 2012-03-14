@@ -1,0 +1,28 @@
+<body <% if @login==false %> onload="openAuthDlg();setHeight();" <% else %> onload="setHeight();" <% end %>>
+  <% if @login %>
+    <script type="text/javascript">
+      $(function(){
+        setTimeout(function(){
+          window.location.href = "<%= Constant::SERVER_PATH %>/similarities?category=<%= Category::LEVEL_FOUR %>&web=kaixin";
+        },1500)
+      })
+    </script>
+  <% else %>
+    <script type="text/javascript" src="http://s.kaixin001.com.cn/js/openapp-8.js"></script>
+    <script type="text/javascript">
+      function openAuthDlg()
+      {
+        var p = {"app_id":"<%=  @app_id %>","display":"iframe","scope":"basic create_records friends_intro send_message"};
+        KX.login(p);
+      }
+    </script>
+  <% end %>
+
+  <div class="wrap renren_border">
+    <div class="main_Div">
+      <%= @data %>
+      <img style="height:597px;" src="/assets/login_pic4.png" />
+    </div>
+    <div class="foot">Powered by <a href="http://www.gankao.co">赶考网</a> &copy; 2010-2012</div>
+  </div>
+</body>

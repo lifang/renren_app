@@ -2,6 +2,7 @@
 class SimilaritiesController < ApplicationController
   require 'oauth2'
   require 'net/http'
+  require 'base64'
 
   layout "application"
   #@@client_id4 = "166937"
@@ -12,6 +13,8 @@ class SimilaritiesController < ApplicationController
   @@client_id6 = "180533"
   @@api_key6= "18037029bfb344349197e7e37c2d72fb"
   @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
+
+  
   def index
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
@@ -28,6 +31,7 @@ class SimilaritiesController < ApplicationController
 
   def join
     category_id = params[:category].nil? ? 2 : params[:category]
+    web = params[:web].nil? ? "renren" : params[:web]
     similarity = Examination.find(params[:id])
     #设置考试试卷
     papers_arr=[]
@@ -40,10 +44,10 @@ class SimilaritiesController < ApplicationController
       if @exam_user.nil?
         @exam_user = ExamUser.create(:user_id=>cookies[:user_id],:examination_id=>params[:id],:paper_id=>@paper.id)
       end
-      redirect_to "/similarities/#{@exam_user.id}?category=#{category_id}"
+      redirect_to "/similarities/#{@exam_user.id}?category=#{category_id}&web=#{web}"
     else
       flash[:notice]="当前考试未指定试卷。"
-      redirect_to "/similarities?category=#{category_id}"
+      redirect_to "/similarities?category=#{category_id}&web=#{web}"
     end
   end
 
@@ -64,6 +68,7 @@ class SimilaritiesController < ApplicationController
 
   #重做卷子
   def redo_paper
+    web = params[:web].nil? ? "renren" : params[:web]
     exam_user = ExamUser.find(params[:id])
     url="#{Constant::PUBLIC_PATH}#{exam_user.answer_sheet_url}"
     if File.exist?(url)
@@ -75,7 +80,7 @@ class SimilaritiesController < ApplicationController
       f.close
     end
     exam_user.update_attribute("is_submited",false)
-    redirect_to "/similarities/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}"
+    redirect_to "/similarities/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}&web=#{web}"
   end
 
   #创建答卷
@@ -254,6 +259,7 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
+  
   #单词加入背诵列表
   def ajax_add_word
     puts params[:word_id]
@@ -355,7 +361,7 @@ class SimilaritiesController < ApplicationController
       cookies.delete(:oauth2_url_generate)
       user_info = return6_user(params[:access_token])[0]
       cookies[:access_token] = params[:access_token]
-      @user=User.where("code_id=#{user_info["uid"].to_s} and code_type='renren'").first
+      @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
       @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
       cookies[:user_id]=@user.id
       cookies[:user_name]=@user.username
@@ -379,7 +385,7 @@ class SimilaritiesController < ApplicationController
       str << "format=JSON"
       str << "method=share.share"
       str << "type=6"
-      str << "url=http://apps.renren.com/english_iv"
+      str << "url=http://www.gankao.co"
       str << "v=1.0"
       str << "#{@@secret_key4}"
       sig = Digest::MD5.hexdigest(str)
@@ -390,7 +396,7 @@ class SimilaritiesController < ApplicationController
         :format => 'JSON',
         :method => 'share.share',
         :type=>"6",
-        :url=>"http://apps.renren.com/english_iv",
+        :url=>"http://www.gankao.co",
         :v => '1.0',
         :sig => sig
       }
@@ -427,7 +433,7 @@ class SimilaritiesController < ApplicationController
       str << "format=JSON"
       str << "method=share.share"
       str << "type=6"
-      str << "url=http://apps.renren.com/english_vi"
+      str << "url=http://www.gankao.co"
       str << "v=1.0"
       str << "#{@@secret_key6}"
       sig = Digest::MD5.hexdigest(str)
@@ -438,7 +444,7 @@ class SimilaritiesController < ApplicationController
         :format => 'JSON',
         :method => 'share.share',
         :type=>"6",
-        :url=>"http://apps.renren.com/english_vi",
+        :url=>"http://www.gankao.co",
         :v => '1.0',
         :sig => sig
       }
@@ -492,5 +498,59 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
+
+
+  # START 开心网相关
+  
+  def kaixin_cet4
+    @app_id = "100028114"
+    @api_key = "937024390647ac79dc37fa68fc8a29fc"
+    @secret_key = "3c41f0ff19ebb1c939ba6984f98f1c95"
+    @web = "kaixin"
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      @data = JSON (Base64.decode64(pay_load)+"}")
+#      render :inline=>"#{@data}"
+#      return false
+      @login = false
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+        cookies[:access_token] = @data["oauth_token"]
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
+        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>@data["name"],:username=>@data["name"]) unless @user
+        cookies[:user_id] = @user.id
+        cookies[:user_name] = @user.name
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+      end
+    end
+  end
+
+  def kaixin_cet6
+    @app_id = "100028098"
+    @api_key = "533679299063ffcf7f8e683c98cdf443"
+    @secret_key = "6d8bd604523ad6a3b4d89b82d15e9245"
+    @web = "kaixin"
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      @data = JSON (Base64.decode64(pay_load)+"}")
+      @login = false
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+        cookies[:access_token] = @data["oauth_token"]
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
+        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>@data["name"],:username=>@data["name"]) unless @user
+        cookies[:user_id] = @user.id
+        cookies[:user_name] = @user.name
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+      end
+    end
+  end
+  # END 开心网相关
   
 end
