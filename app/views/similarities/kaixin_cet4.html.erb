@@ -1,4 +1,4 @@
-<body <% if @login==false %> onload="openAuthDlg();setHeight();" <% else %> onload="setHeight();" <% end %>>
+<body <% if @login==false %> onload="openAuthDlg();"<% end %>>
   <% if @login %>
     <script type="text/javascript">
       $(function(){
@@ -20,7 +20,6 @@
 
   <div class="wrap renren_border">
     <div class="main_Div">
-      <%= @data %>
       <img style="height:597px;" src="/assets/login_pic4.png" />
     </div>
     <div class="foot">Powered by <a href="http://www.gankao.co">赶考网</a> &copy; 2010-2012</div>

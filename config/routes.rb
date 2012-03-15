@@ -13,8 +13,8 @@ RenrenApp::Application.routes.draw do
     end
     collection do
       post :ajax_add_collect,:add_collection,:ajax_report_error,:ajax_load_about_words,:ajax_add_word,:ajax_load_sheets
-      get :cet4,:oauth_login_cet4,:cet6,:oauth_login_cet6,:renren_share4,:renren_share6,:refresh
-      get :kaixin_cet4,:kaixin_cet6
+      get :cet4,:oauth_login_cet4,:cet6,:oauth_login_cet6,:renren_share4,:renren_share6,:refresh,:ajax_free_sum
+      get :kaixin_cet4,:kaixin_cet6,:renren_like,:close_window
     end
   end
 

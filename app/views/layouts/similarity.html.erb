@@ -18,23 +18,12 @@
     <%= stylesheet_link_tag    "/assets/similarity.css" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+
     <% if @web=="kaixin" %>
       <style type="text/css">
         .renren_border {width: 809px;}
         .main_Div {width: 807px;}
       </style>
-      <script type="text/javascript">
-        function setHeight(){
-          var dHeight = document.documentElement.offsetHeight;
-          if("\v"=="v")
-          {
-            dHeight = document.documentElement.scrollHeight;
-          }
-          var t = document.createElement("div");
-          t.innerHTML = '<iframe id="kxiframeagent" src="http://rest.kaixin001.com/api/agent.html#'+dHeight+'" scrolling="yes" height="0px" width="0px"></iframe>';
-          document.documentElement.appendChild(t.firstChild);
-        }
-      </script>
     <% end %>
 
     <!--[if IE 6]>
@@ -48,7 +37,7 @@
 		</script>
 		<![endif]-->
   </head>
-  <body <% if @web=="kaixin" %> onload="setHeight();"<% end %>>
+  <body>
     <div class="wrap renren_border">
       <%= render :partial => "/common/flash_div"  %>
       <div class="clear"></div>
@@ -59,9 +48,4 @@
       <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
     </div>
   </body>
-  <% if @web=="kaixin" %>
-    <script type="text/javascript">
-      setHeight();
-    </script>
-  <% end %>
 </html>
