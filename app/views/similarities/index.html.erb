@@ -1,3 +1,4 @@
+
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
 <body <% if @web=="kaixin" %> onload="setHeight();"<% end %>>
@@ -54,6 +55,8 @@
           <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
         </div>
 
+        <% order_type = {"renren"=>Order::TYPES[:RENREN]} %>
+
         <script type="text/javascript">
           var shared = 0;
           function already_submit(eu_id,sheet_url){
@@ -68,29 +71,77 @@
 
           function tishi_share(){
             if(shared == 0){
-              tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"javascript:void(0);\" onclick=\"javascript:share();\">升级为正式用户</a>]");
-            }else{
-              tishi_alert("请等待页面刷新");
-            }
+              $('#free_sum_div').show();
+              $('#display_free_sum').html("");
+<% if @web == "renren" %>
+        $.ajax({
+          type: "GET",
+          url: "/similarities/ajax_free_sum.json",
+          dataType: "json",
+          data : {
+            "category":"<%= category_id %>",
+            "order_type":<%= order_type[@web] %>
+          },
+          success: function(data){
+            $('#display_free_sum').html(data.message);
           }
+        });
+<% end %>
+    }else{
+      tishi_alert("请等待页面刷新");
+    }
+  }
 
-          function share(){
-            $.ajax({
-              type: "GET",
-              url: "/similarities/renren_share"+<%= "#{(category_id == '2') ? '4' : '6'}" %>+".json",
-              dataType: "json",
-              success: function(data){
-                tishi_alert(data.message);
-                if(data["error"]==null){
-                  shared = 1;
-                  window.location.href="/similarities/refresh?category=<%= category_id %>"
-                }
-              }
-            });
-          }
+  function confirm_share(){
+    $('#free_sum_div').hide();
+    $('#confirm_share_div').show();
+  }
+
+  function share(){
+    $('#confirm_share_div').hide();
+    $.ajax({
+      type: "GET",
+      url: "/similarities/renren_share"+<%= "#{(category_id == '2') ? '4' : '6'}" %>+".json",
+      dataType: "json",
+      success: function(data){
+        tishi_alert(data.message);
+        if(data["error"]==null){
+          shared = 1;
+          window.location.href="/similarities/refresh?category=<%= category_id %>"
+        }
+      }
+    });
+  }
+
+          
         </script>
       </div>
     </div>
+
+    <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
+      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
+      <div class="tab_con">
+        <div>这是一套收费试卷，只有正式的用户才可以试用。</div>
+      </div>
+      <div><% if @web=="kaixin" %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <% end %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button> <% if @web=="renren" %>  &nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span><% end %></div>
+    </div>
+
+    <div id="confirm_share_div" class="rr_tab tab_box border_radius" style="display:none;">
+      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
+      <div class="tab_con">
+        <div>领取免费名额，我们将发送一条新鲜事到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？</div>
+      </div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button>&nbsp;&nbsp;</div>
+    </div>
+    
+    <!--
+    <%# if @web=="renren" && cookies[:first] %>
+            <div id="guanzhu_div" class="tab_box_guanzhu border_radius">
+              <iframe width="500" height="300" src="http://widget.renren.com/dialog/friends?target_id=<%= Constant::RENREN_ID %>&app_id=<%= params["appid"] %>&redirect_uri=<%= Constant::SERVER_PATH %>/similarities/close_window"></iframe>
+            </div>
+    <%# end %>
+    -->
+
     <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
   </div>
 </body>

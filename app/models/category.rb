@@ -9,7 +9,7 @@ class Category < ActiveRecord::Base
 #  has_one :study_plan
 #  has_many :notices
 #  has_many :words
-#  #判断分类是否存在
+#  # 判断分类是否存在
 #  TYPES = {"2" => "english_fourth_level", "3" => "english_sixth_level"}   # :FOURTH_LEVEL 四级； :SIXTH_LEVEL 六级
 #  TYPE_IDS = {:english_fourth_level => 2, :english_sixth_level => 3} # :FOURTH_LEVEL 四级； :SIXTH_LEVEL 六级
    LEVEL_FOUR = 2

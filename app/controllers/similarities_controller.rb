@@ -4,20 +4,13 @@ class SimilaritiesController < ApplicationController
   require 'base64'
 
   layout "application"
-  #@@client_id4 = "166937"
-  @@client_id4 = "180526"
-  @@api_key4 = "d96ca54ba92f4f25bc86a8b6f93b209d"
-  #@@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
-  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
-  @@client_id6 = "180533"
-  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
-  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
-
   
   def index
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
+    @user = User.find(cookies[:user_id])
+    @code_id = @user.code_id.nil? ? "gankao" : @user.code_id
     @similarities = Examination.paginate_by_sql(sql,
       :per_page => 10, :page => params[:page])
     examination_ids = []
@@ -54,6 +47,8 @@ class SimilaritiesController < ApplicationController
     eu = ExamUser.find(params[:id])
     @paper_id = eu.paper_id
     @paper = Paper.find(@paper_id)
+    @user = User.find(eu.user_id)
+    @code_id = @user.code_id.nil? ? "gankao" : @user.code_id
     @paper_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}"
     @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
     s_url = ExamUser.find(params[:id]).answer_sheet_url
@@ -289,189 +284,9 @@ class SimilaritiesController < ApplicationController
     end
   end
 
-
-  def cet4
-    @client_id = @@client_id4
-  end
-
-  #oauth登录(四级登录)
-  def oauth_login_cet4
-    if cookies[:oauth2_url_generate]
-      cookies.delete(:oauth2_url_generate)
-      puts params[:access_token]
-      user_info = return4_user(params[:access_token])[0]
-      cookies[:access_token] = params[:access_token]
-      @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
-      cookies[:user_id]=@user.id
-      cookies[:user_name]=@user.username
-      cookies.delete(:user_role)
-      user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-      redirect_to "/similarities?category=#{Category::LEVEL_FOUR}"
-    else
-      cookies[:oauth2_url_generate]="replace('#','?')"
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
-    end
-  end
-
-  def return4_user(access_token)
-    str = "access_token=#{access_token}"
-    str << "format=JSON"
-    str << "method=xiaonei.users.getInfo"
-    str << "v=1.0"
-    str << "#{@@secret_key4}"
-    sig = Digest::MD5.hexdigest(str)
-
-    query = {
-      :access_token => "#{access_token}",
-      :format => 'JSON',
-      :method => 'xiaonei.users.getInfo',
-      :v => '1.0',
-      :sig => sig
-    }
-    return JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
-  end
-
-  def cet6
-    @client_id = @@client_id6
-  end
-
-  def return6_user(access_token)
-    str = "access_token=#{access_token}"
-    str << "format=JSON"
-    str << "method=xiaonei.users.getInfo"
-    str << "v=1.0"
-    str << "#{@@secret_key6}"
-    sig = Digest::MD5.hexdigest(str)
-
-    query = {
-      :access_token => "#{access_token}",
-      :format => 'JSON',
-      :method => 'xiaonei.users.getInfo',
-      :v => '1.0',
-      :sig => sig
-    }
-    return JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
-  end
-
-  #oauth登录(六级登录)
-  def oauth_login_cet6
-    if cookies[:oauth2_url_generate]
-      cookies.delete(:oauth2_url_generate)
-      user_info = return6_user(params[:access_token])[0]
-      cookies[:access_token] = params[:access_token]
-      @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
-      cookies[:user_id]=@user.id
-      cookies[:user_name]=@user.username
-      cookies.delete(:user_role)
-      user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-      redirect_to "/similarities?category=#{Category::LEVEL_SIX}"
-    else
-      cookies[:oauth2_url_generate]="replace('#','?')"
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
-    end
-  end
-
-  #人人分享，提供权限(四级)
-  def renren_share4
-    puts get_share_sum(Order::TYPES[:RENREN],Category::LEVEL_FOUR)
-    if Constant::RENREN_ORDERS_SUM[:cet_4] && get_share_sum(Order::TYPES[:RENREN],Category::LEVEL_FOUR)>=Constant::RENREN_ORDERS_SUM[:cet_4]
-      data = {:error=>"人数已满",:message=>"<p>限额1000名免费账号已经被注册完。</p><p>您可以登录 <a class='link_c' href='#{Constant::GANKAO_URL}'> 赶考网</a> 充值升级</p>"}
-    else
-      str = "access_token=#{cookies[:access_token]}"
-      str << "comment=众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
-      str << "format=JSON"
-      str << "method=share.share"
-      str << "type=6"
-      str << "url=http://www.gankao.co"
-      str << "v=1.0"
-      str << "#{@@secret_key4}"
-      sig = Digest::MD5.hexdigest(str)
-
-      query = {
-        :access_token => "#{cookies[:access_token]}",
-        :comment=>"众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。",
-        :format => 'JSON',
-        :method => 'share.share',
-        :type=>"6",
-        :url=>"http://www.gankao.co",
-        :v => '1.0',
-        :sig => sig
-      }
-      ret =  JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
-
-      if ret[:error_code]
-        data = {:error=>1,:message=>"分享失败，请重新尝试"}
-      else
-        order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
-        if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
-          order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
-          Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
-            :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
-          data = {:message=>"升级正式用户成功"}
-        else
-          data = {:message=>"您已经是正式用户，请等待页面刷新"}
-        end
-      end
-    end
-    respond_to do |format|
-      format.json {
-        render :json=>data
-      }
-    end
-  end
-
-  #人人分享，提供权限(六级)
-  def renren_share6
-    if Constant::RENREN_ORDERS_SUM[:cet_6] && get_share_sum(Order::TYPES[:RENREN],Category::LEVEL_SIX)>=Constant::RENREN_ORDERS_SUM[:cet_6]
-      data = {:error=>"人数已满",:message=>"<p>限额1000名免费账号已经被注册完。</p><p>您可以登录 <a class='link_c' href='#{Constant::GANKAO_URL}'> 赶考网</a> 充值升级</p>"}
-    else
-      str = "access_token=#{cookies[:access_token]}"
-      str << "comment=众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
-      str << "format=JSON"
-      str << "method=share.share"
-      str << "type=6"
-      str << "url=http://www.gankao.co"
-      str << "v=1.0"
-      str << "#{@@secret_key6}"
-      sig = Digest::MD5.hexdigest(str)
-
-      query = {
-        :access_token => "#{cookies[:access_token]}",
-        :comment=>"众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。",
-        :format => 'JSON',
-        :method => 'share.share',
-        :type=>"6",
-        :url=>"http://www.gankao.co",
-        :v => '1.0',
-        :sig => sig
-      }
-      ret =  JSON Net::HTTP.post_form(URI.parse(URI.encode("http://api.renren.com/restserver.do")), query).body
-      if ret[:error_code]
-        data = {:error=>1,:message=>"分享失败，请重新尝试"}
-      else
-        order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
-        if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
-          order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
-          Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
-            :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
-          data = {:message=>"升级正式用户成功"}
-        else
-          data = {:message=>"您已经是正式用户，请等待页面刷新"}
-        end
-      end
-    end
-    respond_to do |format|
-      format.json {
-        render :json=>data
-      }
-    end
-  end
-
-  #获取 通过分享获取会员的数量
+  #获取当天通过分享获取会员的数量
   def get_share_sum(types,category)
-    sum = Order.where(:types=>types,:category_id=>category).length
+    sum = Order.count_by_sql("select count(id) from orders where TO_DAYS(NOW())-TO_DAYS(created_at)=0 and types=#{types} and category_id=#{category} ")
     return sum
   end
 
@@ -498,9 +313,162 @@ class SimilaritiesController < ApplicationController
     end
   end
 
+  #获取当前免费名额的数量
+  def ajax_free_sum
+    order_type = params[:order_type]
+    category = params[:category]
+    total_sum = category=="2" ? Constant::RENREN_ORDERS_SUM[:cet_4] : Constant::RENREN_ORDERS_SUM[:cet_6]
+    already_sum = get_share_sum(order_type.to_i,category.to_i)
+    data={:message=>"今日剩余#{total_sum-already_sum}"}
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+  #START 人人网相关
+
+  def  renren_like
+    app_id = params["appid"]
+    redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=#{app_id}&redirect_uri=#{Constant::SERVER_PATH}/similarities/close_window"
+  end
+
+  def close_window
+    render :inline=>"<script>alert('work!');</script>"
+  end
+
+
+  #人人四级应用相关信息
+  #@@client_id4 = "166937"
+  @@client_id4 = "180526"
+  @@api_key4 = "d96ca54ba92f4f25bc86a8b6f93b209d"
+  #@@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+
+  def cet4
+    @client_id = @@client_id4
+  end
+
+  #oauth登录(四级登录)
+  def oauth_login_cet4
+    if cookies[:oauth2_url_generate]
+      cookies.delete(:oauth2_url_generate)
+      cookies.delete(:first)
+      user_info = renren_get_user(params[:access_token],@@secret_key4)[0]
+      cookies[:access_token] = params[:access_token]
+      @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
+      cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+      cookies[:user_id]=@user.id
+      cookies[:user_name]=@user.username
+      cookies.delete(:user_role)
+      user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+      redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&appid=#{@@client_id4}"
+    else
+      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :secure  => false}
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
+
+  #人人分享，提供权限(四级)
+  def renren_share4
+    if Constant::RENREN_ORDERS_SUM[:cet_4] && get_share_sum(Order::TYPES[:RENREN],Category::LEVEL_FOUR)>=Constant::RENREN_ORDERS_SUM[:cet_4]
+      data = {:error=>"人数已满",:message=>"<p>今天#{Constant::RENREN_ORDERS_SUM[:cet_4]}个免费名额被抢完T_T，明天再来抢吧</p>"}
+    else
+      comment="众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
+      ret = renren_send_message(cookies[:access_token],comment,@@secret_key4)
+      if ret[:error_code]
+        data = {:error=>1,:message=>"分享失败，请重新尝试"}
+      else
+        order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
+        if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+          order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+          Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+            :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
+          data = {:message=>"升级正式用户成功"}
+        else
+          data = {:message=>"您已经是正式用户，请等待页面刷新"}
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+  #
+  #---------------------------------------------------------------------------------------
+
+  #人人六级应用相关信息
+  @@client_id6 = "180533"
+  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
+  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
+
+  def cet6
+    @client_id = @@client_id6
+  end
+
+  #oauth登录(六级登录)
+  def oauth_login_cet6
+    if cookies[:oauth2_url_generate]
+      cookies.delete(:oauth2_url_generate)
+      cookies.delete(:first)
+      @client_id = @@client_id6
+      user_info = renren_get_user(params[:access_token],@@secret_key6)[0]
+      cookies[:access_token] = params[:access_token]
+      @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
+      cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+      cookies[:user_id]=@user.id
+      cookies[:user_name]=@user.username
+      cookies.delete(:user_role)
+      user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+      redirect_to "/similarities?category=#{Category::LEVEL_SIX}&appid=#{@@client_id6}"
+    else
+      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :secure  => false}
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
+
+  #人人分享，提供权限(六级)
+  def renren_share6
+    if Constant::RENREN_ORDERS_SUM[:cet_6] && get_share_sum(Order::TYPES[:RENREN],Category::LEVEL_SIX)>=Constant::RENREN_ORDERS_SUM[:cet_6]
+      data = {:error=>"人数已满",:message=>"<p>当天#{Constant::RENREN_ORDERS_SUM[:cet_4]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
+    else
+      comment="众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的六级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
+      ret = renren_send_message(cookies[:access_token],comment,@@secret_key6)
+      if ret[:error_code]
+        data = {:error=>1,:message=>"分享失败，请重新尝试"}
+      else
+        order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
+        if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+          order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+          Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:RENREN],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+            :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:RENREN]])
+          data = {:message=>"升级正式用户成功"}
+        else
+          data = {:message=>"您已经是正式用户，请等待页面刷新"}
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+
+  #END  人人网相关
+
+
 
   # START 开心网相关
-  
+
+  #四级
   def kaixin_cet4
     @app_id = "100028114"
     @api_key = "937024390647ac79dc37fa68fc8a29fc"
@@ -510,13 +478,16 @@ class SimilaritiesController < ApplicationController
     if signed_request
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
-      @data = JSON (Base64.decode64(pay_load))
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
       @login = false
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
+        response = kaixin_get_user(cookies[:access_token])
         @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
-        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>@data["name"],:username=>@data["name"]) unless @user
+        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>response["name"],:username=>response["name"]) unless @user
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
         cookies.delete(:user_role)
@@ -525,22 +496,29 @@ class SimilaritiesController < ApplicationController
     end
   end
 
+  #
+  #---------------------------------------------------------------------------------------
+  #六级
+  
   def kaixin_cet6
     @app_id = "100028098"
     @api_key = "533679299063ffcf7f8e683c98cdf443"
     @secret_key = "6d8bd604523ad6a3b4d89b82d15e9245"
     @web = "kaixin"
     signed_request = params[:signed_request]
-    if signed_request
+    if signed_requestre
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
-      @data = JSON (Base64.decode64(pay_load))
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
       @login = false
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
+        response = kaixin_get_user(cookies[:access_token])
         @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
-        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>@data["name"],:username=>@data["name"]) unless @user
+        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>response["name"],:username=>response["name"]) unless @user
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
         cookies.delete(:user_role)
@@ -549,5 +527,5 @@ class SimilaritiesController < ApplicationController
     end
   end
   # END 开心网相关
-  
+
 end

@@ -640,10 +640,10 @@ function close_select_ul(theEvent,obj,problem_index,question_index){ //theEvent�
 }
 
 //确认是否重做试卷
-function confirm_redo(type){
+function confirm_redo(type,web){
     if(confirm("如果您选择重做此卷，所有已保存的答案都将被清空。\n您确认要重做么？")){
         var category_id = (category!=null) ? category : "2" ;
-        window.location.href="/similarities/"+init_exam_user_id+"/redo_paper?category="+category_id+"&type="+type;
+        window.location.href="/similarities/"+init_exam_user_id+"/redo_paper?category="+category_id+"&type="+type+"&web="+web;
     }
 }
 
@@ -941,12 +941,13 @@ function left_side(){
         $("#m_side_"+init_problem).append(element1);
         element3 = create_element("ul",null,"draggable_list_"+init_problem,null,null,"innerHTML");
         $(element1).append(element3);
+        element3.innerHTML+="<div><span class='red'>*</span>拖选下面的单词到相应的答案位置。</div>";
         drag_attrs = drag_attrs.sort();
         str1="";
         for(i=0;i<drag_attrs.length;i++){
             str1 += "<li name='"+drag_attrs[i]+"' class='draggable_attr_"+init_problem+"'>"+drag_attrs[i]+"</li>"
         }
-        $(element3).html(str1);
+        element3.innerHTML+=(str1);
         for(i=0;i<problems[init_problem].questions.question.length;i++){
             $("#droppable_"+init_problem+"_"+i).droppable({
                 drop: function( event, ui ) {

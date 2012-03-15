@@ -85,6 +85,89 @@ module ApplicationHelper
   def is_nomal?(category_id)
     return category_role(category_id) == Order::USER_ORDER[:NOMAL]
   end
+
+  #START -----人人API
+  #人人主方法
+  def renren_api(request)
+    uri = URI.parse("http://api.renren.com")
+    http = Net::HTTP.new(uri.host, uri.port)
+    response = http.request(request).body
+  end
+  #
+  #构成人人签名请求
+  def renren_sig_request(query,secret_key)
+    str = ""
+    query.sort.each{|key,value|str<<"#{key}=#{value}"}
+    str<<secret_key
+    sig = Digest::MD5.hexdigest(str)
+    query[:sig]=sig
+    request = Net::HTTP::Post.new("/restserver.do")
+    request.set_form_data(query)
+    return request
+  end
+  #
+  #人人获取用户信息
+  def renren_get_user(access_token,secret_key)
+    query = {:access_token => access_token,:format => 'JSON',:method => 'xiaonei.users.getInfo',:v => '1.0'}
+    request = renren_sig_request(query,secret_key)
+    response = JSON renren_api(request)
+  end
+  #
+  #人人发送新鲜事
+  def renren_send_message(access_token,message,secret_key)
+    query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:type=>"6",:url=>"http://www.gankao.co",:v => '1.0'}
+    request = renren_sig_request(query,secret_key)
+    response =JSON renren_api(request)
+  end
+  #
+  #END -------人人API----------
   
+  #START -------开心网API----------
+  #
+  #开心主方法
+  def kaixin_api(request)
+    uri = URI.parse("https://api.kaixin001.com")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = http.request(request).body
+  end
+  #
+  #开心获取accesstoken
+  def kaixin_accesstoken(code)
+    request = Net::HTTP::Get.new("/oauth2/access_token?grant_type=authorization_code&code=#{code}&client_id=#{Constant::KAIXIN_API_KEY}&client_secret=#{Constant::KAIXIN_API_SECRET}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_kaixin")
+    response = JSON kaixin_api(request)
+  end
+  #
+  #开心获取用户信息
+  def kaixin_get_user(access_token)
+    request = Net::HTTP::Get.new("/users/me.json?access_token=#{access_token}")
+    response = JSON kaixin_api(request)
+  end
+  #
+  #开心网添加记录
+  def kaixin_send_message(access_token,message)
+    url="https://api.kaixin001.com"
+    info=create_post_http(url,"/records/add.json",{:access_token=>access_token,:content=>message})
+    if info["rid"].nil?
+      p "kaixin error code - #{info["error"]}"
+    else
+      p "kaixin user-record id is  #{info["rid"]}"
+    end
+  end
+  #
+  #构造post请求
+  def create_post_http(url,route_action,params)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(route_action)
+    request.set_form_data(params)
+    return JSON http.request(request).body
+  end
+  #
+  #END -------开心网API----------
+
 
 end
