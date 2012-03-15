@@ -506,7 +506,7 @@ class SimilaritiesController < ApplicationController
     @secret_key = "6d8bd604523ad6a3b4d89b82d15e9245"
     @web = "kaixin"
     signed_request = params[:signed_request]
-    if signed_requestre
+    if signed_request
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
       base_str = Base64.decode64(pay_load)
