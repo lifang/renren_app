@@ -16,7 +16,7 @@ module Constant
   DATE_LONG={:vip=>90,:trail=>7} #试用七天
 
   #设置通过人人分享获得会员的数量限制(每日)
-  RENREN_ORDERS_SUM = {:cet_4=>1,:cet_6=>25}
+  RENREN_ORDERS_SUM = {:cet_4=>50,:cet_6=>25}
 
   #人人公共主页id
   RENREN_ID = 600942099
