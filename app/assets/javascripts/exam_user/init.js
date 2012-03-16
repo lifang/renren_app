@@ -814,7 +814,21 @@ var questions_resource; //小题列表最外层元素
 var question_resource; //单个小题细节最外层元素
 //  TYPES = {0 => "n.", 1 => "v.", 2 => "pron.", 3 => "adj.", 4 => "adv.",
 //    5 => "num.", 6 => "art.", 7 => "prep.", 8 => "conj.", 9 => "interj.", 10 => "u = ", 11 => "c = ", 12 => "pl = "}
-var word_type = {"0":"n.","1":"v.","2":"pron.","3":"adj.","4":"adv.","5":"num.","6":"art.","7":"prep.","8":"conj.","9":"interj.","10":"u = ","11":"c = ","12":"pl = "} ; //单词类型
+var word_type = {
+    "0":"n.",
+    "1":"v.",
+    "2":"pron.",
+    "3":"adj.",
+    "4":"adv.",
+    "5":"num.",
+    "6":"art.",
+    "7":"prep.",
+    "8":"conj.",
+    "9":"interj.",
+    "10":"u = ",
+    "11":"c = ",
+    "12":"pl = "
+} ; //单词类型
 
 $(function(){
     $.ajax({
@@ -892,6 +906,7 @@ function afterload(){
         var pbl_height = m_side_height-drag_tk_height-40;//padding的高度
         $("#problem_box_"+init_problem).css("height",pbl_height);
         $("#drag_tk_"+init_problem).css("height",drag_tk_height);
+    $("#draggable_list_"+init_problem).css("top",34+$("#m_side_"+init_problem).height()-$("#drag_tk_"+init_problem).height());
     }
     if(problems[init_problem].question_type!="1"){
         $("#pro_qu_t_"+init_problem+"_0").trigger("click");
@@ -998,7 +1013,8 @@ function question_box(questions_resource,question_index){
     if(collection == "" || collection == [] || collection.indexOf(problems[init_problem].questions.question[question_index]["id"])==-1){
         if(problems[init_problem]["question_type"]==null || problems[init_problem]["question_type"]=="0"){
             $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip tooltip_"+init_problem+"' name='收藏' onclick=\"javascript:normal_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
-        }else{
+        }
+        else{
             $(element3).html("<a href='javascript:void(0);' id='shoucang_"+problems[init_problem].questions.question[question_index]["id"]+"' class='tooltip tooltip_"+init_problem+"' name='收藏' onclick=\"javascript:special_add_collect('"+init_problem+"','"+question_index+"');\">收藏</a>");
         }
     }else{
