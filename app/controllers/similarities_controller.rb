@@ -75,7 +75,7 @@ class SimilaritiesController < ApplicationController
       f.close
     end
     exam_user.update_attribute("is_submited",false)
-    redirect_to "/similarities/#{params[:id]}?category=#{params[:category]}&type=#{params[:type]}&web=#{web}"
+    redirect_to "/similarities/#{params[:id]}?category=#{params[:category]}&web=#{web}"
   end
 
   #创建答卷
@@ -223,6 +223,8 @@ class SimilaritiesController < ApplicationController
       data={:message=>"您已经提交过此错误，感谢您的支持。"}
     else
       reporterror = ReportError.new(params["post"])
+      reporterror[:status] = ReportError::STATUS[:UNSOVLED]
+      reporterror = ReportError.new(reporterror)
       if reporterror.save
         data={:message=>"错误报告提交成功"}
       else
@@ -293,9 +295,10 @@ class SimilaritiesController < ApplicationController
   #更新用户权限
   def refresh
     category = params[:category].nil? ? "2" : params[:category]
+    success = params[:success]=="success" ? "1" : "0"
     cookies.delete(:user_role)
     user_role?(cookies[:user_id])
-    redirect_to "/similarities?category=#{category}"
+    redirect_to "/similarities?category=#{category}&success=#{success}"
   end
 
   #载入用户答案
@@ -335,7 +338,7 @@ class SimilaritiesController < ApplicationController
   end
 
   def close_window
-    render :inline=>"<script>alert('work!');</script>"
+    render :inline=>"<script>window.close();</script>"
   end
 
 

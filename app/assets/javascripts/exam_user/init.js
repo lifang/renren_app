@@ -538,7 +538,7 @@ function ajax_load_about_words(words,problem_index,question_index){
                             html_str +="<input type='hidden' id='about_word_category_id_"+i+"' value='"+data["words"][i][0].category_id+"' />";
                             html_str +="<input type='hidden' id='about_word_en_mean_"+i+"' value='"+data["words"][i][0].en_mean+"' />";
                             html_str +="<input type='hidden' id='about_word_ch_mean_"+i+"' value='"+data["words"][i][0].ch_mean+"' />";
-                            html_str +="<input type='hidden' id='about_word_types_"+i+"' value='"+data["words"][i][0].types+"' />";
+                            html_str +="<input type='hidden' id='about_word_types_"+i+"' value='"+word_type[data["words"][i][0].types]+"' />";
                             html_str +="<input type='hidden' id='about_word_phonetic_"+i+"' value=\""+data["words"][i][0].phonetic+"\" />";
                             html_str +="<input type='hidden' id='about_word_enunciate_url_"+i+"' value='"+data["words"][i][0].enunciate_url+"' />";
                             html_str +="<input type='hidden' id='about_word_sentences_"+i+"' value='"+data["words"][i][1]+"' />";
@@ -812,7 +812,9 @@ for(i=0;i<problems.length;i++){
 var problem_resource; //题目的最外层元素
 var questions_resource; //小题列表最外层元素
 var question_resource; //单个小题细节最外层元素
-
+//  TYPES = {0 => "n.", 1 => "v.", 2 => "pron.", 3 => "adj.", 4 => "adv.",
+//    5 => "num.", 6 => "art.", 7 => "prep.", 8 => "conj.", 9 => "interj.", 10 => "u = ", 11 => "c = ", 12 => "pl = "}
+var word_type = {"0":"n.","1":"v.","2":"pron.","3":"adj.","4":"adv.","5":"num.","6":"art.","7":"prep.","8":"conj.","9":"interj.","10":"u = ","11":"c = ","12":"pl = "} ; //单词类型
 
 $(function(){
     $.ajax({
