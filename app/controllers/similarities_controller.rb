@@ -342,10 +342,10 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-  @@client_id4 = "166937"
-  #@@client_id4 = "180526"
-  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
-  #@@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  #@@client_id4 = "166937"
+  @@client_id4 = "180526"
+  #@@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   def cet4
     @client_id = @@client_id4
