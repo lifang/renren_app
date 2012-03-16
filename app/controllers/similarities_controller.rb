@@ -211,7 +211,7 @@ class SimilaritiesController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render :json => {:message => "收藏成功！你可以登录赶考网访问收藏夹。"}
+        render :json => {:message => "收藏成功！你可以登录赶考网查看你的收藏"}
       }
     end
   end
@@ -221,7 +221,7 @@ class SimilaritiesController < ApplicationController
     if find_arr.length>0
       data={:message=>"您已经提交过此错误，感谢您的支持。"}
     else
-      reporterror = ReportError.new(params["post"])
+      reporterror = params["post"]
       reporterror[:status] = ReportError::STATUS[:UNSOVLED]
       reporterror = ReportError.new(reporterror)
       if reporterror.save
