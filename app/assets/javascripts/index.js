@@ -51,7 +51,7 @@ function confirm_share(){
 
 function share(){
     $('#confirm_share_div').hide();
-    tishi_alert("正在处理，请稍后...");
+    tishi_alert("正在处理，请稍候...");
     $.ajax({
         type: "GET",
         url: "/similarities/renren_share"+type_n+".json",
