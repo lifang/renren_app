@@ -30,7 +30,7 @@
       <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" name="放大">放大</a></span>
       <span class="icon_return"><a href="/similarities?category=<%= category_id %>&web=<%= @web %>" class="tooltip" name="返回">返回</a></span>
     </div>
-    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= params["type"] %>','<%= @web %>');">重做</a></span>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= @web %>');">重做</a></span>
   </div>
 </div>
 
@@ -48,13 +48,13 @@
       <div class="ch_text">
         <div class="ch_words_line">
           <span class="font_size_24" id='about_word_name'></span>
+          <a href="javascript:void(0);" title="加入我的单词本" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
         </div>
         <div class="ch_words_line">
           <span id='about_word_types'></span><span id='about_word_phonetic'></span>
           <input type="hidden" id="about_word_enunciate_url" />
           <input type="hidden" id="about_word_id" />
           <a href="javascript:void(0);" title="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
-          <a href="javascript:void(0);" title="加入背诵单词" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
         </div>
         <div class="ch_words_line">
           <p class="font_size_16" id='about_word_en_mean'></p>

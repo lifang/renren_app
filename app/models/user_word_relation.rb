@@ -32,7 +32,7 @@ class UserWordRelation < ActiveRecord::Base
     if user_word_relation.nomal_ids.nil?
       nomal_ids = word_id
     else
-      nomal_ids = ((user_word_relation.nomal_ids.split(",")) | ["#{word_id}"]).join(",")
+      nomal_ids = ( ["#{word_id}"] | (user_word_relation.nomal_ids.split(","))).join(",")
     end
     user_word_relation.update_attributes(:nomal_ids => nomal_ids)
   end
