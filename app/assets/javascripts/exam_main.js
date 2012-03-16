@@ -27,7 +27,7 @@ function generate_flash_div(style) {
     var win_width = jQuery(window).width();
     var z_layer_height = jQuery(style).height();
     var z_layer_width = jQuery(style).width();
-    jQuery(style).css('top',(win_height-z_layer_height)/2 + scolltop);
+    jQuery(style).css('top',250);
     jQuery(style).css('left',(win_width-z_layer_width)/2);
     jQuery(style).css('display','block');
 }
