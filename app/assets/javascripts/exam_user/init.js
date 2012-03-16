@@ -143,7 +143,7 @@ function pro_qu_t(problem_index){
             last_opened_question = null;
         }else{
             pro_qu_div.show();
-            replace_answer_span.hide();
+            //replace_answer_span.hide();
             $(this).parent().parent().removeClass("p_q_line");
             if(problems[problem_index]["question_type"]=="1"){
                 $(".inner_borde_blue_"+problem_index+"_"+q_index+":eq(0)").addClass("borde_blue");
@@ -640,10 +640,10 @@ function close_select_ul(theEvent,obj,problem_index,question_index){ //theEvent�
 }
 
 //确认是否重做试卷
-function confirm_redo(type,web){
+function confirm_redo(web){
     if(confirm("如果您选择重做此卷，所有已保存的答案都将被清空。\n您确认要重做么？")){
         var category_id = (category!=null) ? category : "2" ;
-        window.location.href="/similarities/"+init_exam_user_id+"/redo_paper?category="+category_id+"&type="+type+"&web="+web;
+        window.location.href="/similarities/"+init_exam_user_id+"/redo_paper?category="+category_id+"&web="+web;
     }
 }
 
@@ -704,7 +704,7 @@ function normal_add_collect(problem_index,question_index){
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).addClass("hover");
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).attr("name","已收藏");
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).attr("onclick","");
-                tishi_alert("小题收藏成功");
+                tishi_alert(data.message);
             }
         });
     }
@@ -734,7 +734,7 @@ function special_add_collect(problem_index,question_index){
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).addClass("hover");
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).attr("name","已收藏");
                 $("#shoucang_"+problems[problem_index].questions.question[question_index].id).attr("onclick","");
-                tishi_alert("小题收藏成功");
+                tishi_alert(data.message);
             }
         });
     }

@@ -143,7 +143,7 @@ class SimilaritiesController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render :json=>""
+        render :json=>{:message => "收藏成功！你可以登录赶考网查看你的收藏"}
       }
     end
   end
@@ -181,7 +181,7 @@ class SimilaritiesController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render :json => {:message => "收藏成功！"}
+        render :json => {:message => "收藏成功！你可以登录赶考网查看你的收藏"}
       }
     end
   end
@@ -211,7 +211,7 @@ class SimilaritiesController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render :json => {:message => "收藏成功！"}
+        render :json => {:message => "收藏成功！你可以登录赶考网访问收藏夹。"}
       }
     end
   end
@@ -256,10 +256,9 @@ class SimilaritiesController < ApplicationController
   
   #单词加入背诵列表
   def ajax_add_word
-    puts params[:word_id]
     word = Word.find(params[:word_id].to_i)
     UserWordRelation.add_nomal_ids(cookies[:user_id], word.id, word.category_id) if word
-    @message="该单词已经添加到背诵列表中。"
+    @message="单词已添加到你的单词本，你可以登录赶考网进行背诵。"
     respond_to do |format|
       format.json {
         render :json=>{:message=>@message}
@@ -340,11 +339,10 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-  #@@client_id4 = "166937"
-  @@client_id4 = "180526"
-  @@api_key4 = "d96ca54ba92f4f25bc86a8b6f93b209d"
-  #@@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
-  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "166937"
+  #@@client_id4 = "180526"
+  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+  #@@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   def cet4
     @client_id = @@client_id4

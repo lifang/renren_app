@@ -62,7 +62,7 @@
           function already_submit(eu_id,sheet_url){
             if(confirm("你已经做完了该真题，你想重做该真题么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
               sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-              window.location.href="/similarities/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&type=similarities&web=<%= @web %>";
+              window.location.href="/similarities/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&web=<%= @web %>";
               return false;
             }else{
               return true;
@@ -113,34 +113,40 @@
     });
   }
 
+  function friends(){
+    $('#guanzhu_div').hide();
+    window.open("http://widget.renren.com/dialog/friends?target_id=<%= Constant::RENREN_ID %>&app_id=<%= params["appid"] %>&redirect_uri=<%= Constant::SERVER_PATH %>/similarities/close_window","_blank","height=400,width=980,left=200,top=150");
+  }
           
         </script>
       </div>
     </div>
-
     <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
       <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
       <div class="tab_con">
         <div>这是一套收费试卷，只有正式的用户才可以试用。</div>
       </div>
-      <div><% if @web=="kaixin" %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <% end %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button> <% if @web=="renren" %>  &nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span><% end %></div>
+      <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
+      <% if @web=="renren" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
+
     </div>
 
     <div id="confirm_share_div" class="rr_tab tab_box border_radius" style="display:none;">
-      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
+      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#confirm_share_div').hide();" /></span>
       <div class="tab_con">
         <div>领取免费名额，我们将发送一条新鲜事到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？</div>
       </div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button>&nbsp;&nbsp;</div>
+      <div class="btn_box00"><button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button></div>
     </div>
-    
-    <!--
-    <%# if @web=="renren" && cookies[:first] %>
-            <div id="guanzhu_div" class="tab_box_guanzhu border_radius">
-              <iframe width="500" height="300" src="http://widget.renren.com/dialog/friends?target_id=<%= Constant::RENREN_ID %>&app_id=<%= params["appid"] %>&redirect_uri=<%= Constant::SERVER_PATH %>/similarities/close_window"></iframe>
-            </div>
-    <%# end %>
-    -->
+
+    <% if @web=="renren" && cookies[:first] %>
+      <div id="guanzhu_div" class="rr_tab tab_box border_radius">
+        <div class="tab_con">
+          <div>感谢您使用我们的应用，为了更好的提供我们的服务，您可以关注赶考网的公共主页，以获得最新最全的信息和资讯。</div>
+        </div>
+        <div class="btn_box"><button class="t_btn" onclick="javascript:friends();">知道了</button>   </div>
+      </div>
+    <% end %>
 
     <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
   </div>
