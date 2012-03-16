@@ -1,7 +1,21 @@
 
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
-<body <% if @web=="kaixin" %> onload="setHeight();"<% end %>>
+<% order_type = {"renren"=>Order::TYPES[:RENREN]} %>
+<script type="text/javascript">
+  var shared = 0;
+  var web = "<%= @web %>";
+  var public_path = "<%= Constant::PUBLIC_PATH %>";
+  var server_path = "<%= Constant::SERVER_PATH %>";
+  var category_id = "<%= category_id %>";
+  var order_type = "<%= order_type[@web] %>";
+  var type_n = "<%= "#{(category_id == '2') ? '4' : '6'}" %>";
+  var renren_id = "<%= Constant::RENREN_ID %>";
+  var app_id = "<%= params["appid"] %>";
+  var success = "<%= params["success"] %>";
+</script>
+<script type="text/javascript" src="/assets/index.js"></script>  
+<body>
   <div class="wrap renren_border">
     <div class="main_Div">
       <div class="m_box">
@@ -15,7 +29,7 @@
                 <li>
                   <% if is_vip?(category_id) %>
                     <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                         onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                         onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
                          <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
                         <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
                       <% elsif @objects[similarity.id] %>
@@ -32,7 +46,7 @@
                   <% else %>
                     <% if similarity.is_free %>
                       <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                           onclick="return already_submit('<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                           onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
                            <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
                           <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
                         <% elsif @objects[similarity.id] %>
@@ -54,71 +68,6 @@
           </ul>
           <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
         </div>
-
-        <% order_type = {"renren"=>Order::TYPES[:RENREN]} %>
-
-        <script type="text/javascript">
-          var shared = 0;
-          function already_submit(eu_id,sheet_url){
-            if(confirm("你已经做完了该真题，你想重做该真题么？\n 点击\"确定\"重做，点击\"取消\"只浏览试题")){
-              sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
-              window.location.href="/similarities/"+eu_id+"/redo_paper?category="+<%= category_id %>+"&sheet_url="+sheet_url+"&web=<%= @web %>";
-              return false;
-            }else{
-              return true;
-            }
-          }
-
-          function tishi_share(){
-            if(shared == 0){
-              $('#free_sum_div').show();
-              $('#display_free_sum').html("");
-<% if @web == "renren" %>
-        $.ajax({
-          type: "GET",
-          url: "/similarities/ajax_free_sum.json",
-          dataType: "json",
-          data : {
-            "category":"<%= category_id %>",
-            "order_type":<%= order_type[@web] %>
-          },
-          success: function(data){
-            $('#display_free_sum').html(data.message);
-          }
-        });
-<% end %>
-    }else{
-      tishi_alert("请等待页面刷新");
-    }
-  }
-
-  function confirm_share(){
-    $('#free_sum_div').hide();
-    $('#confirm_share_div').show();
-  }
-
-  function share(){
-    $('#confirm_share_div').hide();
-    $.ajax({
-      type: "GET",
-      url: "/similarities/renren_share"+<%= "#{(category_id == '2') ? '4' : '6'}" %>+".json",
-      dataType: "json",
-      success: function(data){
-        tishi_alert(data.message);
-        if(data["error"]==null){
-          shared = 1;
-          window.location.href="/similarities/refresh?category=<%= category_id %>"
-        }
-      }
-    });
-  }
-
-  function friends(){
-    $('#guanzhu_div').hide();
-    window.open("http://widget.renren.com/dialog/friends?target_id=<%= Constant::RENREN_ID %>&app_id=<%= params["appid"] %>&redirect_uri=<%= Constant::SERVER_PATH %>/similarities/close_window","_blank","height=400,width=980,left=200,top=150");
-  }
-          
-        </script>
       </div>
     </div>
     <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
@@ -139,7 +88,20 @@
       <div class="btn_box00"><button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button></div>
     </div>
 
-    <% if @web=="renren" && cookies[:first] %>
+    <div id="already_submit_div" class="rr_tab tab_box border_radius" style="display:none;">
+      <input type="hidden" id="already_submit_ex_id" value=""></input>
+      <input type="hidden" id="already_submit_eu_id" value=""></input>
+      <input type="hidden" id="already_submit_sheet_url" value=""></input>
+      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#already_submit_div').hide();" /></span>
+      <div class="tab_con">
+        <div>你已经做完了该份试卷，你是否要重做题目？</div>
+      </div>
+      <div class="btn_box00"><button class="t_btn" onclick="javascript:view_paper();"> 不,只想浏览 </button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:redo_paper();"> 好,我要重做 </button></div>
+    </div>
+
+
+
+    <% if @web=="renren" && cookies[:first] ; cookies.delete(:first) %>
       <div id="guanzhu_div" class="rr_tab tab_box border_radius">
         <div class="tab_con">
           <div>感谢您使用我们的应用，为了更好的提供我们的服务，您可以关注赶考网的公共主页，以获得最新最全的信息和资讯。</div>
@@ -147,6 +109,7 @@
         <div class="btn_box"><button class="t_btn" onclick="javascript:friends();">知道了</button>   </div>
       </div>
     <% end %>
+
 
     <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
   </div>
