@@ -539,8 +539,6 @@ class SimilaritiesController < ApplicationController
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
-        puts cookies[:user_id]
-        puts cookies[:user_name]
         cookies.delete(:user_role)
         user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
       end
@@ -567,12 +565,13 @@ class SimilaritiesController < ApplicationController
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
-        response = kaixin_get_user(cookies[:access_token])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        cookies[:access_token] = @data["oauth_token"]
+        response = sina_get_user(cookies[:access_token],@data["user_id"])
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -600,17 +599,15 @@ class SimilaritiesController < ApplicationController
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
-        response = kaixin_get_user(cookies[:access_token])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        response = sina_get_user(cookies[:access_token],@data["user_id"])
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
-        puts cookies[:user_id]
-        puts cookies[:user_name]
         cookies.delete(:user_role)
         user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
       end
