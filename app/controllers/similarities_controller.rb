@@ -361,7 +361,11 @@ class SimilaritiesController < ApplicationController
       cookies[:access_token] = params[:access_token]
       @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
       cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+      if @user
+        ActionLog.login_log(@user.id)
+      else
+        @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+      end
       cookies[:user_id]=@user.id
       cookies[:user_name]=@user.username
       cookies.delete(:user_role)
@@ -423,7 +427,11 @@ class SimilaritiesController < ApplicationController
       cookies[:access_token] = params[:access_token]
       @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
       cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"]) unless @user
+      if @user
+        ActionLog.login_log(@user.id)
+      else
+        @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+      end
       cookies[:user_id]=@user.id
       cookies[:user_name]=@user.username
       cookies.delete(:user_role)
@@ -488,8 +496,12 @@ class SimilaritiesController < ApplicationController
         @login = true
         cookies[:access_token] = @data["oauth_token"]
         response = kaixin_get_user(cookies[:access_token])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
-        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>response["name"],:username=>response["name"]) unless @user
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        if @user
+          ActionLog.login_log(@user.id)
+        else
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+        end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
         cookies.delete(:user_role)
@@ -519,15 +531,92 @@ class SimilaritiesController < ApplicationController
         @login = true
         cookies[:access_token] = @data["oauth_token"]
         response = kaixin_get_user(cookies[:access_token])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","renren")
-        @user=User.create(:code_id=>@data["user_id"],:code_type=>'renren',:name=>response["name"],:username=>response["name"]) unless @user
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        if @user
+          ActionLog.login_log(@user.id)
+        else
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+        end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
+        puts cookies[:user_id]
+        puts cookies[:user_name]
         cookies.delete(:user_role)
         user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
       end
     end
   end
   # END 开心网相关
+
+
+  # START 新浪微博相关
+
+  #四级
+  def sina_cet4
+    @app_key = "2422557611"
+    @app_secret = "141eb2a5ded8ff672fb05e87769d3ecb"
+    @web = "sina"
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
+      @login = false
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+        cookies[:access_token] = @data["oauth_token"]
+        response = kaixin_get_user(cookies[:access_token])
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        if @user
+          ActionLog.login_log(@user.id)
+        else
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+        end
+        cookies[:user_id] = @user.id
+        cookies[:user_name] = @user.name
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+      end
+    end
+  end
+
+  #
+  #---------------------------------------------------------------------------------------
+  #六级
+  def sina_cet6
+    @app_key = "2416971947"
+    @app_secret = "2a9ec8a4c028721eda0e3a0d751d724a"
+    @web = "sina"
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
+      @login = false
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+        cookies[:access_token] = @data["oauth_token"]
+        response = kaixin_get_user(cookies[:access_token])
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        if @user
+          ActionLog.login_log(@user.id)
+        else
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+        end
+        cookies[:user_id] = @user.id
+        cookies[:user_name] = @user.name
+        puts cookies[:user_id]
+        puts cookies[:user_name]
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+      end
+    end
+  end
+  
+  # END 新浪微博相关
 
 end
