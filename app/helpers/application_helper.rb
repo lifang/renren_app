@@ -86,6 +86,8 @@ module ApplicationHelper
     return category_role(category_id) == Order::USER_ORDER[:NOMAL]
   end
 
+
+  
   #START -----人人API
   #人人主方法
   def renren_api(request)
@@ -121,6 +123,8 @@ module ApplicationHelper
   end
   #
   #END -------人人API----------
+
+
   
   #START -------开心网API----------
   #
@@ -169,5 +173,32 @@ module ApplicationHelper
   #
   #END -------开心网API----------
 
+
+  
+  #START -------新浪微博API----------
+  #
+  #新浪微博主方法
+  def sina_api(request)
+    uri = URI.parse("https://api.weibo.com")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = http.request(request).body
+  end
+  #
+  #新浪微博获取用户信息
+  def sina_get_user(access_token,uid)
+    request = Net::HTTP::Get.new("/2/users/show.json?access_token=#{access_token}&uid=#{uid}")
+    response = JSON sina_api(request)
+  end
+  #
+  #新浪微博发送微博
+  def sina_send_message(access_token,message)
+    request = Net::HTTP::Post.new("/2/statuses/update.json")
+    request.set_form_data({"access_token" =>access_token, "status" => message})
+    response =JSON sina_api(request)
+  end
+  #
+  #END -------新浪微博API----------
 
 end

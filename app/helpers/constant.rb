@@ -1,10 +1,14 @@
 module Constant
 
   #赶考网链接
-  GANKAO_URL = "http://localhost:3001"
+  #GANKAO_URL = "http://localhost:3001"
 
-  BACK_SERVER_PATH = "http://localhost:3000"
-  SERVER_PATH = "http://localhost:3002"
+  #BACK_SERVER_PATH = "http://localhost:3000"
+  #SERVER_PATH = "http://localhost:3002"
+
+  GANKAO_URL = "http://127.0.0.1:3001"
+  BACK_SERVER_PATH = "http://127.0.0.1:3000"
+  SERVER_PATH = "http://127.0.0.1:3002"
 
   #项目文件目录(使用赶考前台的public目录)
   PUBLIC_PATH = "e:/gankao_season2/public"
