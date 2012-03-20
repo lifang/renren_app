@@ -342,12 +342,12 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-  #  @@client_id4 = "180526"
-  #  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "180526"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-  @@client_id4 = "166937"
-  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -415,13 +415,13 @@ class SimilaritiesController < ApplicationController
   #---------------------------------------------------------------------------------------
 
   #人人六级应用相关信息
-#  @@client_id6 = "180533"
-#  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
-#  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
+  @@client_id6 = "180533"
+  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
+  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
 
   #cet_six
-  @@client_id6 = "180459"
-  @@secret_key6 = "68e04945b0d34cfb9e2091463f8f2f24"
+#  @@client_id6 = "180459"
+#  @@secret_key6 = "68e04945b0d34cfb9e2091463f8f2f24"
   
 
   def cet6
