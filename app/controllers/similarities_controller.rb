@@ -354,12 +354,14 @@ class SimilaritiesController < ApplicationController
     @client_id = @@client_id4
   end
 
+  def cet4_url_generate
+    render :inline=>"<script type='text/javascript'>var p = window.location.href.split('#');var pr = p.length>1 ? p[1] : '';window.location.href = '/similarities/oauth_login_cet4?'+pr;</script>"
+  end
+
   #oauth登录(四级登录)
   def oauth_login_cet4
     cookies.delete(:first)
-    access_token = params["access_token"].nil? ? request.headers["rack.request.cookie_hash"]["access_token"] : params["access_token"]
-    render :inline=>"#{request.headers["rack.request.cookie_hash"]}"
-    return false
+    access_token = params["access_token"]
     user_info = renren_get_user(access_token,@@secret_key4)
     if user_info[0]
       user_info = user_info[0]
@@ -381,8 +383,6 @@ class SimilaritiesController < ApplicationController
     user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
     redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&appid=#{@@client_id4}"
   end
-
-  
 
   #人人分享，提供权限(四级)
   def renren_share4
@@ -416,20 +416,28 @@ class SimilaritiesController < ApplicationController
   #---------------------------------------------------------------------------------------
 
   #人人六级应用相关信息
-  @@client_id6 = "180533"
-  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
-  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
+#  @@client_id6 = "180533"
+#  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
+#  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
 
+  #cet_six
+  @@client_id6 = "180459"
+  @@secret_key6 = "68e04945b0d34cfb9e2091463f8f2f24"
+  
 
   def cet6
     @client_id = @@client_id6
+  end
+
+  def cet6_url_generate
+    render :inline=>"<script type='text/javascript'>var p = window.location.href.split('#');var pr = p.length>1 ? p[1] : '';window.location.href = '/similarities/oauth_login_cet6?'+pr;</script>"
   end
 
   #oauth登录(六级登录)
   def oauth_login_cet6
     cookies.delete(:first)
     @client_id = @@client_id6
-    access_token = params["access_token"].nil? ? request.headers["rack.request.cookie_hash"]["access_token"] : params["access_token"]
+    access_token = params["access_token"]
     user_info = renren_get_user(access_token,@@secret_key6)
     if user_info[0]
       user_info = user_info[0]
