@@ -343,10 +343,12 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-  #@@client_id4 = "166937"
   @@client_id4 = "180526"
-  #@@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
   @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+
+  #cet_four
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -354,28 +356,31 @@ class SimilaritiesController < ApplicationController
 
   #oauth登录(四级登录)
   def oauth_login_cet4
-    if cookies[:oauth2_url_generate]
-      cookies.delete(:oauth2_url_generate)
-      cookies.delete(:first)
-      user_info = renren_get_user(params[:access_token],@@secret_key4)[0]
-      cookies[:access_token] = params[:access_token]
-      @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
-      cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
-      if @user
-        ActionLog.login_log(@user.id)
-      else
-        @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
-      end
-      cookies[:user_id]=@user.id
-      cookies[:user_name]=@user.username
-      cookies.delete(:user_role)
-      user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-      redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&appid=#{@@client_id4}"
+    cookies.delete(:first)
+    r_params = request.headers["rack.request.cookie_hash"]
+    user_info = renren_get_user(r_params["access_token"],@@secret_key4)
+    if user_info[0]
+      user_info = user_info[0]
     else
-      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :secure  => false}
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+      render :inline=>"#{user_info}"
+      return false
     end
+    cookies[:access_token] = r_params["access_token"]
+    @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
+    cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
+    if @user
+      ActionLog.login_log(@user.id)
+    else
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+    end
+    cookies[:user_id]=@user.id
+    cookies[:user_name]=@user.username
+    cookies.delete(:user_role)
+    user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+    redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&appid=#{@@client_id4}"
   end
+
+  
 
   #人人分享，提供权限(四级)
   def renren_share4
@@ -413,34 +418,36 @@ class SimilaritiesController < ApplicationController
   @@api_key6= "18037029bfb344349197e7e37c2d72fb"
   @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
 
+
   def cet6
     @client_id = @@client_id6
   end
 
   #oauth登录(六级登录)
   def oauth_login_cet6
-    if cookies[:oauth2_url_generate]
-      cookies.delete(:oauth2_url_generate)
-      cookies.delete(:first)
-      @client_id = @@client_id6
-      user_info = renren_get_user(params[:access_token],@@secret_key6)[0]
-      cookies[:access_token] = params[:access_token]
-      @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
-      cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
-      if @user
-        ActionLog.login_log(@user.id)
-      else
-        @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
-      end
-      cookies[:user_id]=@user.id
-      cookies[:user_name]=@user.username
-      cookies.delete(:user_role)
-      user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-      redirect_to "/similarities?category=#{Category::LEVEL_SIX}&appid=#{@@client_id6}"
+    cookies.delete(:first)
+    @client_id = @@client_id6
+    r_params = request.headers["rack.request.cookie_hash"]
+    user_info = renren_get_user(r_params["access_token"],@@secret_key6)
+    if user_info[0]
+      user_info = user_info[0]
     else
-      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :secure  => false}
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+      render :inline=>"#{user_info}"
+      return false
     end
+    cookies[:access_token] = r_params["access_token"]
+    @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
+    cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
+    if @user
+      ActionLog.login_log(@user.id)
+    else
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+    end
+    cookies[:user_id]=@user.id
+    cookies[:user_name]=@user.username
+    cookies.delete(:user_role)
+    user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+    redirect_to "/similarities?category=#{Category::LEVEL_SIX}&appid=#{@@client_id6}"
   end
 
   #人人分享，提供权限(六级)
