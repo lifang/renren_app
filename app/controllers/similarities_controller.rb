@@ -371,7 +371,7 @@ class SimilaritiesController < ApplicationController
       user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
       redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&appid=#{@@client_id4}"
     else
-      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :expires => 10000, :secure  => false}
+      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :secure  => false}
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
   end
@@ -437,7 +437,7 @@ class SimilaritiesController < ApplicationController
       user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
       redirect_to "/similarities?category=#{Category::LEVEL_SIX}&appid=#{@@client_id6}"
     else
-      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :expires => 10000, :secure  => false}
+      cookies[:oauth2_url_generate]={:value => "replace('#','?')", :path => "/", :secure  => false}
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
   end
