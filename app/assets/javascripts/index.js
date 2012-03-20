@@ -21,10 +21,11 @@ function redo_paper(){
 }
 
 
-function tishi_share(){
+function tishi_share(content){
     if(shared == 0){
         $('#free_sum_div').show();
         $('#display_free_sum').html("");
+        $('#tishi_share_content').html(content);
         if(web=="renren"){
             $.ajax({
                 type: "GET",
