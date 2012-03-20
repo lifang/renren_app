@@ -343,12 +343,12 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-#  @@client_id4 = "180526"
-#  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "180526"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-  @@client_id4 = "166937"
-  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -357,15 +357,15 @@ class SimilaritiesController < ApplicationController
   #oauth登录(四级登录)
   def oauth_login_cet4
     cookies.delete(:first)
-    r_params = request.headers["rack.request.cookie_hash"]
-    user_info = renren_get_user(r_params["access_token"],@@secret_key4)
+    access_token = params["access_token"].nil? ? request.headers["rack.request.cookie_hash"]["access_token"] : params["access_token"]
+    user_info = renren_get_user(access_token,@@secret_key4)
     if user_info[0]
       user_info = user_info[0]
     else
       render :inline=>"#{user_info}"
       return false
     end
-    cookies[:access_token] = r_params["access_token"]
+    cookies[:access_token] = access_token
     @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
     cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
     if @user
@@ -427,15 +427,15 @@ class SimilaritiesController < ApplicationController
   def oauth_login_cet6
     cookies.delete(:first)
     @client_id = @@client_id6
-    r_params = request.headers["rack.request.cookie_hash"]
-    user_info = renren_get_user(r_params["access_token"],@@secret_key6)
+    access_token = params["access_token"].nil? ? request.headers["rack.request.cookie_hash"]["access_token"] : params["access_token"]
+    user_info = renren_get_user(access_token,@@secret_key6)
     if user_info[0]
       user_info = user_info[0]
     else
       render :inline=>"#{user_info}"
       return false
     end
-    cookies[:access_token] = r_params["access_token"]
+    cookies[:access_token] = access_token
     @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
     cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
     if @user
