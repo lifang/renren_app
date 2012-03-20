@@ -343,8 +343,8 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-#  @@client_id4 = "180526"
-#  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  #  @@client_id4 = "180526"
+  #  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
   @@client_id4 = "166937"
@@ -358,6 +358,8 @@ class SimilaritiesController < ApplicationController
   def oauth_login_cet4
     cookies.delete(:first)
     access_token = params["access_token"].nil? ? request.headers["rack.request.cookie_hash"]["access_token"] : params["access_token"]
+    render :inline=>"#{request.headers["rack.request.cookie_hash"]}"
+    return false
     user_info = renren_get_user(access_token,@@secret_key4)
     if user_info[0]
       user_info = user_info[0]
