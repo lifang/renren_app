@@ -30,7 +30,7 @@ module ApplicationHelper
       orders = Order.find(:all, :conditions => ["user_id = ? and status = #{Order::STATUS[:NOMAL]}", user_id.to_i])
       orders.each do |order|
         if order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or
-            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:RENREN]
+            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:RENREN] or order.types == Order::TYPES[:SINA]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         elsif order.types == Order::TYPES[:TRIAL_SEVEN]
@@ -50,7 +50,7 @@ module ApplicationHelper
   def user_order(category_id, user_id)
     user_role?(user_id) if cookies[:user_role].nil?
     unless cookies[:user_role] =~ /#{category_id}/
-      order=Order.create(:user_id => user_id, :types => Order::TYPES[:TRIAL_SEVEN],
+      Order.create(:user_id => user_id, :types => Order::TYPES[:TRIAL_SEVEN],
         :status => Order::STATUS[:NOMAL], :start_time => Time.now.to_datetime, :total_price => 0,
         :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,
         :category_id => category_id, :remark => Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
