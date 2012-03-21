@@ -26,7 +26,7 @@ function tishi_share(content){
         $('#free_sum_div').show();
         $('#display_free_sum').html("");
         $('#tishi_share_content').html(content);
-        if(web=="renren"){
+        if(web=="renren"||web=="sina"){
             $.ajax({
                 type: "GET",
                 url: "/similarities/ajax_free_sum.json",
@@ -47,24 +47,46 @@ function tishi_share(content){
 
 function confirm_share(){
     $('#free_sum_div').hide();
+    if(web=="renren"){
+        $("#confirm_share_message").html("领取免费名额，我们将发送一条新鲜事到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？");
+    }
+    if(web=="sina"){
+        $("#confirm_share_message").html("领取免费名额，我们将发送一条微博到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？");
+    }
     $('#confirm_share_div').show();
 }
 
 function share(){
     $('#confirm_share_div').hide();
     tishi_alert("正在处理，请稍候...");
-    $.ajax({
-        type: "GET",
-        url: "/similarities/renren_share"+type_n+".json",
-        dataType: "json",
-        success: function(data){
-            tishi_alert(data.message);
-            if(data["error"]==null){
-                shared = 1;
-                window.location.href="/similarities/refresh?category="+category_id+"&success=success";
+    if(web=="renren"){
+        $.ajax({
+            type: "GET",
+            url: "/similarities/renren_share"+type_n+".json",
+            dataType: "json",
+            success: function(data){
+                tishi_alert(data.message);
+                if(data["error"]==null){
+                    shared = 1;
+                    window.location.href="/similarities/refresh?category="+category_id+"&web=renren&success=success";
+                }
             }
-        }
-    });
+        });
+    }
+    if(web=="sina"){
+        $.ajax({
+            type: "GET",
+            url: "/similarities/sina_share"+type_n+".json",
+            dataType: "json",
+            success: function(data){
+                tishi_alert(data.message);
+                if(data["error"]==null){
+                    shared = 1;
+                    window.location.href="/similarities/refresh?category="+category_id+"&web=sina&success=success";
+                }
+            }
+        });
+    }
 }
 
 function friends(){

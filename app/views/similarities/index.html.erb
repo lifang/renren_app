@@ -1,7 +1,7 @@
 
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
-<% order_type = {"renren"=>Order::TYPES[:RENREN]} %>
+<% order_type = {"renren"=>Order::TYPES[:RENREN],"sina"=>Order::TYPES[:SINA]} %>
 <script type="text/javascript">
   var shared = 0;
   var web = "<%= @web %>";
@@ -75,7 +75,8 @@
       <div class="tab_con">
         <div id="tishi_share_content"></div>
       </div>
-      <% if @web=="kaixin" || @web=="sina" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
+      <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
+      <% if @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="renren" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
 
     </div>
@@ -83,7 +84,7 @@
     <div id="confirm_share_div" class="rr_tab tab_box border_radius" style="display:none;">
       <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#confirm_share_div').hide();" /></span>
       <div class="tab_con">
-        <div>领取免费名额，我们将发送一条新鲜事到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？</div>
+        <div id="confirm_share_message"></div>
       </div>
       <div class="btn_box00"><button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button></div>
     </div>

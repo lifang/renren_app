@@ -6,6 +6,7 @@ class SimilaritiesController < ApplicationController
   layout "application"
   
   def index
+    @web = params[:web].nil? ? "renren" : params[:web]
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
@@ -293,11 +294,12 @@ class SimilaritiesController < ApplicationController
 
   #更新用户权限
   def refresh
+    web = params[:web].nil? ? "renren" : params[:web]
     category = params[:category].nil? ? "2" : params[:category]
     success = params[:success]=="success" ? "1" : "0"
     cookies.delete(:user_role)
     user_role?(cookies[:user_id])
-    redirect_to "/similarities?category=#{category}&success=#{success}"
+    redirect_to "/similarities?category=#{category}&web=#{web}&success=#{success}"
   end
 
   #载入用户答案
@@ -575,6 +577,7 @@ class SimilaritiesController < ApplicationController
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
       base_str = Base64.decode64(pay_load)
+      base_str = base_str.split(",\"referer\"")[0]
       base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
       @data = JSON (base_str)
       @login = false
@@ -597,6 +600,35 @@ class SimilaritiesController < ApplicationController
     end
   end
 
+  #微博分享，提供权限(四级)
+  def sina_share4
+    if Constant::SINA_ORDERS_SUM[:cet_4] && get_share_sum(Order::TYPES[:SINA],Category::LEVEL_FOUR)>=Constant::SINA_ORDERS_SUM[:cet_4]
+      data = {:error=>"人数已满",:message=>"<p>今天#{Constant::SINA_ORDERS_SUM[:cet_4]}个免费名额被抢完T_T，明天再来抢吧</p>"}
+    else
+      comment="众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在新浪微博应用平台发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。应用链接: http://apps.weibo.com/english_iv"
+      ret = sina_send_message(cookies[:access_token],comment)
+      if ret["error_code"]
+        puts ret
+        data = {:error=>1,:message=>"微博发送失败，请重新尝试"}
+      else
+        order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
+        if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+          order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+          Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:SINA],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+            :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:SINA]])
+          data = {:message=>"升级正式用户成功"}
+        else
+          data = {:message=>"您已经是正式用户，请等待页面刷新"}
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
   #
   #---------------------------------------------------------------------------------------
   #六级
@@ -609,6 +641,7 @@ class SimilaritiesController < ApplicationController
       list = signed_request.split(".")
       encoded_sig,pay_load =list[0],list[1]
       base_str = Base64.decode64(pay_load)
+      base_str = base_str.split(",\"referer\"")[0]
       base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
       @data = JSON (base_str)
       @login = false
@@ -629,7 +662,36 @@ class SimilaritiesController < ApplicationController
       end
     end
   end
-  
+
+  #微博分享，提供权限(六级)
+  def sina_share6
+    if Constant::SINA_ORDERS_SUM[:cet_6] && get_share_sum(Order::TYPES[:SINA],Category::LEVEL_SIX)>=Constant::SINA_ORDERS_SUM[:cet_6]
+      data = {:error=>"人数已满",:message=>"<p>当天#{Constant::SINA_ORDERS_SUM[:cet_6]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
+    else
+      comment="众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在新浪微博应用平台发现了一个应用，提供全套的六级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。应用链接: http://apps.weibo.com/english_vi"
+      ret = sina_send_message(cookies[:access_token],comment)
+      if ret["error_code"]
+        puts ret
+        data = {:error=>1,:message=>"微博发送失败，请重新尝试"}
+      else
+        order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
+        if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+          order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+          Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:SINA],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+            :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:SINA]])
+          data = {:message=>"升级正式用户成功"}
+        else
+          data = {:message=>"您已经是正式用户，请等待页面刷新"}
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
   # END 新浪微博相关
 
 end
