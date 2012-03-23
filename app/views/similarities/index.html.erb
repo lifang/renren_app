@@ -56,7 +56,7 @@
                       </a>
                     <% else %>
                       <a href="javascript:void(0);"
-                          onclick="javascript:tishi_share('这是一套收费试卷，只有正式的用户才可以使用。');">
+                         onclick="javascript:tishi_share('这是一套收费试卷，只有正式的用户才可以使用。');">
                         <span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                         <h2><%= similarity.title %></h2>
                       </a>
@@ -85,6 +85,7 @@
       <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#confirm_share_div').hide();" /></span>
       <div class="tab_con">
         <div id="confirm_share_message"></div>
+        <% if @web=="sina" %><div><textarea style="padding:5px;width:270px;height:160px;" id="sina_share_message">众所周知，我正在准备<%= "#{(category_id == '2') ? '四' : '六'}" %>级。（原来不知道的话，现在也知道了吧。）刚刚在新浪微博应用平台发现了一个应用，提供全套的<%= "#{(category_id == '2') ? '四' : '六'}" %>级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。应用链接: <%= "#{(category_id == '2') ? 'http://apps.weibo.com/english_iv' : 'http://apps.weibo.com/english_vi'}" %></textarea></div><% end %>
       </div>
       <div class="btn_box00"><button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button></div>
     </div>
