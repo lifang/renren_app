@@ -579,6 +579,7 @@ function ajax_report_error(){
         tishi_alert("请选择错误类型");
         return false;
     }
+    var category_id = (category!=null) ? category : "2";
     if(sheet_url!=""){
         $.ajax({
             type: "POST",
@@ -592,7 +593,8 @@ function ajax_report_error(){
                     "user_name":$("#report_error_user_name").val(),
                     "description":$("#report_error_description").val(),
                     "error_type":$(".report_error_radio:checked").val(),
-                    "question_id":$("#report_error_question_id").val()
+                    "question_id":$("#report_error_question_id").val(),
+                    "category_id":category_id
                 }
             },
             success : function(data) {
