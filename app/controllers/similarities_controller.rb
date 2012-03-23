@@ -605,7 +605,7 @@ class SimilaritiesController < ApplicationController
     if Constant::SINA_ORDERS_SUM[:cet_4] && get_share_sum(Order::TYPES[:SINA],Category::LEVEL_FOUR)>=Constant::SINA_ORDERS_SUM[:cet_4]
       data = {:error=>"人数已满",:message=>"<p>今天#{Constant::SINA_ORDERS_SUM[:cet_4]}个免费名额被抢完T_T，明天再来抢吧</p>"}
     else
-      comment="众所周知，我正在准备四级。（原来不知道的话，现在也知道了吧。）刚刚在新浪微博应用平台发现了一个应用，提供全套的四级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。应用链接: http://apps.weibo.com/english_iv"
+      comment="#{params["message"]}"
       ret = sina_send_message(cookies[:access_token],comment)
       if ret["error_code"]
         puts ret
@@ -668,7 +668,7 @@ class SimilaritiesController < ApplicationController
     if Constant::SINA_ORDERS_SUM[:cet_6] && get_share_sum(Order::TYPES[:SINA],Category::LEVEL_SIX)>=Constant::SINA_ORDERS_SUM[:cet_6]
       data = {:error=>"人数已满",:message=>"<p>当天#{Constant::SINA_ORDERS_SUM[:cet_6]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
     else
-      comment="众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在新浪微博应用平台发现了一个应用，提供全套的六级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。应用链接: http://apps.weibo.com/english_vi"
+      comment="#{params["message"]}"
       ret = sina_send_message(cookies[:access_token],comment)
       if ret["error_code"]
         puts ret

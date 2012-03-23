@@ -75,9 +75,12 @@ function share(){
     }
     if(web=="sina"){
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "/similarities/sina_share"+type_n+".json",
             dataType: "json",
+            data:{
+                "message":$("#sina_share_message").val()
+            },
             success: function(data){
                 tishi_alert(data.message);
                 if(data["error"]==null){
