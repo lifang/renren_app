@@ -78,6 +78,16 @@ function close_tishi_tab(){
     $(".tishi_tab").remove();
 }
 
+function AutoScroll(obj){
+    $(obj).find("ul:first").animate({
+        marginTop:"-25px"
+    },500,function(){
+        $(this).css({
+            marginTop:"0px"
+        }).find("li:first").appendTo(this);
+    });
+}
+
 
   Array.prototype.indexOf=function(el, index){
     var n = this.length>>>0, i = ~~index;

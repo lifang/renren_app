@@ -244,9 +244,9 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 
 /*拖拽---*/
 .drag_tk {
-        padding: 10px;
-	background: #c4c4c4;
-	position: relative;
+    padding: 10px;
+    background: #c4c4c4;
+    position: relative;
 }
 .drag_tk ul { display: block; position: fixed; z-index: 1000;}
 .drag_tk li { padding: 5px; border: 1px #b3ad9c solid; background: #ececec; display: inline-block; margin: 5px; cursor:move;}
@@ -330,3 +330,9 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 
 .borde_blue, input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033ff solid;}
 .link_c {color: red;}
+
+/*AD-----------------------*/
+.AD_text { position: absolute; top: 38px; right: 10px;}
+.AD_scrollDiv{ height:25px; line-height:25px; overflow:hidden; text-align: right;}
+.AD_scrollDiv li { height:25px;padding-left:10px;}
+.AD_scrollDiv li a { color: #333;}
