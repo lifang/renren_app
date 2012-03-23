@@ -19,9 +19,9 @@
     <span class="renren_share"><a name="xn_share" type="button" href="<%= share_url %>">分享</a><%= javascript_include_tag "/assets/exam_user/share.js" %></span>
   <% end %>
   <% if @web!="sina" && @web !="qq" %>
-  <span class="ex_renren">
+    <span class="ex_renren">
       <a href="<%= Constant::GANKAO_URL %>/words/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>" target="_blank">高频词汇,轻松记忆</a>
-  </span>
+    </span>
   <% end %>
   <div class="icon_func">
     <div class="float_right">
@@ -34,6 +34,7 @@
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= @web %>');">重做</a></span>
   </div>
+  <%= render :partial=>"/common/advert" %>
 </div>
 
 <!-- 试题生成入口 generate.js -->

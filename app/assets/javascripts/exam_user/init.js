@@ -9,7 +9,8 @@ function transform_array(object){
     if(resource){
         if(resource.length){
             result = resource;
-        }else{
+        }
+        else{
             result.push(resource);
         }
     }
@@ -908,7 +909,7 @@ function afterload(){
         var pbl_height = m_side_height-drag_tk_height-40;//padding的高度
         $("#problem_box_"+init_problem).css("height",pbl_height);
         $("#drag_tk_"+init_problem).css("height",drag_tk_height);
-    $("#draggable_list_"+init_problem).css("top",34+$("#m_side_"+init_problem).height()-$("#drag_tk_"+init_problem).height());
+        $("#draggable_list_"+init_problem).css("top",34+$("#m_side_"+init_problem).height()-$("#drag_tk_"+init_problem).height());
     }
     if(problems[init_problem].question_type!="1"){
         $("#pro_qu_t_"+init_problem+"_0").trigger("click");
@@ -984,6 +985,11 @@ function left_side(){
 function right_side(){
     element1 = create_element("div",null,null,"m_side",null,"innerHTML");
     $(problem_resource).append(element1);
+    if(have_adv==true){
+        element2 = create_element("div",null,null,null,null,"innerHTML");
+        $(element2).css("padding","10px");
+        $(element1).append(element2);
+    }
     element2 = create_element("div",null,null,"problem_box",null,"innerHTML");
     $(element1).append(element2);
     if(problems[init_problem]["question_type"]=="1"){

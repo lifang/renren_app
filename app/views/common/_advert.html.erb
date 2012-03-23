@@ -1,0 +1,26 @@
+
+<%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
+<% unless ads.blank? %>
+  <div class="AD_text">
+    <div class="AD_scrollDiv">
+      <ul>
+        <% ads.each do |ad| %>
+          <li><%= ad.content.html_safe %></li>
+        <%end unless ads.blank?%>
+      </ul>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var have_adv = true;
+    $(document).ready(function(){
+      setInterval(function(){
+        AutoScroll(".AD_scrollDiv")
+      },3000)
+    });
+  </script>
+<% else %>
+  <script type="text/javascript">
+    var have_adv = false;
+  </script>
+<% end %>
