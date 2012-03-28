@@ -200,6 +200,12 @@ module ApplicationHelper
     response =JSON sina_api(request)
   end
   #
+  #新浪微博发送带图片的微博
+  def sina_send_pic(access_token,message,pic)
+    request = Net::HTTP::Post.new("/2/statuses/upload.json")
+    request.set_form_data({"access_token" =>access_token, "status" => message ,"pic" => pic})
+    response =JSON sina_api(request)
+  end
   #END -------新浪微博API----------
 
 end

@@ -8,7 +8,8 @@ $(function(){
         $("body").append(tooltip);
         $(".tooltip_box").css({
             "top":(e.pageY+y)+"px",
-            "left":(e.pageX+x)+"px"
+            "left":(e.pageX+x)+"px",
+            "z-index":"101"
         }).show("fast");
     }).mouseout(function(){
         $(".tooltip_box").remove();

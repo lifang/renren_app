@@ -345,12 +345,12 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-#  @@client_id4 = "180526"
-#  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "180526"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-  @@client_id4 = "166937"
-  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -423,8 +423,8 @@ class SimilaritiesController < ApplicationController
   @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
 
   #cet_six
-#  @@client_id6 = "180459"
-#  @@secret_key6 = "68e04945b0d34cfb9e2091463f8f2f24"
+  #  @@client_id6 = "180459"
+  #  @@secret_key6 = "68e04945b0d34cfb9e2091463f8f2f24"
   
 
   def cet6
@@ -572,6 +572,10 @@ class SimilaritiesController < ApplicationController
   def sina_cet4
     @app_key = "2422557611"
     @app_secret = "141eb2a5ded8ff672fb05e87769d3ecb"
+
+#    @app_key = "4140866006"
+#    @app_secret = "2367900785a62214eeb4afa02b3cd672"
+
     @web = "sina"
     signed_request = params[:signed_request]
     if signed_request
@@ -585,13 +589,23 @@ class SimilaritiesController < ApplicationController
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
-        cookies[:access_token] = @data["oauth_token"]
         response = sina_get_user(cookies[:access_token],@data["user_id"])
         @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
         if @user
           ActionLog.login_log(@user.id)
         else
           @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          #发送推广微博(审核时隐藏)
+          comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
+          sina_send_message(cookies[:access_token],comment)
+#          file = File.open("E:/test.png","b")
+#          pic = file.read
+#          file.close
+#          puts pic
+#          puts "--------------------------------"
+#          ret = sina_send_pic(cookies[:access_token],comment,pic)
+#          puts "-----------------------------------------------------"
+#          puts ret
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -655,6 +669,8 @@ class SimilaritiesController < ApplicationController
           ActionLog.login_log(@user.id)
         else
           @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          comment = "我正在使用应用--大学英语六级真题 http://apps.weibo.com/english_vi"
+          sina_send_message(cookies[:access_token],comment)
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
