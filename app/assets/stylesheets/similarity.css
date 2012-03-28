@@ -332,7 +332,7 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 .link_c {color: red;}
 
 /*AD-----------------------*/
-.AD_text { position: absolute; top: 38px; right: 10px;}
-.AD_scrollDiv{ height:25px; line-height:25px; overflow:hidden; text-align: right;}
-.AD_scrollDiv li { height:25px;padding-left:10px;}
-.AD_scrollDiv li a { color: #333;}
+.AD_text { position: absolute; top: 38px; right: 20px; width: 330px; height:25px; line-height:25px; margin-right: 7px; background-color: white;z-index:9}
+.AD_text a { color: #333;}
+.AD_text a:hover { color: #F00;}
+
