@@ -577,6 +577,7 @@ class SimilaritiesController < ApplicationController
 #    @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
+    @login = false
     signed_request = params[:signed_request]
     if signed_request
       list = signed_request.split(".")
@@ -585,7 +586,6 @@ class SimilaritiesController < ApplicationController
       base_str = base_str.split(",\"referer\"")[0]
       base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
       @data = JSON (base_str)
-      @login = false
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
@@ -651,6 +651,7 @@ class SimilaritiesController < ApplicationController
     @app_key = "2416971947"
     @app_secret = "2a9ec8a4c028721eda0e3a0d751d724a"
     @web = "sina"
+    @login = false
     signed_request = params[:signed_request]
     if signed_request
       list = signed_request.split(".")
@@ -659,7 +660,6 @@ class SimilaritiesController < ApplicationController
       base_str = base_str.split(",\"referer\"")[0]
       base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
       @data = JSON (base_str)
-      @login = false
       if @data["user_id"] && @data["oauth_token"]
         @login = true
         cookies[:access_token] = @data["oauth_token"]
