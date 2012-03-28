@@ -344,12 +344,12 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-#  @@client_id4 = "180526"
-#  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "180526"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-  @@client_id4 = "166937"
-  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -569,11 +569,11 @@ class SimilaritiesController < ApplicationController
 
   #四级
   def sina_cet4
-#    @app_key = "2422557611"
-#    @app_secret = "141eb2a5ded8ff672fb05e87769d3ecb"
+    @app_key = "2422557611"
+    @app_secret = "141eb2a5ded8ff672fb05e87769d3ecb"
 
-    @app_key = "4140866006"
-    @app_secret = "2367900785a62214eeb4afa02b3cd672"
+#    @app_key = "4140866006"
+#    @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
     signed_request = params[:signed_request]
