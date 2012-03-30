@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Constant
 
   #赶考网链接
