@@ -1,7 +1,7 @@
 
 <%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
 <% unless ads.blank? %>
-  <div class="AD_text">
+  <div class="AD_text AD_width">
     <marquee class="marquee" scrollamount="2" direction=left>
       <% ads.each do |ad| %>
         <%= ad.content.html_safe %> &nbsp;&nbsp;&nbsp;&nbsp;

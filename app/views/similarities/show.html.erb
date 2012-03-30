@@ -34,6 +34,15 @@
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" name="重做" onclick="javascript:confirm_redo('<%= @web %>');">重做</a></span>
   </div>
+  <% if @web=="sina" %>
+    <style type="text/css">
+      .AD_width { width: 340px;}
+    </style>
+  <% else %>
+    <style type="text/css">
+      .AD_width { width: 360px;}
+    </style>
+  <% end %>
   <%= render :partial=>"/common/advert" %>
 </div>
 

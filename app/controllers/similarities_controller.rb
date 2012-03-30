@@ -569,11 +569,13 @@ class SimilaritiesController < ApplicationController
 
   #四级
   def sina_cet4
+    #上线
     @app_key = "2422557611"
     @app_secret = "141eb2a5ded8ff672fb05e87769d3ecb"
 
-#    @app_key = "4140866006"
-#    @app_secret = "2367900785a62214eeb4afa02b3cd672"
+    #    本地测试
+    #    @app_key = "4140866006"
+    #    @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
     @login = false
@@ -597,14 +599,14 @@ class SimilaritiesController < ApplicationController
           #发送推广微博(审核时隐藏)
           comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
           sina_send_message(cookies[:access_token],comment)
-#          file = File.open("E:/test.png","b")
-#          pic = file.read
-#          file.close
-#          puts pic
-#          puts "--------------------------------"
-#          ret = sina_send_pic(cookies[:access_token],comment,pic)
-#          puts "-----------------------------------------------------"
-#          puts ret
+          #          file = File.open("E:/test.png","b")
+          #          pic = file.read
+          #          file.close
+          #          puts pic
+          #          puts "--------------------------------"
+          #          ret = sina_send_pic(cookies[:access_token],comment,pic)
+          #          puts "-----------------------------------------------------"
+          #          puts ret
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
