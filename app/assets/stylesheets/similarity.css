@@ -288,8 +288,8 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 .zhenti_list li { width: 272px; height: 59px; line-height: 59px; float: left; display: inline; margin: 10px 20px; background: url(/assets/zt_li_bg.png) no-repeat;}
 .zhenti_list li span { float: right; margin: 20px 20px 0 0;}
 .zhenti_list li h2 { color: #333; padding-left: 20px; font-size: 14px;}
-.zhenti_h_a { color: #F00; text-align: center; height: 24px; line-height: 24px; margin-bottom: 10px;}
-
+.zhenti_h_a { text-align: center; height: 24px; line-height: 24px; margin-bottom: 10px;}
+.zhenti_h_a a { color: #F00; }
 
 
 

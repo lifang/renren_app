@@ -27,12 +27,14 @@ module ApplicationHelper
   def user_role?(user_id)
     if cookies[:user_role].nil?
       cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
+      cookies[:must] = {:value =>nil, :path => "/", :secure  => false}
       orders = Order.find(:all, :conditions => ["user_id = ? and status = #{Order::STATUS[:NOMAL]}", user_id.to_i])
       orders.each do |order|
-        if order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:ACCREDIT] or
-            order.types == Order::TYPES[:RENREN] or order.types == Order::TYPES[:SINA] or order.types == Order::TYPES[:MUST]
+        if order.types == Order::TYPES[:MUST] or order.types == Order::TYPES[:SINA] or order.types == Order::TYPES[:RENREN] or
+            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
+          cookies[:must]= cookies[:must].nil? ? "#{order.category_id}=" : (cookies[:must] + "&#{order.category_id}=") if order.types == Order::TYPES[:MUST]
         elsif order.types == Order::TYPES[:TRIAL_SEVEN]
           if order.end_time < Time.now or order.status == false
             this_order = "#{order.category_id}=#{Order::USER_ORDER[:NOMAL]}"
@@ -50,11 +52,17 @@ module ApplicationHelper
   def user_order(category_id, user_id)
     user_role?(user_id) if cookies[:user_role].nil?
     unless cookies[:user_role] =~ /#{category_id}/
-      Order.create(:user_id => user_id, :types => Order::TYPES[:TRIAL_SEVEN],
+      order = Order.find(:first, :conditions => ["user_id = ? and category_id = ? and status = #{Order::STATUS[:INVALIDATION]}",
+          user_id.to_i, category_id.to_i])
+      if order
+        this_order = "#{category_id}=#{Order::USER_ORDER[:NOMAL]}"
+      else
+        Order.create(:user_id => user_id, :types => Order::TYPES[:TRIAL_SEVEN],
         :status => Order::STATUS[:NOMAL], :start_time => Time.now.to_datetime, :total_price => 0,
         :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,
         :category_id => category_id, :remark => Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       this_order = "#{category_id}=#{Order::USER_ORDER[:TRIAL]}"
+      end
       cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
     end
   end
