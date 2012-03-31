@@ -345,12 +345,12 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-#  @@client_id4 = "180526"
-#  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "180526"
+  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-  @@client_id4 = "166937"
-  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -600,14 +600,6 @@ class SimilaritiesController < ApplicationController
           #发送推广微博(审核时隐藏)
           comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
           sina_send_message(cookies[:access_token],comment)
-          #          file = File.open("E:/test.png","b")
-          #          pic = file.read
-          #          file.close
-          #          puts pic
-          #          puts "--------------------------------"
-          #          ret = sina_send_pic(cookies[:access_token],comment,pic)
-          #          puts "-----------------------------------------------------"
-          #          puts ret
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -710,7 +702,41 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
-
   # END 新浪微博相关
+
+
+  
+  #
+  #------------------------------------------------------------------------
+  #
+
+
+
+  #START  腾讯相关
+
+
+  #END  腾讯相关
+
+
+  
+  #
+  #------------------------------------------------------------------------
+  #
+
+
+
+  #START 百度相关
+
+  def baidu_cet4
+      
+  end
+
+  def baidu_share4
+      
+  end
+  
+  #END 百度相关
+
+
 
 end
