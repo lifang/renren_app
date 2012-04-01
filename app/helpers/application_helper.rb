@@ -74,7 +74,7 @@ module ApplicationHelper
     user_role?(cookies[:user_id]) if cookies[:user_role].nil?
     all_category = cookies[:user_role].split("&")
     all_category.each do |category|
-      if category =~ /#{category_id}/
+      if category.include?("#{category_id}=")
         current_role = category.split("=")[1]
       end
     end unless all_category.blank?
