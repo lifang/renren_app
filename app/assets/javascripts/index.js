@@ -26,7 +26,7 @@ function tishi_share(content){
         $('#free_sum_div').show();
         $('#display_free_sum').html("");
         $('#tishi_share_content').html(content);
-        if(web=="renren"||web=="sina"){
+        if(web=="renren"||web=="sina"||web=="baidu"){
             $.ajax({
                 type: "GET",
                 url: "/similarities/ajax_free_sum.json",
@@ -41,18 +41,24 @@ function tishi_share(content){
             });
         }
     }else{
-        tishi_alert("请等待页面刷新");
+        tishi_alert("页面即将刷新,请稍等 :)");
     }
 }
 
 function confirm_share(){
     $('#free_sum_div').hide();
+    var message = "";
     if(web=="renren"){
-        $("#confirm_share_message").html("领取免费名额，我们将发送一条新鲜事到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？");
+        message = "发送一条新鲜事到您的主页来宣传我们的应用";
     }
     if(web=="sina"){
-        $("#confirm_share_message").html("领取免费名额，我们将发送一条微博到您的主页来宣传我们的应用，感谢您的支持。确认领取吗？");
+        message = "发送一条微博到您的主页来宣传我们的应用";
     }
+    if(web=="baidu"){
+        share();
+        return false;
+    }
+    $("#confirm_share_message").html("领取免费名额，我们将"+message+"，感谢您的支持。确认领取吗？");
     $('#confirm_share_div').show();
 }
 
@@ -86,6 +92,20 @@ function share(){
                 if(data["error"]==null){
                     shared = 1;
                     window.location.href="/similarities/refresh?category="+category_id+"&web=sina&success=success";
+                }
+            }
+        });
+    }
+    if(web=="baidu"){
+        $.ajax({
+            type: "GET",
+            url: "/similarities/baidu_share"+type_n+".json",
+            dataType: "json",
+            success: function(data){
+                tishi_alert(data.message);
+                if(data["error"]==null){
+                    shared = 1;
+                    window.location.href="/similarities/refresh?category="+category_id+"&web=baidu&success=success";
                 }
             }
         });

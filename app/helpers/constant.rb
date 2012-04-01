@@ -23,7 +23,7 @@ module Constant
   #设置通过分享获得会员的数量限制(每日)
   RENREN_ORDERS_SUM = {:cet_4=>50,:cet_6=>25}
   SINA_ORDERS_SUM = {:cet_4=>50,:cet_6=>25}
-
+  BAIDU_ORDERS_SUM = {:cet_4=>150,:cet_6=>125}
   #人人公共主页id
   RENREN_ID = 600942099
 

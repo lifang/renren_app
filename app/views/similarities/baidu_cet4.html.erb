@@ -1,0 +1,19 @@
+
+<style>
+  body{
+    background: url("/assets/760x628-4.png") no-repeat;
+  }
+</style>
+
+<body>
+
+</body>
+
+
+<script type="text/javascript">
+  $(function(){
+    setTimeout(function(){
+      window.location.href = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=<%= @api_key %>&redirect_uri=<%= @redirect_uri %>&display=page";
+    },1500)
+  })
+</script>
