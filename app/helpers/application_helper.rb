@@ -51,7 +51,7 @@ module ApplicationHelper
   #如果当前科目没有付费记录，则记录一条新的记录
   def user_order(category_id, user_id)
     user_role?(user_id) if cookies[:user_role].nil?
-    unless cookies[:user_role] =~ /#{category_id}/
+    unless cookies[:user_role].include?("#{category_id}=")
       order = Order.find(:first, :conditions => ["user_id = ? and category_id = ? and status = #{Order::STATUS[:INVALIDATION]}",
           user_id.to_i, category_id.to_i])
       if order
@@ -73,7 +73,7 @@ module ApplicationHelper
     user_role?(cookies[:user_id]) if cookies[:user_role].nil?
     all_category = cookies[:user_role].split("&")
     all_category.each do |category|
-      if category =~ /#{category_id}/
+      if category.include?("#{category_id}=")
         current_role = category.split("=")[1]
       end
     end unless all_category.blank?
