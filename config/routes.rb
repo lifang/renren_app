@@ -9,6 +9,8 @@ RenrenApp::Application.routes.draw do
   match "/sina6" => "similarities#sina_cet6"
   match "/baidu4" => "similarities#baidu_cet4"
   match "/baidu6" => "similarities#baidu_cet6"
+  match "/search4" => "similarities#baidu_search4"
+  match "/search6" => "similarities#baidu_search6"
 
   resources :similarities do
     member do
