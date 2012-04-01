@@ -734,6 +734,7 @@ class SimilaritiesController < ApplicationController
   @@baidu_redirect_uri4 = "#{Constant::SERVER_PATH}/similarities/baidu_login4"
 
   def baidu_cet4
+    @web = "baidu"
     @api_key = @@baidu_api_key4
     @redirect_uri = @@baidu_redirect_uri4
   end
@@ -788,6 +789,7 @@ class SimilaritiesController < ApplicationController
   @@baidu_redirect_uri6 = "#{Constant::SERVER_PATH}/similarities/baidu_login6"
 
   def baidu_cet6
+    @web = "baidu"
     @api_key = @@baidu_api_key6
     @redirect_uri = @@baidu_redirect_uri6
   end
