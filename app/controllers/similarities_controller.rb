@@ -780,7 +780,7 @@ class SimilaritiesController < ApplicationController
   end
 
   def baidu_search4
-    render :inline=>"<script src='http://app.baidu.com/static/appstore/monitor.st'></script><img src='/assets/search4.png' onclick=\"javascript:window.parent.location.href='http://apps.baidu.com/english_iv'\"></img>"
+    render :layout=>false
   end
 
 
@@ -835,7 +835,7 @@ class SimilaritiesController < ApplicationController
   end
   
   def baidu_search6
-    render :inline=>"<script src='http://app.baidu.com/static/appstore/monitor.st'></script><img src='/assets/search6.png' onclick=\"javascript:window.parent.location.href='http://apps.baidu.com/english_vi'\"></img>"
+    render :layout=>false
   end
 
   #END 百度相关
