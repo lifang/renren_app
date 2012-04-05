@@ -768,10 +768,9 @@ class SimilaritiesController < ApplicationController
     cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
     user_role?(cookies[:user_id])
     data=true
-    render :inline => "<script>window.opener.location.reload();window.close();window.opener.location.href='/similarities'</script>"
     #      rescue
     #        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-    #      end
+#    #      end
     respond_to do |format|
       format.json {
         render :json=>{:yes=>data,:category=>Category::LEVEL_FOUR}
