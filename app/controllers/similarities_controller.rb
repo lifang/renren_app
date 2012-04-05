@@ -3,7 +3,6 @@ class SimilaritiesController < ApplicationController
   require 'oauth2'
   require 'net/http'
   require 'base64'
-
   layout "application"
   
   def index
