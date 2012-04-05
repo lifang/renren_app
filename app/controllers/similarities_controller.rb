@@ -379,7 +379,8 @@ class SimilaritiesController < ApplicationController
       ActionLog.login_log(@user.id)
     else
       cookies[:first]={:value => "first", :path => "/", :secure  => false}
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],
+        :username=>user_info["name"], :from => User::U_FROM[:APP])
     end
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
@@ -455,7 +456,8 @@ class SimilaritiesController < ApplicationController
       ActionLog.login_log(@user.id)
     else
       cookies[:first]={:value => "first", :path => "/", :secure  => false}
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],
+        :username=>user_info["name"], :from => User::U_FROM[:APP])
     end
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
@@ -521,7 +523,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
+            :username=>response["name"], :from => User::U_FROM[:APP])
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -556,7 +559,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
+            :username=>response["name"], :from => User::U_FROM[:APP])
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -598,7 +602,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
+            :username=>response["screen_name"], :from => User::U_FROM[:APP])
           #发送推广微博(审核时隐藏)
           comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
           sina_send_message(cookies[:access_token],comment)
@@ -664,7 +669,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
+            :username=>response["screen_name"], :from => User::U_FROM[:APP])
           comment = "我正在使用应用--大学英语六级真题 http://apps.weibo.com/english_vi"
           sina_send_message(cookies[:access_token],comment)
         end
@@ -749,7 +755,8 @@ class SimilaritiesController < ApplicationController
       ActionLog.login_log(@user.id)
     else
       cookies[:first]={:value => "first", :path => "/", :secure  => false}
-      @user=User.create(:code_id=>ret_user["uid"],:code_type=>'baidu',:name=>ret_user["uname"],:username=>ret_user["uname"])
+      @user=User.create(:code_id=>ret_user["uid"],:code_type=>'baidu',:name=>ret_user["uname"],
+        :username=>ret_user["uname"], :from => User::U_FROM[:APP])
     end
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
@@ -804,7 +811,8 @@ class SimilaritiesController < ApplicationController
       ActionLog.login_log(@user.id)
     else
       cookies[:first]={:value => "first", :path => "/", :secure  => false}
-      @user=User.create(:code_id=>ret_user["uid"],:code_type=>'baidu',:name=>ret_user["uname"],:username=>ret_user["uname"])
+      @user=User.create(:code_id=>ret_user["uid"],:code_type=>'baidu',:name=>ret_user["uname"],
+        :username=>ret_user["uname"], :from => User::U_FROM[:APP])
     end
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
