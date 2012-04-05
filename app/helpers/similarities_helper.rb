@@ -14,6 +14,7 @@ module SimilaritiesHelper
   REQUEST_ACCESS_TOKEN={
     :response_type=>"token",
     :client_id=>APPID,
+    :redirect_uri=>"#{Constant::SERVER_PATH}/similarities/back_qq",
     :scope=>"get_user_info,add_topic",
     :state=>"1"
   }

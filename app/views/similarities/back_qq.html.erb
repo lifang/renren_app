@@ -1,0 +1,35 @@
+<script type="text/javascript">
+  //获取access token
+  var accessToken = window.location.hash.substring(1);
+  //使用Access Token来获取用户的OpenID
+  var path = "https://graph.qq.com/oauth2.0/me?";
+  var queryParams = [accessToken, 'callback=callback'];
+  var query = queryParams.join('&');
+  var url = path + query;
+  var script = document.createElement('script');
+  script.src = url;
+  document.body.appendChild(script);
+  function callback(user){
+    $.ajax({
+      async:true,
+      type: "POST",
+      url: "/sinilarities/manage_qq.json",
+      dataType: "json",
+      data : {
+        open_id :user.openid,
+        access_token:accessToken,
+        cet_openid: openid
+      },
+      success: function(data){
+        var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1];
+        if(data){
+          window.opener.location.href=url;
+          window.close();
+        }else{
+          window.opener.location.reload();
+          window.close();
+        }
+      }
+    });
+  }
+</script>
