@@ -6,9 +6,7 @@
   var queryParams = [accessToken, 'callback=callback'];
   var query = queryParams.join('&');
   var url = path + query;
-  var script = document.createElement('script');
-  script.src = url;
-  document.body.appendChild(script);
+  document.write("<script src="+ url +"><\/script>")
   function callback(user){
     $.ajax({
       async:true,
