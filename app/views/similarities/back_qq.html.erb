@@ -7,7 +7,7 @@
   var query = queryParams.join('&');
   var url = path + query;
   document.write("<script src="+ url +"><\/script>")
-  function callback(user){
+  function callback(user,openid){
     $.ajax({
       async:true,
       type: "POST",
@@ -19,8 +19,8 @@
         cet_openid: openid
       },
       success: function(data){
-        var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1];
-        if(data){
+        var url="/similarities?category="+data.category
+        if(data.yes){
           window.opener.location.href=url;
           window.close();
         }else{
