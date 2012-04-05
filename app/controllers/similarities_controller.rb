@@ -322,7 +322,9 @@ class SimilaritiesController < ApplicationController
   def ajax_free_sum
     order_type = params[:order_type]
     category = params[:category]
-    total_sum = category=="2" ? Constant::RENREN_ORDERS_SUM[:cet_4] : Constant::RENREN_ORDERS_SUM[:cet_6]
+    total_sum = category=="2" ? Constant::RENREN_ORDERS_SUM[:cet_4] : Constant::RENREN_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:RENREN]
+    total_sum = category=="2" ? Constant::SINA_ORDERS_SUM[:cet_4] : Constant::SINA_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:SINA]
+    total_sum = category=="2" ? Constant::BAIDU_ORDERS_SUM[:cet_4] : Constant::BAIDU_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:BAIDU]
     already_sum = get_share_sum(order_type.to_i,category.to_i)
     data={:message=>"今日剩余#{total_sum-already_sum}"}
     respond_to do |format|
@@ -373,17 +375,18 @@ class SimilaritiesController < ApplicationController
     end
     cookies[:access_token] = access_token
     @user=User.find_by_code_id_and_code_type("#{user_info["uid"]}","renren")
-    cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
     if @user
       ActionLog.login_log(@user.id)
     else
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+      cookies[:first]={:value => "first", :path => "/", :secure  => false}
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],
+        :username=>user_info["name"], :from => User::U_FROM[:APP])
     end
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
     cookies.delete(:user_role)
     user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&appid=#{@@client_id4}"
+    redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&web=renren&appid=#{@@client_id4}"
   end
 
   #人人分享，提供权限(四级)
@@ -449,23 +452,24 @@ class SimilaritiesController < ApplicationController
     end
     cookies[:access_token] = access_token
     @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
-    cookies[:first]={:value => "first", :path => "/", :secure  => false} unless @user
     if @user
       ActionLog.login_log(@user.id)
     else
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],:username=>user_info["name"])
+      cookies[:first]={:value => "first", :path => "/", :secure  => false}
+      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],
+        :username=>user_info["name"], :from => User::U_FROM[:APP])
     end
     cookies[:user_id]=@user.id
     cookies[:user_name]=@user.username
     cookies.delete(:user_role)
     user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_SIX}&appid=#{@@client_id6}"
+    redirect_to "/similarities?category=#{Category::LEVEL_SIX}&web=renren&appid=#{@@client_id6}"
   end
 
   #人人分享，提供权限(六级)
   def renren_share6
     if Constant::RENREN_ORDERS_SUM[:cet_6] && get_share_sum(Order::TYPES[:RENREN],Category::LEVEL_SIX)>=Constant::RENREN_ORDERS_SUM[:cet_6]
-      data = {:error=>"人数已满",:message=>"<p>当天#{Constant::RENREN_ORDERS_SUM[:cet_4]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
+      data = {:error=>"人数已满",:message=>"<p>当天#{Constant::RENREN_ORDERS_SUM[:cet_6]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
     else
       comment="众所周知，我正在准备六级。（原来不知道的话，现在也知道了吧。）刚刚在人人发现了一个应用，提供全套的六级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。"
       ret = renren_send_message(cookies[:access_token],comment,@@secret_key6)
@@ -519,7 +523,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
+            :username=>response["name"], :from => User::U_FROM[:APP])
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -554,7 +559,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],:username=>response["name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
+            :username=>response["name"], :from => User::U_FROM[:APP])
         end
         cookies[:user_id] = @user.id
         cookies[:user_name] = @user.name
@@ -596,7 +602,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
+            :username=>response["screen_name"], :from => User::U_FROM[:APP])
           #发送推广微博(审核时隐藏)
           comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
           sina_send_message(cookies[:access_token],comment)
@@ -662,7 +669,8 @@ class SimilaritiesController < ApplicationController
         if @user
           ActionLog.login_log(@user.id)
         else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],:username=>response["screen_name"])
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
+            :username=>response["screen_name"], :from => User::U_FROM[:APP])
           comment = "我正在使用应用--大学英语六级真题 http://apps.weibo.com/english_vi"
           sina_send_message(cookies[:access_token],comment)
         end
@@ -782,16 +790,118 @@ class SimilaritiesController < ApplicationController
 
   #START 百度相关
 
+  @@baidu_api_key4 = "qGR1RoeMxVHMHRhPRcKSOLn2"
+  @@baidu_secret_key4 = "k4Iogw9wgXzRiX2p6uFd5167bmE0zzwG"
+  @@baidu_redirect_uri4 = "#{Constant::SERVER_PATH}/similarities/baidu_login4"
+
   def baidu_cet4
-      
+    @web = "baidu"
+    @api_key = @@baidu_api_key4
+    @redirect_uri = @@baidu_redirect_uri4
+  end
+
+  def baidu_login4
+    code = params["code"]
+    ret_access_token = baidu_access_token(code,@@baidu_api_key4,@@baidu_secret_key4,@@baidu_redirect_uri4)
+    cookies[:access_token] = ret_access_token["access_token"]
+    ret_user = baidu_get_user(cookies[:access_token])
+    @user=User.find_by_code_id_and_code_type("#{ret_user["uid"]}","baidu")
+    if @user
+      ActionLog.login_log(@user.id)
+    else
+      cookies[:first]={:value => "first", :path => "/", :secure  => false}
+      @user=User.create(:code_id=>ret_user["uid"],:code_type=>'baidu',:name=>ret_user["uname"],
+        :username=>ret_user["uname"], :from => User::U_FROM[:APP])
+    end
+    cookies[:user_id]=@user.id
+    cookies[:user_name]=@user.username
+    cookies.delete(:user_role)
+    user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+    redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&web=baidu"
   end
 
   def baidu_share4
-      
+    if Constant::BAIDU_ORDERS_SUM[:cet_4] && get_share_sum(Order::TYPES[:BAIDU],Category::LEVEL_FOUR)>=Constant::BAIDU_ORDERS_SUM[:cet_4]
+      data = {:error=>"人数已满",:message=>"<p>当天#{Constant::BAIDU_ORDERS_SUM[:cet_4]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
+    else
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:BAIDU],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:BAIDU]])
+        data = {:message=>"升级正式用户成功"}
+      else
+        data = {:message=>"您已经是正式用户，请等待页面刷新"}
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+  def baidu_search4
+    @web = "baidu"
+  end
+
+
+  @@baidu_api_key6 = "28Df4AX3I59YSwCaqlpgHmmG"
+  @@baidu_secret_key6 = "spkM4urRXmPhQNEpkzS90DX4yLyINDV0"
+  @@baidu_redirect_uri6 = "#{Constant::SERVER_PATH}/similarities/baidu_login6"
+
+  def baidu_cet6
+    @web = "baidu"
+    @api_key = @@baidu_api_key6
+    @redirect_uri = @@baidu_redirect_uri6
+  end
+
+  def baidu_login6
+    code = params["code"]
+    ret_access_token = baidu_access_token(code,@@baidu_api_key6,@@baidu_secret_key6,@@baidu_redirect_uri6)
+    cookies[:access_token] = ret_access_token["access_token"]
+    ret_user = baidu_get_user(cookies[:access_token])
+    @user=User.find_by_code_id_and_code_type("#{ret_user["uid"]}","baidu")
+    if @user
+      ActionLog.login_log(@user.id)
+    else
+      cookies[:first]={:value => "first", :path => "/", :secure  => false}
+      @user=User.create(:code_id=>ret_user["uid"],:code_type=>'baidu',:name=>ret_user["uname"],
+        :username=>ret_user["uname"], :from => User::U_FROM[:APP])
+    end
+    cookies[:user_id]=@user.id
+    cookies[:user_name]=@user.username
+    cookies.delete(:user_role)
+    user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+    redirect_to "/similarities?category=#{Category::LEVEL_SIX}&web=baidu"
+  end
+
+  def baidu_share6
+    if Constant::BAIDU_ORDERS_SUM[:cet_6] && get_share_sum(Order::TYPES[:BAIDU],Category::LEVEL_SIX)>=Constant::BAIDU_ORDERS_SUM[:cet_6]
+      data = {:error=>"人数已满",:message=>"<p>当天#{Constant::BAIDU_ORDERS_SUM[:cet_6]}个免费账号已经被抢完T_T，明天再来抢吧。</p>"}
+    else
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:BAIDU],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:BAIDU]])
+        data = {:message=>"升级正式用户成功"}
+      else
+        data = {:message=>"您已经是正式用户，请等待页面刷新"}
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
   end
   
+  def baidu_search6
+    @web = "baidu"
+  end
+
   #END 百度相关
 
-
-
+  
 end

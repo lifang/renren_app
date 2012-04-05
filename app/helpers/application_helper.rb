@@ -31,7 +31,8 @@ module ApplicationHelper
       orders = Order.find(:all, :conditions => ["user_id = ? and status = #{Order::STATUS[:NOMAL]}", user_id.to_i])
       orders.each do |order|
         if order.types == Order::TYPES[:MUST] or order.types == Order::TYPES[:SINA] or order.types == Order::TYPES[:RENREN] or
-            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:CHARGE] or order.types == Order::TYPES[:OTHER]
+            order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:CHARGE] or
+            order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:BAIDU]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
           cookies[:must]= cookies[:must].nil? ? "#{order.category_id}=" : (cookies[:must] + "&#{order.category_id}=") if order.types == Order::TYPES[:MUST]
@@ -215,5 +216,36 @@ module ApplicationHelper
     response =JSON sina_api(request)
   end
   #END -------新浪微博API----------
+
+
+  #START -----------百度API-------------
+  #
+  #
+  #百度主方法
+  def baidu_api(request)
+    uri = URI.parse("https://openapi.baidu.com")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = http.request(request).body
+  end
+  #
+  #用code换取access_token
+  def baidu_access_token(code,api_key,api_secret,redirect_uri)
+    request = Net::HTTP::Get.new("/oauth/2.0/token?grant_type=authorization_code&code=#{code}&client_id=#{api_key}&client_secret=#{api_secret}&redirect_uri=#{redirect_uri}")
+    response = JSON baidu_api(request)
+  end
+  #
+  #
+  def baidu_get_user(access_token)
+    request = Net::HTTP::Get.new("/rest/2.0/passport/users/getLoggedInUser?access_token=#{access_token}")
+    response = JSON baidu_api(request)
+  end
+  #
+  #
+  def baidu_send_message(access_token,message)
+    
+  end
+  #END -----------百度API-------------
 
 end

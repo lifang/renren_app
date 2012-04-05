@@ -8,6 +8,11 @@ RenrenApp::Application.routes.draw do
   match "/sina4" => "similarities#sina_cet4"
   match "/sina6" => "similarities#sina_cet6"
   match "/qq_cet4" => "similarities#qq_cet4"
+  match "/baidu4" => "similarities#baidu_cet4"
+  match "/baidu6" => "similarities#baidu_cet6"
+  match "/search4" => "similarities#baidu_search4"
+  match "/search6" => "similarities#baidu_search6"
+
   resources :similarities do
     member do
       get :join,:redo_paper
@@ -19,6 +24,7 @@ RenrenApp::Application.routes.draw do
       get :kaixin_cet4,:kaixin_cet6,:renren_like,:close_window
       get :sina_cet4,:sina_cet6,:cet4_url_generate,:cet6_url_generate,:request_qq,:manage_qq
       post :sina_share4,:sina_share6,:check_status
+      get :baidu_cet4,:baidu_login4,:baidu_share4,:baidu_search4,:baidu_cet6,:baidu_login6,:baidu_share6,:baidu_search6
     end
   end
 
