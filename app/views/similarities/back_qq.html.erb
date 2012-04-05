@@ -7,9 +7,7 @@
   var query = queryParams.join('&');
   var url = path + query;
   document.write("<script src="+ url +"><\/script>")
-  alert(openid);
   function callback(user,openid){
-    alert(openid);
     $.ajax({
       async:true,
       type: "POST",
@@ -17,8 +15,7 @@
       dataType: "json",
       data : {
         open_id :user.openid,
-        access_token:accessToken,
-        cet_openid: openid
+        access_token:accessToken
       },
       success: function(data){
         var url="/similarities?web=qq&category="+data.category

@@ -726,6 +726,7 @@ class SimilaritiesController < ApplicationController
   def check_status
     user=User.first(:conditions=>"code_id='#{params[:openid]}' and code_type='qq'")
     if user.nil?
+      cookies[:openid]=params[:openid]
       data=true
     else
       cookies[:user_id]=user.id
@@ -744,32 +745,33 @@ class SimilaritiesController < ApplicationController
   end
   
   def manage_qq
-    #      begin
-    meters=params[:access_token].split("&")
-    access_token=meters[0].split("=")[1]
-    expires_in=meters[1].split("=")[1].to_i
-    openid=params[:open_id]
-    qq_codeid=params[:cet_openid]
-    @user= User.find_by_open_id(openid)
-    if @user.nil?
-      user_url="https://graph.qq.com"
-      user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
-      user_info=create_get_http(user_url,user_route)
-      user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
-      @user=User.create(:code_type=>'qq',:code_id=>qq_codeid,:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
-    else
-      ActionLog.login_log(@user.id)
-      if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
-        @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+    begin
+      meters=params[:access_token].split("&")
+      access_token=meters[0].split("=")[1]
+      expires_in=meters[1].split("=")[1].to_i
+      openid=params[:open_id]
+      @user= User.find_by_open_id(openid)
+      if @user.nil?
+        user_url="https://graph.qq.com"
+        user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
+        user_info=create_get_http(user_url,user_route)
+        user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
+        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+      else
+        ActionLog.login_log(@user.id)
+        @user.update_attributes(:code_id=>cookies[:openid])
+        if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
       end
+      cookies.delete(:openid)
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      data=true
+    rescue
+      render :inline => "<script>window.opener.location.reload();window.close();</script>"
     end
-    cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-    cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
-    user_role?(cookies[:user_id])
-    data=true
-    #      rescue
-    #        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-#    #      end
     respond_to do |format|
       format.json {
         render :json=>{:yes=>data,:category=>Category::LEVEL_FOUR}
