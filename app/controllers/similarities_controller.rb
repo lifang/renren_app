@@ -746,9 +746,9 @@ class SimilaritiesController < ApplicationController
   
   def manage_qq
     #      begin
-    cookies.delete(:change_url)
-    access_token=params[:access_token]
-    expires_in=params[:expires_in]
+    meters=params[:access_token].split("&")
+    access_token=meters[0].split("=")[1]
+    expires_in=meters[1].split("=")[1].to_i
     openid=params[:open_id]
     qq_codeid=params[:cet_openid]
     @user= User.find_by_open_id(openid)
