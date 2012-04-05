@@ -1,6 +1,6 @@
 # encoding: utf-8
 module ApplicationHelper
-
+include SimilaritiesHelper
 
   def deny_access
     redirect_to "/logins?last_url=#{request.url}"
