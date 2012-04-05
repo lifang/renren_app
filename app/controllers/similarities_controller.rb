@@ -787,7 +787,7 @@ class SimilaritiesController < ApplicationController
   end
 
   def baidu_search4
-    render :layout=>false
+    @web = "baidu"
   end
 
 
@@ -843,7 +843,7 @@ class SimilaritiesController < ApplicationController
   end
   
   def baidu_search6
-    render :layout=>false
+    @web = "baidu"
   end
 
   #END 百度相关
