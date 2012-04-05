@@ -720,8 +720,63 @@ class SimilaritiesController < ApplicationController
 
 
 
-  #START  腾讯相关
+  #  #START  腾讯相关
+  #
 
+  #检测是否已进入过应用
+  def check_status
+    user=User.first(:conditions=>"code_id='#{params[:openid]}' and code_type='qq'")
+    if user.nil?
+      data=true
+    else
+      cookies[:user_id]=user.id
+      data=false
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
+    end
+  end
+
+  #qq登录
+  def request_qq
+    redirect_to "#{SimilaritiesHelper::REQUEST_URL_QQ}?#{SimilaritiesHelper::REQUEST_ACCESS_TOKEN.merge!(:redirect_uri=>"#{Constant::SERVER_PATH}/similarities/manage_qq?cet_openid=#{params[:openid]}").map{|k,v|"#{k}=#{v}"}.join("&")}"
+  end
+  
+  def manage_qq
+    if cookies[:change_url]
+      #      begin
+      cookies.delete(:change_url)
+      access_token=params[:access_token]
+      expires_in=params[:expires_in]
+      openid=params[:open_id]
+      qq_codeid=params[:cet_openid]
+      @user= User.find_by_open_id(openid)
+      if @user.nil?
+        user_url="https://graph.qq.com"
+        user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
+        user_info=create_get_http(user_url,user_route)
+        user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
+        @user=User.create(:code_type=>'qq',:code_id=>qq_codeid,:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+      else
+        ActionLog.login_log(@user.id)
+        if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
+      end
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      render :inline => "<script>window.opener.location.reload();window.close();window.opener.location.href='/similarities'</script>"
+      #      rescue
+      #        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      #      end
+    else
+      cookies[:change_url]="try again"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
 
   #END  腾讯相关
 

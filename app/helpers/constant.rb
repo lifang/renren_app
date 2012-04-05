@@ -12,12 +12,12 @@ module Constant
   SERVER_PATH = "http://127.0.0.1:3002"
 
   #项目文件目录(使用赶考前台的public目录)
-  PUBLIC_PATH = "e:/gankao_season2/public"
+  PUBLIC_PATH = "f:/gankao_season2/public"
 
   #后台项目文件目录
-  BACK_PUBLIC_PATH = "d:/exam_season2/public"
+  BACK_PUBLIC_PATH = "f:/exam_season2/public"
 
-    #充值vip有效期
+  #充值vip有效期
   DATE_LONG={:vip=>90,:trail=>7} #试用七天
 
   #设置通过分享获得会员的数量限制(每日)
@@ -26,5 +26,8 @@ module Constant
   BAIDU_ORDERS_SUM = {:cet_4=>150,:cet_6=>125}
   #人人公共主页id
   RENREN_ID = 600942099
+
+  #qq appid
+  APPID="223448"
 
 end
