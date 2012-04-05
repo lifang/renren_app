@@ -19,7 +19,7 @@
         cet_openid: openid
       },
       success: function(data){
-        var url="/similarities?category="+data.category
+        var url="/similarities?web=qq&category="+data.category
         if(data.yes){
           window.opener.location.href=url;
           window.close();
