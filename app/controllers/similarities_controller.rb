@@ -767,10 +767,16 @@ class SimilaritiesController < ApplicationController
     cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
     cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
     user_role?(cookies[:user_id])
+    data=true
     render :inline => "<script>window.opener.location.reload();window.close();window.opener.location.href='/similarities'</script>"
     #      rescue
     #        render :inline => "<script>window.opener.location.reload();window.close();</script>"
     #      end
+    respond_to do |format|
+      format.json {
+        render :json=>{:yes=>data,:category=>Category::LEVEL_FOUR}
+      }
+    end
   end
 
   #END  腾讯相关
