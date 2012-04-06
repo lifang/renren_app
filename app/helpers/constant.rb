@@ -29,5 +29,7 @@ module Constant
 
   #qq appid
   APPID="223448"
-
+  #分享图片路径
+  IMG_URL=SERVER_PATH+"/share_logo.png"
+  FREE_QQ_COUNT = {:cet_4=>10,:cet_6=>125}
 end
