@@ -19,7 +19,6 @@
       },
       success: function(data){
         var url="/similarities?web=qq&category="+data.category
-        
         if(data.yes){
           window.opener.location.href=url;
           window.close();

@@ -7,6 +7,7 @@ class SimilaritiesController < ApplicationController
   
   def index
     @web = params[:web].nil? ? "renren" : params[:web]
+    puts @web
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
@@ -324,6 +325,7 @@ class SimilaritiesController < ApplicationController
     total_sum = category=="2" ? Constant::RENREN_ORDERS_SUM[:cet_4] : Constant::RENREN_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:RENREN]
     total_sum = category=="2" ? Constant::SINA_ORDERS_SUM[:cet_4] : Constant::SINA_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:SINA]
     total_sum = category=="2" ? Constant::BAIDU_ORDERS_SUM[:cet_4] : Constant::BAIDU_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:BAIDU]
+    total_sum = category=="2" ? Constant::FREE_QQ_COUNT[:cet_4] : Constant::FREE_QQ_COUNT[:cet_6] if order_type.to_i == Order::TYPES[:QQ]
     already_sum = get_share_sum(order_type.to_i,category.to_i)
     data={:message=>"今日剩余#{total_sum-already_sum}"}
     respond_to do |format|
@@ -770,7 +772,7 @@ class SimilaritiesController < ApplicationController
       user_role?(cookies[:user_id])
       data=true
     rescue
-      render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      data=false
     end
     respond_to do |format|
       format.json {

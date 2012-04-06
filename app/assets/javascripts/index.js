@@ -26,7 +26,7 @@ function tishi_share(content){
         $('#free_sum_div').show();
         $('#display_free_sum').html("");
         $('#tishi_share_content').html(content);
-        if(web=="renren"||web=="sina"||web=="baidu"){
+        if(web=="renren"||web=="sina"||web=="baidu"||web=="qq"){
             $.ajax({
                 type: "GET",
                 url: "/similarities/ajax_free_sum.json",

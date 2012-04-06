@@ -14,6 +14,9 @@
   var success = "<%= params["success"] %>";
 </script>
 <script type="text/javascript" src="/assets/index.js"></script>
+<% if @web=="qq" %>
+  <script type="text/javascript" charset="utf-8" src="/assets/qq/fusion_loader"></script>
+<% end %>
 <body>
   <div class="wrap renren_border">
     <div class="main_Div">
@@ -76,15 +79,14 @@
         <div id="tishi_share_content"></div>
       </div>
       <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <% if @web=="renren" || @web=="sina" || @web=="baidu" %>
-          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>
-        <% elsif @web=="qq" %>
-          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>
-          <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
-        <% end %>
-        &nbsp;<span id="display_free_sum" class="red"></span>
-      </div>
+
+      <% if @web=="renren" || @web=="sina" || @web=="baidu" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button> &nbsp;<span id="display_free_sum" class="red"></span>
+        </div>
+      <% elsif @web=="qq" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button> &nbsp;<span id="display_free_sum" class="red"></span></div>
+        <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
+      <% end %>
     </div>
 
     <div id="confirm_share_div" class="rr_tab tab_box border_radius" style="display:none;">
