@@ -77,7 +77,7 @@
         <div id="tishi_share_content"></div>
       </div>
       <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
-      <% if @web=="renren" || @web=="sina" || @web="baidu" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
+      <% if @web=="renren" || @web=="sina" || @web=="baidu" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
     </div>
 
     <div id="confirm_share_div" class="rr_tab tab_box border_radius" style="display:none;">
