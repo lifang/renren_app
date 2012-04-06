@@ -732,6 +732,7 @@ class SimilaritiesController < ApplicationController
       data=true
     else
       cookies[:user_id]=user.id
+      user_role?(cookies[:user_id])
       data=false
     end
     respond_to do |format|
@@ -786,7 +787,7 @@ class SimilaritiesController < ApplicationController
   def qq_confirm
     refresh=false
     if Constant::FREE_QQ_COUNT[:cet_4] && get_share_sum(Order::TYPES[:QQ],Category::LEVEL_FOUR)>=Constant::FREE_QQ_COUNT[:cet_4]
-      data = {:error=>"人数已满",:message=>"<p>今天#{Constant::FREE_QQ_COUNT[:cet_4]}个免费名额被抢完T_T，明天再来抢吧</p>"}
+      message="<p>今天#{Constant::FREE_QQ_COUNT[:cet_4]}个免费名额被抢完T_T，明天再来抢吧</p>"
     else
       order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
       if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
@@ -796,14 +797,14 @@ class SimilaritiesController < ApplicationController
         cookies.delete(:user_role)
         user_role?(cookies[:user_id])
         refresh=true
-        data = {:message=>"升级正式用户成功"}
+        message="升级正式用户成功"
       else
-        data = {:message=>"您已经是正式用户，请等待页面刷新"}
+        message="您已经是正式用户，请等待页面刷新"
       end
     end
     respond_to do |format|
       format.json {
-        render :json=>{:notice=>data,:fresh=>refresh,:category=>Category::LEVEL_FOUR}
+        render :json=>{:notice=>message,:fresh=>refresh,:category=>Category::LEVEL_FOUR}
       }
     end
   end

@@ -24,7 +24,7 @@ RenrenApp::Application.routes.draw do
       get :kaixin_cet4,:kaixin_cet6,:renren_like,:close_window
       get :sina_cet4,:sina_cet6,:cet4_url_generate,:cet6_url_generate,:request_qq,:back_qq
       post :sina_share4,:sina_share6,:check_status,:manage_qq,:qq_confirm
-      get :baidu_cet4,:baidu_login4,:baidu_share4,:baidu_search4,:baidu_cet6,:baidu_login6,:baidu_share6,:baidu_search6
+      get :baidu_cet4,:baidu_login4,:baidu_share4,:baidu_search4,:baidu_cet6,:baidu_login6,:baidu_share6,:baidu_search6,:set_role
     end
   end
 
