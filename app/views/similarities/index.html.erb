@@ -1,6 +1,6 @@
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
-<% order_type = {"renren"=>Order::TYPES[:RENREN],"sina"=>Order::TYPES[:SINA],"baidu"=>Order::TYPES[:BAIDU]} %>
+<% order_type = {"renren"=>Order::TYPES[:RENREN],"sina"=>Order::TYPES[:SINA],"baidu"=>Order::TYPES[:BAIDU],"qq"=>Order::TYPES[:QQ]} %>
 <script type="text/javascript">
   var shared = 0;
   var web = "<%= @web %>";

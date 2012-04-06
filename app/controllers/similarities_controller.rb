@@ -758,7 +758,9 @@ class SimilaritiesController < ApplicationController
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
-        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>"qq")
+        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
         ActionLog.login_log(@user.id)
         @user.update_attributes(:code_id=>cookies[:openid])
