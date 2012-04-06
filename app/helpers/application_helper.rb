@@ -243,9 +243,6 @@ include SimilaritiesHelper
   end
   #
   #
-  def baidu_send_message(access_token,message)
-    
-  end
   #END -----------百度API-------------
 
 end
