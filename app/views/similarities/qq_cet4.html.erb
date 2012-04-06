@@ -1,0 +1,37 @@
+<%#*<script type="text/javascript" charset="utf-8" src="/assets/qq/fusion_loader"></script>%>
+<script type="text/javascript">
+  function getHttpParams(name)
+  {
+    var r = new RegExp("(\\?|#|&)"+name+"=([^&#]*)(&|#|$)");
+    var m = location.href.match(r);
+    return decodeURIComponent(!m?"":m[2]);
+  }
+  var openkey=getHttpParams("openkey");
+  var openid=getHttpParams("openid");
+  var web_type=getHttpParams("web");
+
+  $.ajax({
+    async:true,
+    dataType:'json',
+    type:'post',
+    url:"/similarities/check_status",
+    data:{
+      openid:openid
+    },
+    success : function(data) {
+      if (data){
+        window.open('/similarities/request_qq', '_blank', 'height=500,width=600,left=300,top=150');
+      }else{
+        window.location.href="/similarities"
+      }
+    }
+  });
+</script>
+<body>
+  <script type="text/javascript" src="/assets/renren.js"></script>
+  <div class="wrap renren_border">
+    <div class="main_Div">
+      <img style="height:597px;" src="/assets/login_pic4.png" />
+    </div>
+  </div>
+</body>

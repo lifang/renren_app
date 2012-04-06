@@ -7,6 +7,7 @@ RenrenApp::Application.routes.draw do
   match "/kaixin6" => "similarities#kaixin_cet6"
   match "/sina4" => "similarities#sina_cet4"
   match "/sina6" => "similarities#sina_cet6"
+  match "/qq_cet4" => "similarities#qq_cet4"
   match "/baidu4" => "similarities#baidu_cet4"
   match "/baidu6" => "similarities#baidu_cet6"
   match "/search4" => "similarities#baidu_search4"
@@ -21,8 +22,8 @@ RenrenApp::Application.routes.draw do
       post :ajax_add_collect,:add_collection,:ajax_report_error,:ajax_load_about_words,:ajax_add_word,:ajax_load_sheets
       get :cet4,:oauth_login_cet4,:cet6,:oauth_login_cet6,:renren_share4,:renren_share6,:refresh,:ajax_free_sum
       get :kaixin_cet4,:kaixin_cet6,:renren_like,:close_window
-      get :sina_cet4,:sina_cet6,:cet4_url_generate,:cet6_url_generate
-      post :sina_share4,:sina_share6
+      get :sina_cet4,:sina_cet6,:cet4_url_generate,:cet6_url_generate,:request_qq,:back_qq
+      post :sina_share4,:sina_share6,:check_status,:manage_qq
       get :baidu_cet4,:baidu_login4,:baidu_share4,:baidu_search4,:baidu_cet6,:baidu_login6,:baidu_share6,:baidu_search6
     end
   end

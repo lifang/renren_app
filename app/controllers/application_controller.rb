@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   require 'rexml/document'
   include REXML
   include ApplicationHelper
+  include SimilaritiesHelper
 
   before_filter  :set_p3p
 
