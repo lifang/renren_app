@@ -731,6 +731,7 @@ class SimilaritiesController < ApplicationController
       cookies[:openid]=params[:openid]
       data=true
     else
+      cookies.delete(:user_role)
       cookies[:user_id]=user.id
       user_role?(cookies[:user_id])
       data=false
