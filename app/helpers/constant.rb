@@ -31,5 +31,8 @@ module Constant
   APPID="223448"
   #分享图片路径
   IMG_URL=SERVER_PATH+"/share_logo.png"
+  #四六级抢名额
   FREE_QQ_COUNT = {:cet_4=>10,:cet_6=>10}
+  #六级分享图片
+  IMG_URL_6=SERVER_PATH+"/share_logo_6.png"
 end

@@ -765,7 +765,7 @@ class SimilaritiesController < ApplicationController
           :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
         ActionLog.login_log(@user.id)
-        @user.update_attributes(:code_id=>cookies[:openid])
+        @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
@@ -832,7 +832,7 @@ class SimilaritiesController < ApplicationController
           :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
         ActionLog.login_log(@user.id)
-        @user.update_attributes(:code_id=>cookies[:openid])
+        @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
