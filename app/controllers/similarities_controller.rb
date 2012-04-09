@@ -811,7 +811,7 @@ class SimilaritiesController < ApplicationController
   end
 
 
-  def request_cet6
+  def request_qq6
     redirect_to "#{SimilaritiesHelper::REQUEST_URL_QQ}?#{SimilaritiesHelper::REQUEST_ACCESS_TOKEN_6.map{|k,v|"#{k}=#{v}"}.join("&")}"
   end
 
