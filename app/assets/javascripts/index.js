@@ -154,7 +154,9 @@ function qq_share(){
                 success: function(data){
                     tishi_alert(data.notice);
                     if(data.fresh){
-                        window.location.href="/similarities?category="+data.category+"&web=qq";
+                        setTimeout(function(){
+                            window.location.href="/similarities?category="+data.category+"&web=qq";
+                        },500);
                     }
                 }
             })
@@ -205,7 +207,7 @@ function qq_share_6(){
                     if(data.fresh){
                         setTimeout(function(){
                             window.location.href="/similarities?category="+data.category+"&web=qq";
-                        },1000);
+                        },500);
                     }
                 }
             })
