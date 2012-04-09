@@ -139,7 +139,7 @@ function qq_share(){
         summary :"由赶考网提供，1996年至2011年全部新大学英语四级真题，提供在线练习功能。",
         // 必须。分享的标题。
 
-        title :"英语四级真题",
+        title :"英语四级真题,分享获取免费使用资格",
         // 可选。图片的URL。
 
         pics :img_url,
@@ -188,7 +188,7 @@ function qq_share_6(){
         summary :"由赶考网提供，1996年至2011年全部新大学英语六级真题，提供在线练习功能。",
         // 必须。分享的标题。
 
-        title :"英语六级真题",
+        title :"英语六级真题,分享获取免费使用资格",
         // 可选。图片的URL。
 
         pics :img_url,
@@ -203,7 +203,9 @@ function qq_share_6(){
                 success: function(data){
                     tishi_alert(data.notice);
                     if(data.fresh){
-                        window.location.href="/similarities?category="+data.category+"&web=qq";
+                        setTimeout(function(){
+                            window.location.href="/similarities?category="+data.category+"&web=qq";
+                        },1000);
                     }
                 }
             })
