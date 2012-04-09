@@ -156,7 +156,7 @@ function qq_share(){
                     if(data.fresh){
                         setTimeout(function(){
                             window.location.href="/similarities?category="+data.category+"&web=qq";
-                        },500);
+                        },2000);
                     }
                 }
             })
@@ -207,7 +207,7 @@ function qq_share_6(){
                     if(data.fresh){
                         setTimeout(function(){
                             window.location.href="/similarities?category="+data.category+"&web=qq";
-                        },500);
+                        },2000);
                     }
                 }
             })
