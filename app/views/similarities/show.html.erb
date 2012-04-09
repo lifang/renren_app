@@ -18,7 +18,7 @@
     <% share_url = category_id=="2" ? "http://apps.renren.com/english_iv" : "http://apps.renren.com/english_vi" %>
     <span class="renren_share"><a name="xn_share" type="button" href="<%= share_url %>">分享</a><%= javascript_include_tag "/assets/exam_user/share.js" %></span>
   <% end %>
-  <% if @web!="sina" && @web !="qq" %>
+  <% if @web!="baidu" && @web !="qq" %>
     <span class="ex_renren">
       <a href="<%= Constant::GANKAO_URL %>/words/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>" target="_blank">高频词汇,轻松记忆</a>
     </span>
@@ -43,7 +43,7 @@
       .AD_width { width: 360px;}
     </style>
   <% end %>
-  <%= render :partial=>"/common/advert" %>
+  <%= render :partial=>"/common/advert",:object=>@web %>
 </div>
 
 <!-- 试题生成入口 generate.js -->
