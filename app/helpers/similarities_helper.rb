@@ -19,6 +19,14 @@ module SimilaritiesHelper
     :state=>"1"
   }
 
+  REQUEST_ACCESS_TOKEN_6={
+    :response_type=>"token",
+    :client_id=>APPID,
+    :redirect_uri=>"#{Constant::SERVER_PATH}/similarities/back_qq_6",
+    :scope=>"get_user_info,add_topic",
+    :state=>"1"
+  }
+
   #构造post请求
   def create_post_http(url,route_action,params)
     uri = URI.parse(url)
