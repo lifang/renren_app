@@ -171,3 +171,52 @@ function qq_share(){
 
     });
 }
+
+
+function qq_share_6(){
+    $("#free_sum_div").css("display","none");
+    var img_url=$("#img_url").val();
+    fusion2.dialog.share
+    ({
+        // 可选。分享应用的URL，点击该URL可以进入应用，必须是应用在平台内的地址。
+        url:"http://rc.qzone.qq.com/myhome/100625123",
+        // 可选。默认展示在输入框里的分享理由。
+
+        desc:"由赶考网提供，1996年至2011年全部新大学英语六级真题，提供在线练习功能。参与分享可以获得所有六级真题的免费体验资格,赶快来试试吧",
+        // 必须。应用简要描述。
+
+        summary :"由赶考网提供，1996年至2011年全部新大学英语六级真题，提供在线练习功能。",
+        // 必须。分享的标题。
+
+        title :"英语六级真题",
+        // 可选。图片的URL。
+
+        pics :img_url,
+        // 可选。透传参数，用于onSuccess回调时传入的参数，用于识别请求。
+        context:"share",
+        // 可选。用户操作后的回调方法。
+        onSuccess : function (opt) {
+            $.ajax({
+                type: "POST",
+                url: "/similarities/qq_confirm_6.json",
+                dataType: "json",
+                success: function(data){
+                    tishi_alert(data.notice);
+                    if(data.fresh){
+                        window.location.href="/similarities?category="+data.category+"&web=qq";
+                    }
+                }
+            })
+        },
+
+        // 可选。用户取消操作后的回调方法。
+        onCancel : function () {
+            tishi_alert("取消分享将不会获得正式会员资格,你只能免费使用三场真题考试");
+        },
+
+        // 可选。对话框关闭时的回调方法。
+        onClose : function () {
+        }
+
+    });
+}

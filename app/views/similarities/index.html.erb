@@ -84,7 +84,13 @@
           <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button> &nbsp;<span id="display_free_sum" class="red"></span>
         </div>
       <% elsif @web=="qq" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button> &nbsp;<span id="display_free_sum" class="red"></span></div>
+          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;
+          <% if category_id==Category::LEVEL_FOUR  %>
+            <button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>  
+          <% elsif category_id==Category::LEVEL_SIX %>
+            <button class="t_btn" onclick="javascript:qq_share_6();">抢免费名额</button>
+          <% end %>
+          &nbsp;<span id="display_free_sum" class="red"></span></div>
         <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
       <% end %>
     </div>

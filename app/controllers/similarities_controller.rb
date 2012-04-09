@@ -827,7 +827,7 @@ class SimilaritiesController < ApplicationController
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
-        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>"qq6")
+        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
         Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
           :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
@@ -847,10 +847,36 @@ class SimilaritiesController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:yes=>data,:category=>Category::LEVEL_FOUR}
+        render :json=>{:yes=>data,:category=>Category::LEVEL_SIX}
       }
     end
   end
+
+  def qq_confirm_6
+    refresh=false
+    if Constant::FREE_QQ_COUNT[:cet_6] && get_share_sum(Order::TYPES[:QQ],Category::LEVEL_SIX)>=Constant::FREE_QQ_COUNT[:cet_6]
+      message="<p>今天#{Constant::FREE_QQ_COUNT[:cet_6]}个免费名额被抢完T_T，明天再来抢吧</p>"
+    else
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:QQ],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:QQ]])
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        cookies.delete(:user_role)
+        user_role?(cookies[:user_id])
+        refresh=true
+        message="升级正式用户成功"
+      else
+        message="您已经是正式用户，请等待页面刷新"
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:notice=>message,:fresh=>refresh,:category=>Category::LEVEL_SIX}
+      }
+    end
+  end
+
 
   #END  腾讯相关
 
