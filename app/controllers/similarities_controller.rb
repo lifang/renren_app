@@ -7,6 +7,7 @@ class SimilaritiesController < ApplicationController
   
   def index
     @web = params[:web].nil? ? "renren" : params[:web]
+    puts @web
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
@@ -324,6 +325,7 @@ class SimilaritiesController < ApplicationController
     total_sum = category=="2" ? Constant::RENREN_ORDERS_SUM[:cet_4] : Constant::RENREN_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:RENREN]
     total_sum = category=="2" ? Constant::SINA_ORDERS_SUM[:cet_4] : Constant::SINA_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:SINA]
     total_sum = category=="2" ? Constant::BAIDU_ORDERS_SUM[:cet_4] : Constant::BAIDU_ORDERS_SUM[:cet_6] if order_type.to_i == Order::TYPES[:BAIDU]
+    total_sum = category=="2" ? Constant::FREE_QQ_COUNT[:cet_4] : Constant::FREE_QQ_COUNT[:cet_6] if order_type.to_i == Order::TYPES[:QQ]
     already_sum = get_share_sum(order_type.to_i,category.to_i)
     data={:message=>"今日剩余#{total_sum-already_sum}"}
     respond_to do |format|
@@ -729,7 +731,9 @@ class SimilaritiesController < ApplicationController
       cookies[:openid]=params[:openid]
       data=true
     else
+      cookies.delete(:user_role)
       cookies[:user_id]=user.id
+      user_role?(cookies[:user_id])
       data=false
     end
     respond_to do |format|
@@ -756,10 +760,12 @@ class SimilaritiesController < ApplicationController
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
-        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
+        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
         ActionLog.login_log(@user.id)
-        @user.update_attributes(:code_id=>cookies[:openid])
+        @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
@@ -770,7 +776,7 @@ class SimilaritiesController < ApplicationController
       user_role?(cookies[:user_id])
       data=true
     rescue
-      render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      data=false
     end
     respond_to do |format|
       format.json {
@@ -778,6 +784,99 @@ class SimilaritiesController < ApplicationController
       }
     end
   end
+
+  def qq_confirm
+    refresh=false
+    if Constant::FREE_QQ_COUNT[:cet_4] && get_share_sum(Order::TYPES[:QQ],Category::LEVEL_FOUR)>=Constant::FREE_QQ_COUNT[:cet_4]
+      message="<p>今天#{Constant::FREE_QQ_COUNT[:cet_4]}个免费名额被抢完T_T，明天再来抢吧</p>"
+    else
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:QQ],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:QQ]])
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        cookies.delete(:user_role)
+        user_role?(cookies[:user_id])
+        refresh=true
+        message="升级正式用户成功"
+      else
+        message="您已经是正式用户，请等待页面刷新"
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:notice=>message,:fresh=>refresh,:category=>Category::LEVEL_FOUR}
+      }
+    end
+  end
+
+
+  def request_qq6
+    redirect_to "#{SimilaritiesHelper::REQUEST_URL_QQ}?#{SimilaritiesHelper::REQUEST_ACCESS_TOKEN_6.map{|k,v|"#{k}=#{v}"}.join("&")}"
+  end
+
+  def manage_qq_6
+    begin
+      meters=params[:access_token].split("&")
+      access_token=meters[0].split("=")[1]
+      expires_in=meters[1].split("=")[1].to_i
+      openid=params[:open_id]
+      @user= User.find_by_open_id(openid)
+      if @user.nil?
+        user_url="https://graph.qq.com"
+        user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
+        user_info=create_get_http(user_url,user_route)
+        user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
+        @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
+        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
+      else
+        ActionLog.login_log(@user.id)
+        @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
+        if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
+          @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
+        end
+      end
+      cookies.delete(:openid)
+      cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
+      cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      user_role?(cookies[:user_id])
+      data=true
+    rescue
+      data=false
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:yes=>data,:category=>Category::LEVEL_SIX}
+      }
+    end
+  end
+
+  def qq_confirm_6
+    refresh=false
+    if Constant::FREE_QQ_COUNT[:cet_6] && get_share_sum(Order::TYPES[:QQ],Category::LEVEL_SIX)>=Constant::FREE_QQ_COUNT[:cet_6]
+      message="<p>今天#{Constant::FREE_QQ_COUNT[:cet_6]}个免费名额被抢完T_T，明天再来抢吧</p>"
+    else
+      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
+      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
+        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:QQ],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
+          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:QQ]])
+        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
+        cookies.delete(:user_role)
+        user_role?(cookies[:user_id])
+        refresh=true
+        message="升级正式用户成功"
+      else
+        message="您已经是正式用户，请等待页面刷新"
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:notice=>message,:fresh=>refresh,:category=>Category::LEVEL_SIX}
+      }
+    end
+  end
+
 
   #END  腾讯相关
 

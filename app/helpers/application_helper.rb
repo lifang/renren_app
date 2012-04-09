@@ -32,7 +32,7 @@ include SimilaritiesHelper
       orders.each do |order|
         if order.types == Order::TYPES[:MUST] or order.types == Order::TYPES[:SINA] or order.types == Order::TYPES[:RENREN] or
             order.types == Order::TYPES[:ACCREDIT] or order.types == Order::TYPES[:CHARGE] or
-            order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:BAIDU]
+            order.types == Order::TYPES[:OTHER] or order.types == Order::TYPES[:BAIDU] or order.types == Order::TYPES[:QQ]
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
           cookies[:must]= cookies[:must].nil? ? "#{order.category_id}=" : (cookies[:must] + "&#{order.category_id}=") if order.types == Order::TYPES[:MUST]
