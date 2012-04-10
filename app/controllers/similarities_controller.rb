@@ -897,6 +897,18 @@ class SimilaritiesController < ApplicationController
     @web = "baidu"
     @api_key = @@baidu_api_key4
     @redirect_uri = @@baidu_redirect_uri4
+    if params[:bd_user] && params[:bd_user]!="0"
+      @user=User.find_by_code_id_and_code_type(params[:bd_user],"baidu")
+      if @user
+        ActionLog.login_log(@user.id)
+        cookies[:user_id]=@user.id
+        cookies[:user_name]=@user.username
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+        redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&web=baidu"
+        return false
+      end
+    end
   end
 
   def baidu_login4
@@ -916,7 +928,7 @@ class SimilaritiesController < ApplicationController
     cookies[:user_name]=@user.username
     cookies.delete(:user_role)
     user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&web=baidu"
+    render :inline=>"<script type='text/javascript'>window.parent.location.href='/similarities?category=#{Category::LEVEL_FOUR}&web=baidu'</script>"
   end
 
   def baidu_share4
@@ -953,6 +965,18 @@ class SimilaritiesController < ApplicationController
     @web = "baidu"
     @api_key = @@baidu_api_key6
     @redirect_uri = @@baidu_redirect_uri6
+    if params[:bd_user] && params[:bd_user]!="0"
+      @user=User.find_by_code_id_and_code_type(params[:bd_user],"baidu")
+      if @user
+        ActionLog.login_log(@user.id)
+        cookies[:user_id]=@user.id
+        cookies[:user_name]=@user.username
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+        redirect_to "/similarities?category=#{Category::LEVEL_SIX}&web=baidu"
+        return false
+      end
+    end
   end
 
   def baidu_login6
@@ -972,7 +996,7 @@ class SimilaritiesController < ApplicationController
     cookies[:user_name]=@user.username
     cookies.delete(:user_role)
     user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_SIX}&web=baidu"
+    render :inline=>"<script type='text/javascript'>window.parent.location.href='/similarities?category=#{Category::LEVEL_SIX}&web=baidu'</script>"
   end
 
   def baidu_share6

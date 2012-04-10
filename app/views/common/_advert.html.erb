@@ -1,6 +1,10 @@
-
+<% @object = advert %>
 <%ads= Advert.ip_advert(request.headers["HTTP_X_REAL_IP"]) %>
-<% unless ads.blank? %>
+<% if ads.blank? || @object=="baidu" %>
+  <script type="text/javascript">
+    var have_adv = false;
+  </script>
+<% else %>
   <div class="AD_text AD_width">
     <marquee class="marquee" scrollamount="2" direction=left>
       <% ads.each do |ad| %>
@@ -10,9 +14,5 @@
   </div>
   <script type="text/javascript">
     var have_adv = true;
-  </script>
-<% else %>
-  <script type="text/javascript">
-    var have_adv = false;
   </script>
 <% end %>
