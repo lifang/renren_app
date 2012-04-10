@@ -18,7 +18,7 @@
         access_token:accessToken
       },
       success: function(data){
-        var url="/similarities?web=qq&category="+data.category
+        var url="/similarities?web=qq&listen=1&category="+data.category
         if(data.yes){
           window.opener.location.href=url;
           window.close();
