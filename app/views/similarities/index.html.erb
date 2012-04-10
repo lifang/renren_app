@@ -79,15 +79,14 @@
         <div id="tishi_share_content"></div>
       </div>
       <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
-
       <% if @web=="renren" || @web=="sina" || @web=="baidu" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button> &nbsp;<span id="display_free_sum" class="red"></span>
         </div>
       <% elsif @web=="qq" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;
           <% if category_id.to_i==Category::LEVEL_FOUR  %>
-           <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
-            <button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>  
+            <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
+            <button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>
           <% elsif category_id.to_i==Category::LEVEL_SIX %>
             <button class="t_btn" onclick="javascript:qq_share_6();">抢免费名额</button>
             <input type="hidden" value="<%= Constant::IMG_URL_6 %>" id="img_url"/>
@@ -117,7 +116,6 @@
       <div class="btn_box00"><button class="t_btn" onclick="javascript:view_paper();"> 不,只想浏览 </button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:redo_paper();"> 好,我要重做 </button></div>
     </div>
 
-
     <% if @web=="renren" && cookies[:first] ; cookies.delete(:first) %>
       <div id="guanzhu_div" class="rr_tab tab_box border_radius">
         <div class="tab_con">
@@ -127,8 +125,21 @@
       </div>
     <% end %>
 
-
     <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
   </div>
+  <div class="zhezhao" style="display: none"></div>
+  <div class="rr_tab tab_box border_radius" id="listen_weibo" style="display:none;height:150px;">
+    <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('#listen_weibo').hide();$('.zhezhao').css('display','none');" /></span>
+    <div class="tab_con">
+      <div><img src="/assets/listen_weibo.png"/></div>
+      <div><iframe src="http://follow.v.t.qq.com/index.php?c=follow&a=quick&name=gankao2011&style=5&t=1334028755869&f=0" marginwidth="0" marginheight="0" allowtransparency="true" frameborder="0" height="24" scrolling="auto" width="70"></iframe></div>
+    </div>
+  </div>
+  <% if params[:listen]=="1" %>
+    <script type="text/javascript">
+      $(".zhezhao").css("display","");
+      $("#listen_weibo").css("display","");
+    </script>
+  <% end %>
 </body>
 

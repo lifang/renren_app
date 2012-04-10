@@ -7,7 +7,6 @@ class SimilaritiesController < ApplicationController
   
   def index
     @web = params[:web].nil? ? "renren" : params[:web]
-    puts @web
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"

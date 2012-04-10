@@ -296,7 +296,7 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 /*renren_tab*/
 .rr_tab {top: 200px; left: 245px;}
 /*tab_box------------*/
-.tab_box { width: 300px; padding: 10px; background: #FFF; border: 5px #333 solid; position: absolute; z-index:1000;}
+.tab_box { width: 300px; padding: 10px; background: #FFF; border: 5px #666 solid; position: absolute; z-index:1000;}
 .tab_x { float: right;}
 .tab_con { padding: 20px 10px; text-align: center; line-height: 24px;}
 
@@ -337,4 +337,7 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 .AD_text { position: absolute; top: 34px; right: 20px;height:25px; line-height:25px; margin-right: 7px; background-color: white;z-index:9}
 .AD_text a { color: #333;}
 .AD_text a:hover { color: #F00;}
+
+/*遮罩层*/
+.zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:888;}
 
