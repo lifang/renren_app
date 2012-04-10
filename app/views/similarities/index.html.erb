@@ -130,9 +130,9 @@
 
     <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
   </div>
-  <div class="zhezhao" style="display: none"></div>
+  <div class="listen_zhezhao" style="display: none"></div>
   <div class="rr_tab tab_box border_radius" id="listen_weibo" style="display:none;height:150px;">
-    <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('#listen_weibo').hide();$('.zhezhao').css('display','none');" /></span>
+    <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('#listen_weibo').hide();$('.listen_zhezhao').css('display','none');" /></span>
     <div class="tab_con">
       <div><img src="/assets/listen_weibo.png"/></div>
       <div><iframe src="http://follow.v.t.qq.com/index.php?c=follow&a=quick&name=gankao2011&style=5&t=1334028755869&f=0" marginwidth="0" marginheight="0" allowtransparency="true" frameborder="0" height="24" scrolling="auto" width="70"></iframe></div>
@@ -140,7 +140,7 @@
   </div>
   <% if params[:listen]=="1" %>
     <script type="text/javascript">
-      $(".zhezhao").css("display","");
+      $(".listen_zhezhao").css("display","");
       $("#listen_weibo").css("display","");
     </script>
   <% end %>
