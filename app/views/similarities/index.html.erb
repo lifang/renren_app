@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    
+
     <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
       <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
       <div class="tab_con">
@@ -127,8 +127,11 @@
         <div class="btn_box"><button class="t_btn" onclick="javascript:friends();">知道了</button>   </div>
       </div>
     <% end %>
-
-    <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
+    <% if @web=="qq" %>
+      <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012，如有问题请联系qq:2568830556</div>
+    <% else %>
+      <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
+    <% end %>
   </div>
   <div class="listen_zhezhao" style="display: none"></div>
   <div class="rr_tab tab_box border_radius" id="listen_weibo" style="display:none;height:150px;">
