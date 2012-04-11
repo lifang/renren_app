@@ -85,7 +85,7 @@
       <% if @web=="renren" || @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="baidu" %><div class="btn_box" style="width:160px;"><button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="qq" %>
-        <div style="text-align:center; line-height: 60px;">付费请登录www.gankao.co</div>
+        <div style="text-align:center; padding-bottom: 25px">付费请登录www.gankao.co</div>
         <div style="text-align:center;">
           <% if category_id.to_i==Category::LEVEL_FOUR  %>
             <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
