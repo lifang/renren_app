@@ -22,7 +22,7 @@
     <div class="main_Div" <% if @web=="baidu" %> style="background: #EFEDE7;" <% end %> >
       <div class="m_box">
         <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
-        <% if @web != "baidu" %>
+        <% if @web != "baidu" and @web != "qq"%>
           <div class="zhenti_h_a"><a href="javascript:void(0)" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/study_plans/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')"><%= Category::NAME["#{category_id}"] %>必过秘籍</a></div>
         <% end %>
         <div class="zhenti_list">
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
+    <div id="free_sum_div" class="rr_tab tab_box border_radius" >
       <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
       <div class="tab_con">
         <div id="tishi_share_content"></div>
@@ -85,8 +85,8 @@
       <% if @web=="renren" || @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="baidu" %><div class="btn_box" style="width:160px;"><button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="qq" %>
-        <div>
-          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;
+        <div style="text-align:center; line-height: 24px;">付费请登录www.gankao.co</div>
+        <div style="text-align:center;">
           <% if category_id.to_i==Category::LEVEL_FOUR  %>
             <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
             <button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>
