@@ -760,8 +760,6 @@ class SimilaritiesController < ApplicationController
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:category_id=>Category::LEVEL_FOUR,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
-          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
         ActionLog.login_log(@user.id)
         @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
@@ -772,7 +770,7 @@ class SimilaritiesController < ApplicationController
       cookies.delete(:openid)
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
+      user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
       data=true
     rescue
       data=false
@@ -827,8 +825,6 @@ class SimilaritiesController < ApplicationController
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
-        Order.create(:user_id=>@user.id,:types=>Order::TYPES[:TRIAL_SEVEN],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
-          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:trail].days,:remark=>Order::TYPE_NAME[Order::TYPES[:TRIAL_SEVEN]])
       else
         ActionLog.login_log(@user.id)
         @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
@@ -839,7 +835,7 @@ class SimilaritiesController < ApplicationController
       cookies.delete(:openid)
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
+      user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
       data=true
     rescue
       data=false

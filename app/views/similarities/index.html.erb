@@ -115,8 +115,8 @@
       <% if @web=="renren" || @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="baidu" %><div class="btn_box" style="width:160px;"><button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="qq" %>
-        <div>
-          <button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;
+        <div style="text-align:center; padding-bottom: 15px">付费请登录www.gankao.co</div>
+        <div style="text-align:center;">
           <% if category_id.to_i==Category::LEVEL_FOUR  %>
             <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
             <button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>
@@ -157,12 +157,15 @@
         <div class="btn_box"><button class="t_btn" onclick="javascript:friends();">知道了</button>   </div>
       </div>
     <% end %>
-
-    <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
+    <% if @web=="qq" %>
+      <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012，如有问题请联系qq:2568830556</div>
+    <% else %>
+      <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
+    <% end %>
   </div>
   <div class="listen_zhezhao" style="display: none"></div>
   <div class="rr_tab tab_box border_radius" id="listen_weibo" style="display:none;height:150px;">
-    <span class="xx_x"><img src="/assets/x.png" onclick="javascript:$('#listen_weibo').hide();$('.listen_zhezhao').css('display','none');" /></span>
+    <span class="xx_x"><img src="/assets/x.png" onclick="javascript:window.location.href='/similarities?web=qq&category=<%= category_id %>'" /></span>
     <div class="tab_con">
       <div><img src="/assets/listen_weibo.png"/></div>
       <div><iframe src="http://follow.v.t.qq.com/index.php?c=follow&a=quick&name=gankao2011&style=5&t=1334028755869&f=0" marginwidth="0" marginheight="0" allowtransparency="true" frameborder="0" height="24" scrolling="auto" width="70"></iframe></div>
