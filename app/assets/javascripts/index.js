@@ -147,21 +147,26 @@ function qq_share(){
         context:"share",
         // 可选。用户操作后的回调方法。
         onSuccess : function (opt) {
-            $.ajax({
-                type: "POST",
-                url: "/similarities/qq_confirm.json",
-                dataType: "json",
-                success: function(data){
-                    tishi_alert(data.notice);
-                    if(data.fresh){
-                        setTimeout(function(){
-                            window.location.href="/similarities?category="+data.category+"&web=qq";
-                        },2000);
+            var rand = parseInt(Math.random() *10 + 1);
+            if(rand==9){
+                $.ajax({
+                    type: "POST",
+                    url: "/similarities/qq_confirm.json",
+                    dataType: "json",
+                    success: function(data){
+                        tishi_alert(data.notice);
+                        if(data.fresh){
+                            setTimeout(function(){
+                                window.location.href="/similarities?category="+data.category+"&web=qq";
+                            },2000);
+                        }
                     }
-                }
-            })
+                })
+            }else{
+                tishi_alert("太悲催了，你竟然没抢到?")
+            }
+   
         },
-
         // 可选。用户取消操作后的回调方法。
         onCancel : function () {
             tishi_alert("取消分享将不会获得正式会员资格,你只能免费使用三场真题考试");
@@ -198,19 +203,24 @@ function qq_share_6(){
         context:"share",
         // 可选。用户操作后的回调方法。
         onSuccess : function (opt) {
-            $.ajax({
-                type: "POST",
-                url: "/similarities/qq_confirm_6.json",
-                dataType: "json",
-                success: function(data){
-                    tishi_alert(data.notice);
-                    if(data.fresh){
-                        setTimeout(function(){
-                            window.location.href="/similarities?category="+data.category+"&web=qq";
-                        },2000);
+            var rand = parseInt(Math.random() *10 + 1);
+            if(rand==9){
+                $.ajax({
+                    type: "POST",
+                    url: "/similarities/qq_confirm_6.json",
+                    dataType: "json",
+                    success: function(data){
+                        tishi_alert(data.notice);
+                        if(data.fresh){
+                            setTimeout(function(){
+                                window.location.href="/similarities?category="+data.category+"&web=qq";
+                            },2000);
+                        }
                     }
-                }
-            })
+                })
+            }else{
+                tishi_alert("太悲催了，你竟然没抢到?")
+            }
         },
 
         // 可选。用户取消操作后的回调方法。
