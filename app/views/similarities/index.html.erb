@@ -20,62 +20,92 @@
 <body>
   <div class="wrap renren_border">
     <div class="main_Div" <% if @web=="baidu" %> style="background: #EFEDE7;" <% end %> >
-      <div class="m_box">
-        <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
-        <% if @web != "baidu" %>
+      <% if @web != "baidu" %>
+        <div class="m_box">
+          <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
           <div class="zhenti_h_a"><a href="javascript:void(0)" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/study_plans/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')"><%= Category::NAME["#{category_id}"] %>必过秘籍</a></div>
-        <% end %>
-        <div class="zhenti_list">
-          <ul>
-            <% if @similarities.blank? %>
-              <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
-            <% else %>
-              <% @similarities.each do |similarity| %>
-                <li>
-                  <% if is_vip?(category_id) %>
-                    <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                         onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
-                         <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                        <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
-                      <% elsif @objects[similarity.id] %>
-                        <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
-                      <% elsif !similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
-                      <% end %>
-                      <h2><%= similarity.title %></h2>
-                    </a>
-                  <% elsif is_nomal?(category_id) %>
-                    <a href="javascript:void(0);" onclick="javascript:tishi_share('SORRY,您的试用期已结束。您需要升级为正式用户才可以正常使用。');">
-                      <% unless similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
-                      <h2><%= similarity.title %></h2>
-                    </a>
-                  <% else %>
-                    <% if similarity.is_free %>
+          <div class="zhenti_list">
+            <ul>
+              <% if @similarities.blank? %>
+                <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
+              <% else %>
+                <% @similarities.each do |similarity| %>
+                  <li>
+                    <% if is_vip?(category_id) %>
                       <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
                            onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
                            <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
                           <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
                         <% elsif @objects[similarity.id] %>
                           <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
+                        <% elsif !similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
                         <% end %>
                         <h2><%= similarity.title %></h2>
                       </a>
-                    <% else %>
-                      <a href="javascript:void(0);"
-                         onclick="javascript:tishi_share('这是一套收费试卷，只有正式的用户才可以使用。');">
-                        <span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
+                    <% elsif is_nomal?(category_id) %>
+                      <a href="javascript:void(0);" onclick="javascript:tishi_share('SORRY,您的试用期已结束。您需要升级为正式用户才可以正常使用。');">
+                        <% unless similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
                         <h2><%= similarity.title %></h2>
                       </a>
+                    <% else %>
+                      <% if similarity.is_free %>
+                        <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                             onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                             <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                            <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
+                          <% elsif @objects[similarity.id] %>
+                            <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
+                          <% end %>
+                          <h2><%= similarity.title %></h2>
+                        </a>
+                      <% else %>
+                        <a href="javascript:void(0);"
+                           onclick="javascript:tishi_share('这是一套收费试卷，只有正式的用户才可以使用。');">
+                          <span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
+                          <h2><%= similarity.title %></h2>
+                        </a>
+                      <% end %>
                     <% end %>
-                  <% end %>
-                </li>
+                  </li>
+                <% end %>
               <% end %>
-            <% end %>
-          </ul>
-          <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
+            </ul>
+            <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
+          </div>
         </div>
-      </div>
+
+      <% else %>
+
+        <div class="m_box">
+          <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
+          <div class="zhenti_list">
+            <ul>
+              <% if @similarities.blank? %>
+                <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
+              <% else %>
+                <% @similarities.each do |similarity| %>
+                  <li class="similarities_li">
+                    <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                         onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
+                         <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
+                        <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
+                      <% elsif @objects[similarity.id] %>
+                        <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
+                      <% end %>
+                      <h2><%= similarity.title %></h2>
+                    </a>
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+            <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
+          </div>
+        </div>
+
+      <% end %>
+
     </div>
-    
+
     <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
       <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
       <div class="tab_con">

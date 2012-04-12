@@ -340,4 +340,3 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 
 /*遮罩层*/
 .listen_zhezhao { width:100%; height: 628px; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:888;}
-

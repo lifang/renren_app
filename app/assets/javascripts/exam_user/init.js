@@ -22,6 +22,11 @@ var a = transform_array(answer.paper.problems.problem);
 for(var i=0;i<a.length;i++){
     if(a[i]!=null){
         var a1 = transform_array(a[i].question);
+        if(web!=null && web=="baidu"){
+            for(var j=0;j<a1.length;j++){
+                a1[j].analysis = "";
+            }
+        }
         answers.push(a1);
     }
 }
