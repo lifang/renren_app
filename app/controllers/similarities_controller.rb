@@ -748,6 +748,7 @@ class SimilaritiesController < ApplicationController
   end
   
   def manage_qq
+    listen=false
     begin
       meters=params[:access_token].split("&")
       access_token=meters[0].split("=")[1]
@@ -760,6 +761,7 @@ class SimilaritiesController < ApplicationController
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
+        listen=true
       else
         ActionLog.login_log(@user.id)
         @user.update_attributes(:code_id=>cookies[:openid]) if @user.code_id.nil? or @user.code_id!=cookies[:openid]
@@ -777,7 +779,7 @@ class SimilaritiesController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:yes=>data,:category=>Category::LEVEL_FOUR}
+        render :json=>{:yes=>data,:category=>Category::LEVEL_FOUR,:listen=>listen}
       }
     end
   end
@@ -813,6 +815,7 @@ class SimilaritiesController < ApplicationController
   end
 
   def manage_qq_6
+    listen=false
     begin
       meters=params[:access_token].split("&")
       access_token=meters[0].split("=")[1]
@@ -824,6 +827,7 @@ class SimilaritiesController < ApplicationController
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Constant::APPID}&openid=#{openid}"
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
+        listen=true
         @user=User.create(:code_type=>'qq',:code_id=>cookies[:openid],:name=>user_info["nickname"],:username=>user_info["nickname"],:open_id=>openid ,:access_token=>access_token,:end_time=>Time.now+expires_in.seconds,:from=>User::U_FROM[:APP])
       else
         ActionLog.login_log(@user.id)
@@ -842,7 +846,7 @@ class SimilaritiesController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render :json=>{:yes=>data,:category=>Category::LEVEL_SIX}
+        render :json=>{:yes=>data,:category=>Category::LEVEL_SIX,:listen=>listen}
       }
     end
   end
