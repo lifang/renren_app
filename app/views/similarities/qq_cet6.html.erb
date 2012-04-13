@@ -19,22 +19,10 @@
     },
     success : function(data) {
       if (data){
-        window.open('/similarities/request_qq6','_blank', 'height=450,width=510,left=400,top=250');
+         document.write("<iframe src='/similarities/request_qq6' style='width:754px;height:628px;border:0px;'></iframe>");
       }else{
         window.location.href="/similarities?web=qq&category=3"
       }
     }
   });
 </script>
-<body>
-<style type="text/css">
-  .renren_border {width: 754px;}
-  .main_Div {width: 752px;}
-</style>
-<div class="wrap renren_border">
-  <div class="main_Div">
-    <img style="height:597px;" src="/assets/762-6-qq.jpg" />
-  </div>
-  <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012，如有问题请联系qq:2568830556</div>
-</div>
-</body>

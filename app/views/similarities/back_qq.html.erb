@@ -20,11 +20,9 @@
       success: function(data){
         var url="/similarities?web=qq&listen=1&category="+data.category
         if(data.yes){
-          window.opener.location.href=url;
-          window.close();
+          window.location.href=url;
         }else{
-          window.opener.location.reload();
-          window.close();
+          window.location.reload();
         }
       }
     });
@@ -32,6 +30,7 @@
 </script>
 <body>
 <style type="text/css">
+  inline {width:810px}
   .renren_border {width: 754px;}
   .main_Div {width: 752px;}
 </style>
