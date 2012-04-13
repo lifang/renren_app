@@ -18,13 +18,26 @@
         access_token:accessToken
       },
       success: function(data){
-        var url="/similarities?web=qq&listen=1&category="+data.category
+        var url="/similarities?web=qq&listen=1&category="+data.category;
         if(data.yes){
-          window.location.href=url;
+          window.parent.frames["qq_cet4"].parent.window.location.href=url;
         }else{
-          window.location.reload();
+          window.parent.frames["qq_cet4"].parent.window.location.reload();
         }
       }
     });
   }
 </script>
+<body>
+<style type="text/css">
+  inline {width:810px}
+  .renren_border {width: 754px;}
+  .main_Div {width: 752px;}
+</style>
+<div class="wrap renren_border">
+  <div class="main_Div">
+    <img style="height:597px;" src="/assets/762-4-qq.jpg" />
+  </div>
+  <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012,如有问题请联系qq:2568830556</div>
+</div>
+</body>
