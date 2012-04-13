@@ -20,9 +20,9 @@
       success: function(data){
         var url="/similarities?web=qq&listen=1&category="+data.category;
         if(data.yes){
-          document.frames["qq_cet4"].parent.window.location.href =url;
+          window.parent.frames["qq_cet4"].parent.window.location.href=url;
         }else{
-          document.frames["qq_cet4"].parent.window.location.reload();
+          window.parent.frames["qq_cet4"].parent.window.location.reload();
         }
       }
     });
