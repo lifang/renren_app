@@ -18,11 +18,11 @@
         access_token:accessToken
       },
       success: function(data){
-        var url="/similarities?web=qq&listen=1&category="+data.category
+        var url="/similarities?web=qq&listen=1&category="+data.category;
         if(data.yes){
-          window.location.href=url;
+          document.frames["qq_cet6"].parent.window.location.href =url;
         }else{
-          window.location.reload();
+         document.frames["qq_cet6"].parent.window.location.reload();
         }
       }
     });
