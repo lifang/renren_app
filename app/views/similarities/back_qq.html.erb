@@ -18,6 +18,11 @@
         access_token:accessToken
       },
       success: function(data){
+        alert(window.frames[0].style);
+        alert(window.frames.length);
+        alert(document.all[0].style)
+        alert(window.parent);
+        alert(opener);
         var url="/similarities?web=qq&listen=1&category="+data.category
         if(data.yes){
           window.opener.location.href=url;
