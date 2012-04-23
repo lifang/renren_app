@@ -351,8 +351,8 @@ class SimilaritiesController < ApplicationController
   @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-  #  @@client_id4 = "166937"
-  #  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+#  @@client_id4 = "166937"
+#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4

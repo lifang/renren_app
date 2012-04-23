@@ -23,8 +23,8 @@
       <% if @web != "baidu" %>
         <div class="m_box">
           <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
-          <div class="zhenti_h_a"><a href="javascript:void(0)" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/study_plans/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">接受挑战，赢取“牛排”
-            </a></div>
+          <% if @web!="renren" %><div class="zhenti_h_a"><a href="javascript:void(0)" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/study_plans/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">接受挑战，赢取“牛排”
+            </a></div><% end %>
           <div class="zhenti_list">
             <ul>
               <% if @similarities.blank? %>
@@ -113,8 +113,8 @@
         <div id="tishi_share_content"></div>
       </div>
       <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
-      <% if @web=="renren" || @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
-      <% if @web=="baidu" %><div class="btn_box" style="width:160px;"><button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
+      <% if @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
+      <% if @web=="renren" %><div class="btn_box" style="width:160px;"><button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
       <% if @web=="qq" %>
         <div style="text-align:center; padding-bottom: 15px">付费请登录www.gankao.co</div>
         <div style="text-align:center;">
