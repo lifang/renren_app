@@ -250,6 +250,9 @@ function right_or_error_effect(user_answer,answer,analysis,problem_index,questio
             }
         }
     }
+    if(web!=null && web=="baidu"){
+        $("#baidu_analysis_"+problem_index+"_"+question_index).show();
+    }
     $("#display_jiexi_"+problem_index+"_"+question_index).show();
     $("#display_analysis_"+problem_index+"_"+question_index).html(analysis);
     $("#check_question_btn_"+problem_index+"_"+question_index).hide();
@@ -336,6 +339,9 @@ function check_question(question_type,correct_type,problem_index,question_index)
     if($("#exam_user_answer_"+problem_index+"_"+question_index).val()==""){
         tishi_alert("请做题后再核对");
         return false;
+    }
+    if(web!=null && web=="baidu"){
+        $("#baidu_analysis_"+problem_index+"_"+question_index).show();
     }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
@@ -1089,7 +1095,7 @@ function question_box(questions_resource,question_index){
     }
     $(element1).html($(element1).html()+"<a href='javascript:void(0);' class=\"upErrorTo_btn\" onclick=\"javascript:open_report_error('"+problems[init_problem].questions.question[question_index]["id"]+"');\">报告错误</a>");
     if(web!=null && web=="baidu"){
-       $(element1).html($(element1).html()+"<a href='javascript:void(0);' class=\"upErrorTo_btn\" onclick=\"javascript:tishi_alert('相关解析请登录赶考网查看');\">查看解析</a>");
+        $(element1).html($(element1).html()+"<a href='javascript:void(0);' id='baidu_analysis_"+init_problem+"_"+question_index+"' style='display:none;' class=\"upErrorTo_btn\" onclick=\"javascript:tishi_alert('相关解析请登录赶考网查看');\">查看解析</a>");
     }
     if(problems[init_problem].questions.question[question_index]["words"]!=null && problems[init_problem].questions.question[question_index]["words"]!=""){
         $(element1).html($(element1).html()+"<button class=\"t_btn\" onclick=\"javascript:ajax_load_about_words('"+problems[init_problem].questions.question[question_index]["words"]+"',"+init_problem+","+question_index+");\">相关词汇</button>");
