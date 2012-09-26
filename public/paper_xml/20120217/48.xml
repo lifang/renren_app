@@ -1,0 +1,20 @@
+<paper id='48' time='120' total_num='6' total_score='0.0'>
+        <base_info>
+          <title>不惜</title>
+          <category>2</category>
+          <creater>1</creater>
+          <created_at>2012-02-17 16:21</created_at>
+          <updated_at>2012-02-17 16:21</updated_at>
+          <description/>
+<category_name>forth_level</category_name>      </base_info>
+      <blocks>
+        <block id='' time='' total_num='6' total_score='0.0'>
+            <base_info>
+                <title>Part I	Writing</title>
+                <description/>
+            </base_info>
+            <problems><problem id='114' question_type='1'><description>gggg</description><title>&lt;span style=&quot;background-color:#FF9900;&quot;&gt;&lt;/span&gt;ggggg((sign))hhhhhhggggg((sign))hhhhhhggggg((sign))hhhhhhgggg</title><category>2</category><questions><question correct_type='1' flag='0' id='138' score='0.0'><description>ffffdddd</description><answer>sssss</answer><questionattrs>sssss;-;sssss;-;sss;-;ddd</questionattrs><tags/><words>miss;words</words><analysis/></question><question correct_type='0' flag='' id='142' score='sssa'><description>ffddd</description><answer>ccc</answer><questionattrs>sss;-;ddd;-;fbbb;-;ccc</questionattrs><tags/><words/><analysis>ssss</analysis></question><question correct_type='3' flag='' id='143' score='sssd'><description>ddddaaa</description><answer>ssss</answer><questionattrs/><tags/><words/><analysis>fggaaa</analysis></question></questions></problem><problem id='115' question_type='1'><description>sss</description><title>ffff((sign))ssxxxx</title><category>2</category><questions><question correct_type='3' flag='0' id='139' score='0.0'><description>dddd</description><answer>ffff</answer><questionattrs/><tags/><words/><analysis>ggg</analysis></question></questions></problem><problem id='116' question_type='1'><description>gghhddd</description><title>aaaa((sign))ddddd((mp3))/mp3/music.mp3((mp3))</title><category>2</category><questions><question correct_type='1' flag='0' id='140' score='0.0'><description>dddd</description><answer>ss</answer><questionattrs>sss;-;ss;-;fggg;-;dd</questionattrs><tags/><words>just so so</words><analysis/></question></questions></problem><problem id='117' question_type='1'><description>ddd</description><title>aaaa((sign))ssqqq</title><category>2</category><questions><question correct_type='3' flag='0' id='141' score='0.0'><description>ddddfs</description><answer>sss</answer><questionattrs/><tags/><words/><analysis>aaaa</analysis></question></questions></problem></problems>
+            </block>
+      </blocks>
+       <problem_ids/>
+      </paper>

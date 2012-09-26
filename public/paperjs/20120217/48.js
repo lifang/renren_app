@@ -1,0 +1,87 @@
+papers = {
+    "paper":{
+        "id":"48",
+        "time":"120",
+        "total_num":"3",
+        "total_score":"0.0",
+        "base_info":{
+            "title":"\u4e0d\u60dc",
+            "category":"2",
+            "creater":"1",
+            "created_at":"2012-02-17 16:21",
+            "updated_at":"2012-02-17 16:21",
+            "description":null,
+            "category_name":"forth_level"
+        },
+        "blocks":{
+            "block":{
+                "id":"",
+                "time":"",
+                "total_num":"3",
+                "total_score":"0.0",
+                "base_info":{
+                    "title":"Part I\tWriting",
+                    "description":null
+                },
+                "problems":{
+                    "problem":[{
+                        "id":"114",
+                        "question_type":"1",
+                        "description":"gggg",
+                        "title":"ggggg((sign))hhhhhh",
+                        "category":"2",
+                        "questions":{
+                            "question":{
+                                "correct_type":"1",
+                                "flag":"0",
+                                "id":"138",
+                                "score":"0.0",
+                                "description":"ffffdddd",
+                                "questionattrs":"sssss;-;sssss;-;sss;-;ddd",
+                                "tags":null,
+                                "words":null
+                            }
+                        }
+                    },{
+                "id":"115",
+                "question_type":"1",
+                "description":"sss",
+                "title":"ffff((sign))ssxxxx",
+                "category":"2",
+                "questions":{
+                    "question":{
+                        "correct_type":"3",
+                        "flag":"0",
+                        "id":"139",
+                        "score":"0.0",
+                        "description":"dddd",
+                        "questionattrs":null,
+                        "tags":null,
+                        "words":null
+                    }
+                }
+            },{
+        "id":"116",
+        "question_type":"1",
+        "description":"gghhddd",
+        "title":"aaaa((sign))ddddd((mp3))/mp3/music.mp3((mp3))",
+        "category":"2",
+        "questions":{
+            "question":{
+                "correct_type":"1",
+                "flag":"0",
+                "id":"140",
+                "score":"0.0",
+                "description":"dddd",
+                "questionattrs":"sss;-;ss;-;fggg;-;dd",
+                "tags":null,
+                "words":null
+            }
+        }
+    }]
+}
+}
+},
+"problem_ids":null
+}
+}

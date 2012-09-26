@@ -1,0 +1,25 @@
+<paper id='69' time='11' total_num='0' total_score='0'>
+        <base_info>
+          <title>let's go</title>
+          <category>2</category>
+          <creater>1</creater>
+          <created_at>2012-08-10 15:04</created_at>
+          <updated_at>2012-08-10 15:04</updated_at>
+          <description/>
+<category_name>大学英语四级</category_name>      </base_info>
+      <blocks>
+        <block id='0' time='' total_num='' total_score=''>
+            <base_info>
+                <title>Part I	Writing</title>
+                <description/>
+            </base_info>
+            <problems><problem id='134' question_type='1'><description>dddddsss</description><title>&lt;p&gt;
+	think about you and youself,((sign))ssss
+&lt;/p&gt;
+&lt;p&gt;
+	you are always the best.
+&lt;/p&gt;</title><category>2</category><questions><question correct_type='3' flag='0' id='191' score='0.0'><description>ssssasaa</description><answer>aaasss</answer><questionattrs></questionattrs><tags></tags><words></words><analysis>ssssa</analysis></question></questions></problem></problems>
+            </block>
+      </blocks>
+       <problem_ids/>
+      </paper>

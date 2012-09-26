@@ -1,182 +1,36 @@
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
-<% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
-<% order_type = {"renren"=>Order::TYPES[:RENREN],"sina"=>Order::TYPES[:SINA],"baidu"=>Order::TYPES[:BAIDU],"qq"=>Order::TYPES[:QQ]} %>
 <script type="text/javascript">
   var shared = 0;
   var web = "<%= @web %>";
   var public_path = "<%= Constant::PUBLIC_PATH %>";
   var server_path = "<%= Constant::SERVER_PATH %>";
   var category_id = "<%= category_id %>";
-  var order_type = "<%= order_type[@web] %>";
-  var type_n = "<%= "#{(category_id == '2') ? '4' : '6'}" %>";
-  var renren_id = "<%= Constant::RENREN_ID %>";
-  var app_id = "<%= params["appid"] %>";
-  var success = "<%= params["success"] %>";
 </script>
 <script type="text/javascript" src="/assets/index.js"></script>
-<% if @web=="qq" %>
-  <script type="text/javascript" charset="utf-8" src="/assets/qq/fusion_loader"></script>
-<% end %>
 <body>
   <div class="wrap renren_border">
     <div class="main_Div" <% if @web=="baidu" %> style="background: #EFEDE7;" <% end %> >
-      <% if @web != "baidu" %>
-        <div class="m_box">
-          <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
-          <div class="zhenti_h_a"><a href="javascript:void(0)" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/study_plans/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">接受挑战，赢取“牛排”
-            </a></div>
-          <div class="zhenti_list">
-            <ul>
-              <% if @similarities.blank? %>
-                <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
-              <% else %>
-                <% @similarities.each do |similarity| %>
-                  <li>
-                    <% if is_vip?(category_id) %>
-                      <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                           onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
-                           <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                          <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
-                        <% elsif @objects[similarity.id] %>
-                          <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
-                        <% elsif !similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
-                        <% end %>
-                        <h2><%= similarity.title %></h2>
-                      </a>
-                    <% elsif is_nomal?(category_id) %>
-                      <a href="javascript:void(0);" onclick="javascript:tishi_share('SORRY,您的试用期已结束。您需要升级为正式用户才可以正常使用。');">
-                        <% unless similarity.is_free %><span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span><% end %>
-                        <h2><%= similarity.title %></h2>
-                      </a>
-                    <% else %>
-                      <% if similarity.is_free %>
-                        <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                             onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
-                             <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                            <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
-                          <% elsif @objects[similarity.id] %>
-                            <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
-                          <% end %>
-                          <h2><%= similarity.title %></h2>
-                        </a>
-                      <% else %>
-                        <a href="javascript:void(0);"
-                           onclick="javascript:tishi_share('这是一套收费试卷，只有正式的用户才可以使用。');">
-                          <span><img class="tooltip" name="仅供正式用户使用" src="/assets/icon_tx.png" /></span>
-                          <h2><%= similarity.title %></h2>
-                        </a>
-                      <% end %>
-                    <% end %>
-                  </li>
-                <% end %>
+      <div class="m_box">
+        <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
+        <div class="zhenti_list">
+          <ul>
+            <% if @similarities.blank? %>
+              <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
+            <% else %>
+              <% @similarities.each do |similarity| %>
+                <li class="similarities_li">
+                  <a href="/similarities/<%= similarity.id %>?category=<%= category_id %>&web=<%=@web  %>">
+                    <h2><%= similarity.title %></h2>
+                  </a>
+                </li>
               <% end %>
-            </ul>
-            <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
-          </div>
+            <% end %>
+          </ul>
+          <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
         </div>
-
-      <% else %>
-
-        <div class="m_box">
-          <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题（2006.12-2011.12）</h1>
-          <div class="zhenti_list">
-            <ul>
-              <% if @similarities.blank? %>
-                <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
-              <% else %>
-                <% @similarities.each do |similarity| %>
-                  <li class="similarities_li">
-                    <a href="/similarities/<%= similarity.id %>/join?category=<%= category_id %>&web=<%= @web %>" <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                         onclick="return already_submit('<%= similarity.id %>','<%= @objects[similarity.id][0] %>','<%= @objects[similarity.id][2] %>')" <% end %>>
-                         <% if @objects[similarity.id]&&@objects[similarity.id][1] %>
-                        <span><img class="tooltip" name="已完成" src="/assets/icon_wc.png" /></span>
-                      <% elsif @objects[similarity.id] %>
-                        <span><img class="tooltip" name="未做完" src="/assets/icon_nun.png" /></span>
-                      <% end %>
-                      <h2><%= similarity.title %></h2>
-                    </a>
-                  </li>
-                <% end %>
-              <% end %>
-            </ul>
-            <%=  will_paginate @similarities ,:previous_label=>" &lt;", :next_label=>" &gt;" %>
-          </div>
-        </div>
-
-      <% end %>
-
-    </div>
-
-    <div id="free_sum_div" class="rr_tab tab_box border_radius" style="display:none;">
-      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#free_sum_div').hide();" /></span>
-      <div class="tab_con">
-        <div id="tishi_share_content"></div>
       </div>
-      <% if @web=="kaixin" %><div class="btn_box"><button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button></div><% end %>
-      <% if @web=="renren" || @web=="sina" %><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="t_btn" onclick="javascript:window.open('<%= Constant::GANKAO_URL %>/users/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>')">付费</button>&nbsp;&nbsp;<button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
-      <% if @web=="baidu" %><div class="btn_box" style="width:160px;"><button class="t_btn" onclick="javascript:confirm_share();">抢免费名额</button>&nbsp;<span id="display_free_sum" class="red"></span></div><% end %>
-      <% if @web=="qq" %>
-        <div style="text-align:center; padding-bottom: 15px">付费请登录www.gankao.co</div>
-        <div style="text-align:center;">
-          <% if category_id.to_i==Category::LEVEL_FOUR  %>
-            <input type="hidden" value="<%= Constant::IMG_URL %>" id="img_url"/>
-            <button class="t_btn" onclick="javascript:qq_share();">抢免费名额</button>
-          <% elsif category_id.to_i==Category::LEVEL_SIX %>
-            <button class="t_btn" onclick="javascript:qq_share_6();">抢免费名额</button>
-            <input type="hidden" value="<%= Constant::IMG_URL_6 %>" id="img_url"/>
-          <% end %>
-          &nbsp;<span id="display_free_sum" class="red"></span>
-        </div>
-      <% end %>
     </div>
-
-    <div id="confirm_share_div" class="rr_tab tab_box border_radius" style="display:none;">
-      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#confirm_share_div').hide();" /></span>
-      <div class="tab_con">
-        <div id="confirm_share_message"></div>
-        <% if @web=="sina" %><div><textarea style="padding:5px;width:270px;height:160px;" id="sina_share_message">众所周知，我正在准备<%= "#{(category_id == '2') ? '四' : '六'}" %>级。（原来不知道的话，现在也知道了吧。）刚刚在新浪微博应用平台发现了一个应用，提供全套的<%= "#{(category_id == '2') ? '四' : '六'}" %>级真题和录音，灰常和谐，灰常给力。只不过，如果不分享给你们，我就只能用其中的3套而已。所以，你们看到了这条分享。见谅见谅。应用链接: <%= "#{(category_id == '2') ? 'http://apps.weibo.com/english_iv' : 'http://apps.weibo.com/english_vi'}" %></textarea></div><% end %>
-      </div>
-      <div class="btn_box00"><button class="t_btn" onclick="javascript:share();">确认</button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:$('#confirm_share_div').hide();">取消</button></div>
-    </div>
-
-    <div id="already_submit_div" class="rr_tab tab_box border_radius" style="display:none;">
-      <input type="hidden" id="already_submit_ex_id" value=""></input>
-      <input type="hidden" id="already_submit_eu_id" value=""></input>
-      <input type="hidden" id="already_submit_sheet_url" value=""></input>
-      <span class="xx_x"><img src="/assets/x.gif" onclick="javascript:$('#already_submit_div').hide();" /></span>
-      <div class="tab_con">
-        <div>你已经做完了该份试卷，你是否要重做题目？</div>
-      </div>
-      <div class="btn_box00"><button class="t_btn" onclick="javascript:view_paper();"> 不,只想浏览 </button>   &nbsp;&nbsp;<button class="t_btn" onclick="javascript:redo_paper();"> 好,我要重做 </button></div>
-    </div>
-
-    <% if @web=="renren" && cookies[:first] ; cookies.delete(:first) %>
-      <div id="guanzhu_div" class="rr_tab tab_box border_radius">
-        <div class="tab_con">
-          <div>感谢您使用我们的应用，为了更好的提供我们的服务，您可以关注赶考网的公共主页，以获得最新最全的信息和资讯。</div>
-        </div>
-        <div class="btn_box"><button class="t_btn" onclick="javascript:friends();">知道了</button>   </div>
-      </div>
-    <% end %>
-    <% if @web=="qq" %>
-      <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012，如有问题请联系qq:2568830556</div>
-    <% else %>
-      <div class="foot">Powered by <a href="http://www.gankao.co" target="_blank">赶考网</a> &copy; 2010-2012</div>
-    <% end %>
+    <div class="foot">Powered by 赶考网 &copy; 2010-2012，如有问题请联系qq:2568830556</div>
   </div>
-  <div class="listen_zhezhao" style="display: none"></div>
-  <div class="rr_tab tab_box border_radius" id="listen_weibo" style="display:none;height:150px;">
-    <span class="xx_x"><img src="/assets/x.png" onclick="javascript:window.location.href='/similarities?web=qq&category=<%= category_id %>'" /></span>
-    <div class="tab_con">
-      <div><img src="/assets/listen_weibo.png"/></div>
-      <div><iframe src="http://follow.v.t.qq.com/index.php?c=follow&a=quick&name=gankao2011&style=5&t=1334028755869&f=0" marginwidth="0" marginheight="0" allowtransparency="true" frameborder="0" height="24" scrolling="auto" width="70"></iframe></div>
-    </div>
-  </div>
-  <% if params[:listen]=="1" %>
-    <script type="text/javascript">
-      $(".listen_zhezhao").css("display","");
-      $("#listen_weibo").css("display","");
-    </script>
-  <% end %>
 </body>
 

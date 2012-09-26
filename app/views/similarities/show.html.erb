@@ -4,25 +4,13 @@
     $("#load_message").html("SORRY,此份试题好像存在问题，也可能由于您的网速过慢，您可以刷新试试。");
   },20000);
 </script>
-
 <% category_id = params[:category].nil? ? '2' : params[:category] %>
 <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
-
-
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
 <div id="log"></div>
 <div class="m_top">
   <h1 class="ex_paper_h"><%= @paper.title %></h1>
-  <% if @web=="renren" %>
-    <% share_url = category_id=="2" ? "http://apps.renren.com/english_iv" : "http://apps.renren.com/english_vi" %>
-    <span class="renren_share"><a name="xn_share" type="button" href="<%= share_url %>">分享</a><%= javascript_include_tag "/assets/exam_user/share.js" %></span>
-  <% end %>
-  <% if @web!="baidu" && @web !="qq" %>
-    <span class="ex_renren">
-      <a href="<%= Constant::GANKAO_URL %>/words/renren?category=<%= category_id %>&user_id=<%= cookies[:user_id] %>&code_id=<%= @code_id %>" target="_blank">高频词汇,轻松记忆</a>
-    </span>
-  <% end %>
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
@@ -47,62 +35,11 @@
       .AD_width { width: 360px;}
     </style>
   <% end %>
-  <%= render :partial=>"/common/advert",:object=>@web %>
+  <%#= render :partial=>"/common/advert",:object=>@web %>
 </div>
 
 <!-- 试题生成入口 generate.js -->
 <div id="generate"><div style="height: 467px;"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div></div>
-
-<!-- 相关词汇框 -->
-<div id="about_words_loader" style="display:none;">
-  <div class="jiexi" id="about_words">
-    <span class="xx_x" onclick="javascript:close_about_words();" ><img alt="gankao" src="/assets/x.gif"/></span>
-    <div class="xg_words">
-      <ul id="about_words_list"></ul>
-    </div>
-    <div class="xg_words_ny">
-      <div class="ch_text">
-        <div class="ch_words_line">
-          <span class="font_size_24" id='about_word_name'></span>
-          <a href="javascript:void(0);" title="加入我的单词本" onclick="javascript:ajax_add_word($('#about_word_id').val());"><img src="/assets/join_bs.png" /></a>
-        </div>
-        <div class="ch_words_line">
-          <span id='about_word_types'></span><span id='about_word_phonetic'></span>
-          <input type="hidden" id="about_word_enunciate_url" />
-          <input type="hidden" id="about_word_id" />
-          <a href="javascript:void(0);" title="发音" onclick="javascript:play_word_enunciate($('#about_word_enunciate_url').val());"><img alt="gankao" src="/assets/icon_fy.png" /></a>
-        </div>
-        <div class="ch_words_line">
-          <p class="font_size_16" id='about_word_en_mean'></p>
-          <p id='about_word_ch_mean'></p>
-        </div>
-        <div class="ch_words_line">
-          <ul class="words_ul_font14" id="about_word_sentences"></ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 报告错误框  -->
-<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 450px; display: none; ">
-  <span class="xx_x"><img src="/assets/xx.png" onclick="javascript:close_report_error();"/></span>
-  <input type="hidden" id="report_error_paper_id" value="<%= @paper_id %>" />
-  <input type="hidden" id="report_error_paper_title" value="<%= @paper.title %>" />
-  <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id] %>" />
-  <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
-  <input type="hidden" id="report_error_question_id" />
-  <h3>错误类型:</h3>
-  <ul>
-    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>"/>题目错误</li>
-    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANSWER] %>"/>答案错误</li>
-    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>"/>解析错误</li>
-    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
-  </ul>
-  <h3>错误说明:</h3>
-  <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
-  <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
-</div>
 
 <%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
 <%= javascript_include_tag "/assets/jquery.ui.widget.min.js" %>
@@ -120,9 +57,7 @@
   var category = '<%= category_id %>';
   var init_exam_user_id ='<%= params[:id] %>';
   var init_paper_id = "<%= @paper_id %>";
-  var sheet_url = "<%= @sheet_url %>";
   var init_problem = 0;
-  var collection = <%= array_or_string_for_javascript(@collection) %>;
   var web = "<%= @web %>";
 </script>
 

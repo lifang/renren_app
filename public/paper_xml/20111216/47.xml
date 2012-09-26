@@ -1,0 +1,338 @@
+<paper id='47' time='110' total_num='26' total_score='107.0'>
+    <base_info>
+        <title>曾经的1989</title>
+        <category>2</category>
+        <creater>1</creater>
+        <created_at>2011-12-16 13:32</created_at>
+        <updated_at>2011-12-16 13:32</updated_at>
+        <description/>
+        <category_name>forth_level</category_name>
+    </base_info>
+    <blocks>
+        <block id='33' time='' total_num='11' total_score='67.0'>
+            <base_info>
+                <title>Part I	Writing</title>
+                <description>hello,where rom you and manee((mp3))/mp3/music.mp3((mp3)) sthindk </description>
+            </base_info>
+            <problems>
+                <problem id='93' question_type='0'>
+                    <description>还好吗，你们？</description>
+                    <title>还记得，那时的我还没冒出胡须。lll</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='0' id='112' score='12'>
+                            <description>得得得得</description>
+                            <answer>444</answer>
+                            <questionattrs>333;-;111;-;222;-;444</questionattrs>
+                            <tags> 23 的地方改过 改过 2334455</tags>
+                            <words> ddd sss fffd</words>
+                            <analysis>看得见自己。</analysis>
+                        </question>
+                        <question correct_type='5' flag='' id='134' score='12'>
+                            <description>哈哈哈哈哈凤飞飞</description>
+                            <answer>卡卡卡卡事实上</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words/>
+                            <analysis>哇哇哇的vvv</analysis>
+                        </question>
+                        <question correct_type='3' flag='' id='135' score='0.0'>
+                            <description>发反反复复的呵呵呵呵</description>
+                            <answer>反反复复</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words>schedule</words>
+                            <analysis>呵呵很多的</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='94' question_type='0'>
+                    <description>我是不能看见自己的凤飞飞哈哈哈</description>
+                    <title>原来自己去了那里，一个没有自己的地方。</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='1' id='113' score='12'>
+                            <description>还是描述一下吧</description>
+                            <answer>都可以为空的;|;因为我们没添加验证;|;原来如此</answer>
+                            <questionattrs>都可以为空的;-;因为我们没添加验证;-;原来如此;-;i gusse</questionattrs>
+                            <tags> 上市</tags>
+                            <words> ddd</words>
+                            <analysis>算了吧，这是一个秘密。</analysis>
+                        </question>
+                        <question correct_type='5' id='114' score='凤飞飞'>
+                            <description>鹅鹅鹅</description>
+                            <answer>得得得</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words/>
+                            <analysis>凤飞飞</analysis>
+                        </question>
+                        <question correct_type='5' id='115' score='11'>
+                            <description>生生世世</description>
+                            <answer>反反复复哥哥哥哥</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words/>
+                            <analysis>几个滚滚滚</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='106' question_type='0'>
+                    <description/>
+                    <title/>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='3' flag='0' id='128' score='12'>
+                            <description>wwwww</description>
+                            <answer>ww</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words>and so on;hand</words>
+                            <analysis>eeee</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='107' question_type='1'>
+                    <description/>
+                    <title>ddddddfffrrrrrlllxxxxsxffff((mp3))/mp3/music.mp3((mp3))fffffffffffffffdd((sign))</title>
+                   
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='3' flag='0' id='129' score='fff'>
+                            <description>web and angel</description>
+                            <answer>ssss</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words>angel;web</words>
+                            <analysis>dddd</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='109' question_type='1'>
+                    <description/>
+                    <title/>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='' flag='0' id='131' score='1'>
+                            <description>ddddss</description>
+                            <answer/>
+                            <questionattrs/>
+                            <tags/>
+                            <words>and so on;mouse</words>
+                            <analysis>hhhhh</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='110' question_type='1'>
+                    <description/>
+                    <title/>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='3' flag='0' id='132' score='6'>
+                            <description>jjj</description>
+                            <answer>fff</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words>ok;l;ddd;and so on</words>
+                            <analysis>ghhh</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='111' question_type='0'>
+                    <description/>
+                    <title/>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='3' flag='0' id='133' score='1'>
+                            <description>dddsss</description>
+                            <answer>8</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words>word;words;ok</words>
+                            <analysis>999</analysis>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='34' start_time='0' time='0' total_num='2' total_score='20.0'>
+            <base_info>
+                <title>333322</title>
+                <description>ddddddddddd</description>
+            </base_info>
+            <problems>
+                <problem id='95' question_type='1'>
+                    <description>雪花飞舞的世界，从此少了自己。</description>
+                   
+                    <title>只有一个人还在这个fff((mp3))/mp3/music.mp3((mp3))fffffffffffffffdd((sign))世界。</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='3' id='116' score='12'>
+                            <description>我知道这个人不是你。</description>
+                            <answer>还是简单好。</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words/>
+                            <analysis>用什么区覆盖那些。</analysis>
+                        </question>
+                        <question correct_type='3' id='117' score='8'>
+                            <description>小题</description>
+                            <answer>1</answer>
+                            <questionattrs/>
+                            <tags/>
+                            <words/>
+                            <analysis>13</analysis>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='35' start_time='1' time='2' total_num='1' total_score='5.0'>
+            <base_info>
+                <title>还是我的fff((mp3))((mp3))fffffffffffffffdd((sign))好</title>
+                <description>11((mp3))/mp3/music.mp3((mp3))</description>
+            </base_info>
+            <problems>
+                <problem id='96' question_type='0'>
+                    <description>嘻嘻嘻</description>
+                    <title>咯咯咯</title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='1' flag='' id='118' score='5.0'>
+                            <description>卡卡卡</description>
+                            <answer>缭绫缭绫何所似;|;坎坎坷坷;|;凌霄何以堪;|;风华正茂时</answer>
+                            <questionattrs>缭绫缭绫何所似;-;坎坎坷坷;-;凌霄何以堪;-;风华正茂时</questionattrs>
+                            <tags/>
+                            <words/>
+                            <analysis>风花雪月夜！</analysis>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+        <block id='36' start_time='0' time='0' total_num='12' total_score='15.0'>
+            <base_info>
+                <title>还fff((mp3))((mp3))fffffffffffffffdd((sign))是我</title>
+                <description>11((mp3))/mp3/music.mp3((mp3))</description>
+            </base_info>
+            <problems>
+                <problem id='97' question_type='1'>
+                    <description/>
+                    <title/>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='1' id='119' score=''>
+                            <description>得得得得</description>
+                            <answer/>
+                            <questionattrs>得得得;-;事实上;-;444;-;反反复复</questionattrs>
+                            <tags/>
+                            <words/>
+                            <analysis>啊啊啊</analysis>
+                        </question>
+                    </questions>
+                </problem>
+                <problem id='112' question_type='1' score='0.0' types='0'>
+                    <title>Media Selection for Advertisements \nAfter determining the target audience for a product or service, ((sign))advertising agencies must select the appropriate media for the advertisement. We discuss here the major types of media used in advertising. We focus our attention on seven types of advertising: television, newspapers, radio, magazines, out-of-home, Internet, and direct mail. \n
+                       Television Television is an attractive medium for advertising because it((sign)) delivers mass audiences to advertisers. When you consider that nearly three out of four Americans have seen the game show \"Who Wants to Be a Millionaire?\" you can understand the power of television to communicate with a large audience. When advertisers create a brand, for example, they want to impress consumers with the brand and its image. Television provides an ideal vehicle for this type of communication. But television is an expensive medium, and not all advertisers can afford to use it.on advertising is fourfold. First, narrowcasting means that telev((sign))ision channels are seen by an increasingly narrow segment of the audience. The Golf Channel, for instance, is watched by people who play golf. Home and Garden Television is seen by those interested in household improvement projects. Thus, audiences are smaller and more homogeneous(\u5177\u6709\u5171\u540c\u7279\u70b9\u7684) than they have been in the past. Second, there is an increase in the number of television channels available to viewers, and thus, advertisers.&nbsp;This has also resulted in an increase in the sheer number of advertisements to which audiences are exposed. Third, digital recording devices allow audience members more control over which commercials they watch. Fourth, control over programming is being passed from the networks to local cable operators and satellite programmers.
+                       &nbsp;Nue((sign)) is newspapers. The New York Times, which reaches a national audience, accounts for $1 billion in ad revenue annually. It has increased its national circulation (\u53d1\u884c\u91cf) by 40% and is now available for home delivery in 168 cities. Locally, newspapers are the largest advertising medium. \nNewspapers are a less expensive advertising medium((sign)) than television and provide a way for advertisers to communicate a longer, more detailed message to their audience than they can through television. Given new production techniques, advertisements can be printed in newspapers in about 48 hours, meaning newspapers are also a quick way of getting the massage out. Newspapy, and they develop a high degree of loyalty from local readers.\nAdvertising on radio continues to grow.((sign)) Radio is often used in conjunction with outdoor billboards (\u5e7f\u544a\u724c) and the Internet to reach even more customers than television. Advertisers are likely to use radio because it is a less expensive medium than television, which means advertisers can afford to repeat their ads often. Internet companies are also turning to radio advertising. Radio provides a way for advertisers to communicate with audience members at all times of the day. Consumers listen to radio on their way to school or work, at work, on the way home, and in the evening hours.&nbsp;Two major changes\u2014satellite and Internet radio\u2014will force radio advertisers to adapt their methods. Both of these radio forms allow listeners to tune in stations that are more distant than the local stations they could receive in the past. As a result, radio will increasingly attract target audiences who live many miles apart.\nMagazines \nNewsweeklies, women\u2019s titles, and business((sign)) magazines have all seen in increases in advertising because they attract the high-end market. Magazines are popular with advertisers because of the narrow market that they deliver. A broadcast medium such as network television&nbsp;attracts&nbsp;all types of audience members, but magazine audiences are more homogeneous. If you read \"Sports Illustrated\", for example, you have much in common with the magazine\u2019s other readers. Advertisers see magazines as an efficient way of reaching target audience members.&nbsp;Advertisers using the print media - magazines and newspapers - will need to adapt to two main changes. First, the Internet will bring larger audiences to local newspapers. These audiences will be more diverse and geographically dispersed(\u5206\u6563) than in the past. Second,&nbsp;advertisers&nbsp;will have to understand how to use an increasing number of magazines for their target audiences. Although some magazines will maintain national audiences, a large number of magazines will entertain narrower audiences.
+                       Out-of-home advertisingOut-of-home advertising,((sign)) also callingly&nbsp;effective&nbsp;way of reaching consumers, who are more active than ever before. &nbsp;Many consumers today do not sit at home and watch television. &nbsp;Using billboards, newsstands, and bus shelters ((sign))for&nbsp;advertising&nbsp;is an effective way of reaching these on-the-go consumers. More consumers travel longer distances to and from work, which also makes out-of-home advertising effective. &nbsp;Technology has changed the nature of the billboard business, making it a more effective medium than in the past. &nbsp;Using digital printing, billboard companies can print a billboard in 2 hours, compared with 6 days previously. &nbsp;This allows advertisers more variety in the types of messages they create because they can change their messages more quickly.
+                       Internet As consumers become more comfortable with online shopping, advertisers will seek to reach this market. ((sign))As consumers get more of their news and information from the Internet, the ability of television and radio to get the word out to consumers will decrease.&nbsp;The challenge to Internet advertisers is to create ads that audience members remember.&nbsp;Internet advertising will play a more prominent role in organizations\u2019 advertising in the near&nbsp;future. Internet audiences tend to be quite homogeneous, but small. Advertisers will have to adjust their methods to reach these audiences and will have to adapt their persuasive strategies to the online medium as well.
+                       Direct mail&nbsp;((sign))A final advertising medium is direct mail, which uses mailings to consumers to communicate a client's message. Direct mail includes newsletters, postcards and special promotions. Direct mail is an effective way to build relationships with consumers. For many businesses, direct mail is the most effective from ((mp3))/mp3/music.mp3((mp3))of advertising.
+                    </title>
+                    <category>2</category>
+                    <questions>
+                        <question correct_type='0' id='113' score='0.0'>
+                            <description>Television is an attractive advertising medium in that_____________.</description>
+                            <answer>A) it has large audiences </answer>
+                            <analysis>文章中的小标题可以帮助我们快速定位。这里Television部分的第一句话就回答了这个问题：Television is an attractive medium for advertising because it delivers mass audiences to advertisers. </analysis>
+                            <questionattrs>A) it has large audiences ;-;B) it appeals to housewives ;-;C) it helps build up a company’s reputation ;-;D) it is affordable to most advertisers</questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='0' id='131' score='0.0'>
+                            <description>With the increase in the number of TV channels_________. </description>
+                            <answer>D) the number of TV ads people can see has increased</answer>
+                            <analysis>还是在Television的部分，第二段里谈到电视广告的四重影响，其中第二重影响说：Second, there is an increase in the number of television channels available to viewers, and thus, advertisers. This has also resulted in an increase in the sheer number of advertisements to which audiences are exposed. 这里提到频道数量上升，带来的结果是观众所能接触到的广告的绝对数量的上升。</analysis>
+                            <questionattrs>A) the cost of TV advertising has decreased ;-;B) the number of TV viewers has increased ;-;C) advertisers’ interest in other media has decreased ;-;D) the number of TV ads people can see has increased</questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='0' id='117' score='0.0'>
+                            <description>Compared with television, newspapers as an advertising medium_________________. </description>
+                            <answer>B) convey more detailed messages </answer>
+                            <analysis>Newspaper的第二段中提到Newspapers are a less expensive advertising medium than television and provide a way for advertisers to communicate a longer, more detailed message to their audience than they can through television. 这句话比较了报纸和电视的差别，谈到报纸广告更便宜，与受众的交流时间更长更深入。
+                            </analysis>
+                            <questionattrs>A) earn a larger annual ad revenue ;-;B) convey more detailed messages ;-;C) use more production techniques ;-;D) get messages out more effectively </questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='0' id='118' score='0.0'>
+                            <description>Advertising on radio continues to grow because ___________. </description>
+                            <answer>C) it provides easy access to consumers </answer>
+                            <analysis>Radio部分开头第一句就说到Advertising on radio continues to grow. 说明这一段就是说为什么广播的广告会原来越多。理由有3个：&lt;br&gt;
+1. 与户外广告和互联网广告组合可以接触到比电视广告更广泛的受众&lt;br&gt;
+2. 便宜&lt;br&gt;
+3. 全天候&lt;br&gt;
+这里的4个选项只有C谈到了，easy access to consumers意思是更容易接触到消费者。和便宜这个理由是相符合的。
+                            </analysis>
+                            <questionattrs>A) more local radio stations have been set up ;-;B) modern technology makes it more entertaining ;-;C) it provides easy access to consumers ;-;D) it has been revolutionized by Internet radio. </questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='0' id='119' score='0.0'>
+                            <description>Magazines are seen by advertisers as an efficient way to___________.</description>
+                            <answer>A) reach target audiences </answer>
+                            <analysis>Magazines这一部分第一段第二句Magazines are popular with advertisers because of the narrow market that they deliver，就谈到了Magazine受欢迎的理由是narrow market，因此定位受众更有效。
+                            </analysis>
+                            <questionattrs>A) reach target audiences ;-;B) modern technology makes it more entertaining ;-;C) appeal to educated people.;-;D) convey all kinds of messages</questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='1' id='94' score='0.0'>
+                            <description>Oui-of-home advertising has become more effective because_______ </description>
+                            <answer>consumers travel more now than ever before </answer>
+                            <analysis>找到这句话就基本可以确定答案了More consumers travel longer distances to and from work, which also makes out-of-home advertising effective. &lt;br&gt;
+其中to and from work是指上下班，他们travel longer distance，路程更长。
+                            </analysis>
+                            <questionattrs>billboards can be replaced within two hours ;-;consumers travel more now than ever before ;-;such ads have been made much more attractive ;-;the pace of urban life is much faster nowadays </questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='1' id='106' score='0.0'>
+                            <description> The challenge to Internet advertisers is to create ads that are___________.</description>
+                            <answer>C) easy to remember </answer>
+                            <analysis>Internet部分第一段中最后一句： The challenge to Internet advertisers is to create ads that audience members remember.  </analysis>
+                            <questionattrs>A) quick to update ;-;B) pleasant to look at ;-;C) easy to remember ;-;D) convenient to access </questionattrs>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='3' id='23' score='0.0'>
+                            <description>Internet advertisers will have to adjust their methods to reach audiences that tend to be____________ .</description>
+                            <answer>quite homogeneous, but small</answer>
+                            <analysis>首先从句子本身看，要填入的部分是that后面的从句内容，句子的作用是用来说明audiences的（叫定语从句）。再在文章中，可以找到下面的句子Internet audiences tend to be quite homogeneous, but small.。</analysis>
+                            <questionattrs/>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='3' id='24' score='5'>
+                            <description>Direct mail is an effective form of advertising for businesses to develop_________________ .</description>
+                            <answer>relationship with consumers</answer>
+                            <analysis>分析句子知道我们要填入的是名词或者名词词组，用来说明邮件广告对于企业而言是建立（何种事物）的有效形式。回到原文寻找，我们发现有：Direct mail is an effective way to build relationships with consumers. &lt;br&gt;
+其中，build和develop意思相同。
+                            </analysis>
+                            <questionattrs/>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='3' id='25' score='5'>
+                            <description>This passage discusses how advertisers select__________for advertisements.</description>
+                            <answer> the appropriate media</answer>
+                            <analysis>首先理解句子意思，问的是整篇文章所说的内容是广告主如何选择广告的（   ）。如果要寻找这种有关主旨的信息，一般就在文章开始或结束的地方。这篇文章的开头说道：After determining the target audience for a product or service, advertising agencies must select the appropriate media for the advertisement. </analysis>
+                            <questionattrs/>
+                            <tags>快速阅读</tags>
+                        </question>
+                        <question correct_type='0' id='26' score='5'>
+                            <answer>B)love breeds love.</answer>
+                            <analysis>后母通过自己对孩子的爱，获得了孩子们对她的爱，爱会带来爱，因此我们选择B项。其实文章的开头也表达了这一观点。这种大意概括累的题目应该抓住文章的开头和结尾。
+                            </analysis>
+                            <questionattrs>A)love is blind.;-;B)love breeds love.;-;C)divorce often has disastrous consequences.;-;D)happiness is hard to find in blended families.</questionattrs>
+                            <tags>听力</tags>
+                        </question>
+                    </questions>
+                </problem>
+            </problems>
+        </block>
+    </blocks>
+    <problem_ids/>
+</paper>

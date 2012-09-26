@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>      <paper id='36' total_num='0' total_score='0'>
+        <base_info>
+          <title>模拟测试</title>
+          <category>2</category>
+          <creater>1</creater>
+          <created_at>2011-12-15 13:06</created_at>
+          <updated_at>2011-12-15 13:06</updated_at>
+          <description></description>
+<category_name>forth_level</category_name>      </base_info>
+      <blocks>
+        <block id='' time='' total_num='4' total_score='15.0'>
+            <base_info>
+                <title>first</title>
+                <description></description>
+            </base_info>
+            <problems></problems>
+            </block>
+      </blocks>
+       <problem_ids></problem_ids>
+      </paper>
