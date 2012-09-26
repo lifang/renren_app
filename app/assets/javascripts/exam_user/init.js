@@ -246,6 +246,9 @@ function right_or_error_effect(user_answer,answer,analysis,problem_index,questio
             }
         }
     }
+    if(web!=null && web=="baidu"){
+        $("#baidu_analysis_"+problem_index+"_"+question_index).show();
+    }
     $("#display_jiexi_"+problem_index+"_"+question_index).show();
     $("#display_analysis_"+problem_index+"_"+question_index).html(analysis);
     $("#check_question_btn_"+problem_index+"_"+question_index).hide();
@@ -332,6 +335,9 @@ function check_question(question_type,correct_type,problem_index,question_index)
     if($("#exam_user_answer_"+problem_index+"_"+question_index).val()==""){
         tishi_alert("请做题后再核对");
         return false;
+    }
+    if(web!=null && web=="baidu"){
+        $("#baidu_analysis_"+problem_index+"_"+question_index).show();
     }
     $("#display_answer_"+problem_index+"_"+question_index).empty();
     $("#display_analysis_"+problem_index+"_"+question_index).empty();
