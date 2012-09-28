@@ -9,7 +9,8 @@
 
   <div style="position: absolute; z-index: 10001; height: 342px; width: 570px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; background-color: rgba(82, 82, 82, 0.699219); border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; display: block; left: 105px; top: 106.4px; " class="rr_ui_dialog">
     <div class="rr_dialog_content" style="background-color: rgb(255, 255, 255); height: 342px; width: 570px; ">
-      <iframe style="border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; border-image: initial; overflow-x: hidden; overflow-y: hidden; height: 342px; width: 570px; " src="https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=<%= @api_key %>&redirect_uri=<%= @redirect_uri %>&display=page"></iframe>
+      <iframe style="border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; border-image: initial; overflow-x: hidden; overflow-y: hidden; height: 342px; width: 570px; "
+              src="https://ren.gankao.co?category=<%= Category::LEVEL_SIX %>&web=baidu"></iframe>
     </div>
   </div>
 
