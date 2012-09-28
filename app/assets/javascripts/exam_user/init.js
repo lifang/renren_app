@@ -642,7 +642,7 @@ function clone_flowplayer(selector,audio_src){
         },
         onLoad: function() {
             this.setVolume(90);
-            this.setClip("http://manage.gankao.co"+audio_src);
+            this.setClip(back_server_path+audio_src);
         }
     });
 }
