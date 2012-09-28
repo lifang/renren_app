@@ -9,7 +9,7 @@ class SimilaritiesController < ApplicationController
     @web = params[:web].nil? ? "renren" : params[:web]
     category_id = params[:category].nil? ? 2 : params[:category]
     sql = "select e.id, e.title, e.is_free from examinations e
-        where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
+        where e.category_id = #{category_id} and e.types = #{Examination::TYPES[:OLD_EXAM]} order by created_at "
     @similarities = Examination.paginate_by_sql(sql,
       :per_page => 10, :page => params[:page])
   end
