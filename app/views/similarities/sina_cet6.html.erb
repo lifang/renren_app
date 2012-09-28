@@ -3,9 +3,6 @@
     background: url("/assets/760x628-6.png") no-repeat;
   }
 </style>
-
-<% if @login %>
-
   <script type="text/javascript">
     $(function(){
       setTimeout(function(){
@@ -13,21 +10,6 @@
       },1500)
     })
   </script>
-
-<% else %>
-
-  <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/t35/apps/opent/js/frames/client.js"></script>
-  <script type="text/javascript">
-    function authLoad(){
-      App.AuthDialog.show({
-        client_id : "<%= @app_key %>",    //必选，appkey
-        redirect_uri : "http://apps.weibo.com/english_vi",     //必选，授权后的回调地址，例如：http://apps.weibo.com/giftabc
-        height: 120    //可选，默认距顶端120px
-      });
-    }
-  </script>
-
-<% end %>
 
 <body <% if @login==false %> onload="authLoad();"<% end %>>
 

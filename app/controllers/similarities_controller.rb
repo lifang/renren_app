@@ -520,35 +520,35 @@ class SimilaritiesController < ApplicationController
     #    @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
-    @login = false
-    signed_request = params[:signed_request]
-    if signed_request
-      list = signed_request.split(".")
-      encoded_sig,pay_load =list[0],list[1]
-      base_str = Base64.decode64(pay_load)
-      base_str = base_str.split(",\"referer\"")[0]
-      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
-      @data = JSON (base_str)
-      if @data["user_id"] && @data["oauth_token"]
-        @login = true
-        cookies[:access_token] = @data["oauth_token"]
-        response = sina_get_user(cookies[:access_token],@data["user_id"])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
-        if @user
-          ActionLog.login_log(@user.id)
-        else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
-            :username=>response["screen_name"], :from => User::U_FROM[:APP])
-          #发送推广微博(审核时隐藏)
-          comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
-          sina_send_message(cookies[:access_token],comment)
-        end
-        cookies[:user_id] = @user.id
-        cookies[:user_name] = @user.name
-        cookies.delete(:user_role)
-        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-      end
-    end
+#    @login = false
+#    signed_request = params[:signed_request]
+#    if signed_request
+#      list = signed_request.split(".")
+#      encoded_sig,pay_load =list[0],list[1]
+#      base_str = Base64.decode64(pay_load)
+#      base_str = base_str.split(",\"referer\"")[0]
+#      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+#      @data = JSON (base_str)
+#      if @data["user_id"] && @data["oauth_token"]
+#        @login = true
+#        cookies[:access_token] = @data["oauth_token"]
+#        response = sina_get_user(cookies[:access_token],@data["user_id"])
+#        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
+#        if @user
+#          ActionLog.login_log(@user.id)
+#        else
+#          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
+#            :username=>response["screen_name"], :from => User::U_FROM[:APP])
+#          #发送推广微博(审核时隐藏)
+#          comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
+#          sina_send_message(cookies[:access_token],comment)
+#        end
+#        cookies[:user_id] = @user.id
+#        cookies[:user_name] = @user.name
+#        cookies.delete(:user_role)
+#        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+#      end
+#    end
   end
 
   #微博分享，提供权限(四级)
