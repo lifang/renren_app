@@ -23,6 +23,7 @@ $(function(){
 
 //提示框样式设定
 function generate_flash_div(style) {
+    $(".tishi_tab")..css('display','none');
     var scolltop = document.body.scrollTop|document.documentElement.scrollTop;
     var win_height = document.documentElement.clientHeight;//jQuery(document).height();
     var win_width = jQuery(window).width();
@@ -90,11 +91,11 @@ function AutoScroll(obj){
 }
 
 
-  Array.prototype.indexOf=function(el, index){
+Array.prototype.indexOf=function(el, index){
     var n = this.length>>>0, i = ~~index;
     if(i < 0) i += n;
     for(; i < n; i++) if(i in this && this[i] === el) return i;
     return -1;
-  }
+}
 
 
