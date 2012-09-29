@@ -54,28 +54,6 @@ class SimilaritiesController < ApplicationController
     return outline
   end
 
-  #考生保存答案
-  def ajax_save_question_answer
-    if params[:sheet_url]!="" && params[:sheet_url]!=nil
-      url=params[:sheet_url]
-      doc = get_doc(url)
-      ele_str = "_#{params[:problem_index]}_#{params[:question_index]}"
-      doc.attributes["init"].nil? ? doc.add_attribute("init", "#{params[:problem_index]}") : (doc.attributes["init"] = "#{params[:problem_index]}")
-      question = doc.elements[ele_str].nil? ? doc.add_element(ele_str) : doc.elements[ele_str]
-      question.text.nil? ? question.add_text(params[:answer]) : question.text=params[:answer]
-      manage_element(question,{},{"question_type"=>params[:question_type], "correct_type"=>params[:correct_type]})
-      write_xml(doc, url)
-      #更新action_logs , total_num+1
-      log = ActionLog.find_by_sql("select * from action_logs where user_id=#{cookies[:user_id]} and types=#{ActionLog::TYPES[:PRACTICE]} and category_id=#{params[:category_id]} and TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
-      log = ActionLog.create(:user_id=>cookies[:user_id],:types=>ActionLog::TYPES[:PRACTICE],:category_id=>params[:category_id],:total_num=>0) unless log
-      log.update_attribute("total_num",log.total_num+1)
-    end
-    respond_to do |format|
-      format.json {
-        render :json=>""
-      }
-    end
-  end
 
   #添加收藏(题面后小题)
   def ajax_add_collect
@@ -237,7 +215,7 @@ class SimilaritiesController < ApplicationController
     end
   end
  
-#载入用户答案
+  #载入用户答案
   def ajax_load_sheets
     if File.exist?(params[:sheet_url])
       doc = get_doc(params[:sheet_url])
@@ -286,8 +264,8 @@ class SimilaritiesController < ApplicationController
   @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
 
   #cet_four
-#  @@client_id4 = "166937"
-#  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
+  #  @@client_id4 = "166937"
+  #  @@secret_key4 = "f4fa7ef75e934c2b884a6512a32d625f"
 
   def cet4
     @client_id = @@client_id4
@@ -374,32 +352,6 @@ class SimilaritiesController < ApplicationController
   end
 
   #oauth登录(六级登录)
-  def oauth_login_cet6
-    cookies.delete(:first)
-    @client_id = @@client_id6
-    access_token = params["access_token"]
-    user_info = renren_get_user(access_token,@@secret_key6)
-    if user_info[0]
-      user_info = user_info[0]
-    else
-      render :inline=>"#{user_info}"
-      return false
-    end
-    cookies[:access_token] = access_token
-    @user=User.find_by_code_id_and_code_type(user_info["uid"],'renren')
-    if @user
-      ActionLog.login_log(@user.id)
-    else
-      cookies[:first]={:value => "first", :path => "/", :secure  => false}
-      @user=User.create(:code_id=>user_info["uid"],:code_type=>'renren',:name=>user_info["name"],
-        :username=>user_info["name"], :from => User::U_FROM[:APP])
-    end
-    cookies[:user_id]=@user.id
-    cookies[:user_name]=@user.username
-    cookies.delete(:user_role)
-    user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-    redirect_to "/similarities?category=#{Category::LEVEL_SIX}&web=renren&appid=#{@@client_id6}"
-  end
 
   #人人分享，提供权限(六级)
   def renren_share6
@@ -429,6 +381,9 @@ class SimilaritiesController < ApplicationController
     end
   end
 
+  def renren_ky
+   @client_id = @@client_id4
+  end
 
   #END  人人网相关
 
@@ -520,35 +475,35 @@ class SimilaritiesController < ApplicationController
     #    @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
-#    @login = false
-#    signed_request = params[:signed_request]
-#    if signed_request
-#      list = signed_request.split(".")
-#      encoded_sig,pay_load =list[0],list[1]
-#      base_str = Base64.decode64(pay_load)
-#      base_str = base_str.split(",\"referer\"")[0]
-#      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
-#      @data = JSON (base_str)
-#      if @data["user_id"] && @data["oauth_token"]
-#        @login = true
-#        cookies[:access_token] = @data["oauth_token"]
-#        response = sina_get_user(cookies[:access_token],@data["user_id"])
-#        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
-#        if @user
-#          ActionLog.login_log(@user.id)
-#        else
-#          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
-#            :username=>response["screen_name"], :from => User::U_FROM[:APP])
-#          #发送推广微博(审核时隐藏)
-#          comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
-#          sina_send_message(cookies[:access_token],comment)
-#        end
-#        cookies[:user_id] = @user.id
-#        cookies[:user_name] = @user.name
-#        cookies.delete(:user_role)
-#        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-#      end
-#    end
+    #    @login = false
+    #    signed_request = params[:signed_request]
+    #    if signed_request
+    #      list = signed_request.split(".")
+    #      encoded_sig,pay_load =list[0],list[1]
+    #      base_str = Base64.decode64(pay_load)
+    #      base_str = base_str.split(",\"referer\"")[0]
+    #      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+    #      @data = JSON (base_str)
+    #      if @data["user_id"] && @data["oauth_token"]
+    #        @login = true
+    #        cookies[:access_token] = @data["oauth_token"]
+    #        response = sina_get_user(cookies[:access_token],@data["user_id"])
+    #        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
+    #        if @user
+    #          ActionLog.login_log(@user.id)
+    #        else
+    #          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
+    #            :username=>response["screen_name"], :from => User::U_FROM[:APP])
+    #          #发送推广微博(审核时隐藏)
+    #          comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
+    #          sina_send_message(cookies[:access_token],comment)
+    #        end
+    #        cookies[:user_id] = @user.id
+    #        cookies[:user_name] = @user.name
+    #        cookies.delete(:user_role)
+    #        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+    #      end
+    #    end
   end
 
   #微博分享，提供权限(四级)
@@ -644,6 +599,10 @@ class SimilaritiesController < ApplicationController
         render :json=>data
       }
     end
+  end
+
+  def sina_ky
+    @web="sina"
   end
   # END 新浪微博相关
 
@@ -786,32 +745,18 @@ class SimilaritiesController < ApplicationController
     end
   end
 
-  def qq_confirm_6
-    refresh=false
-    if Constant::FREE_QQ_COUNT[:cet_6] && get_share_sum(Order::TYPES[:QQ],Category::LEVEL_SIX)>=Constant::FREE_QQ_COUNT[:cet_6]
-      message="<p>今天#{Constant::FREE_QQ_COUNT[:cet_6]}个免费名额被抢完T_T，明天再来抢吧</p>"
-    else
-      order = Order.where(:user_id=>cookies[:user_id],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL])[0]
-      if (order && order.types==Order::TYPES[:TRIAL_SEVEN]) || order.nil?
-        Order.create(:user_id=>cookies[:user_id],:types=>Order::TYPES[:QQ],:category_id=>Category::LEVEL_SIX,:status => Order::STATUS[:NOMAL],:start_time => Time.now.to_datetime, :total_price => 0,
-          :end_time => Time.now.to_datetime + Constant::DATE_LONG[:vip].days,:remark=>Order::TYPE_NAME[Order::TYPES[:QQ]])
-        order.update_attributes(:status => Order::STATUS[:INVALIDATION]) unless order.nil?
-        cookies.delete(:user_role)
-        user_role?(cookies[:user_id])
-        refresh=true
-        message="升级正式用户成功"
-      else
-        message="您已经是正式用户，请等待页面刷新"
-      end
-    end
-    respond_to do |format|
-      format.json {
-        render :json=>{:notice=>message,:fresh=>refresh,:category=>Category::LEVEL_SIX}
-      }
-    end
+  def qq_cet4
+    @web="qq"
   end
 
 
+  def qq_cet6
+    @web="qq"
+  end
+
+  def qq_ky
+    @web="qq"
+  end
   #END  腾讯相关
 
 
@@ -959,6 +904,14 @@ class SimilaritiesController < ApplicationController
     @web = "baidu"
   end
 
+  def baidu_ky
+    @web = "baidu"
+  end
+
+  def search_ky
+    @web = "baidu"
+  end
+  
   #END 百度相关
   
 end
