@@ -14,7 +14,7 @@ RenrenApp::Application.routes.draw do
   match "/search4" => "similarities#baidu_search4"
   match "/search6" => "similarities#baidu_search6"
   match "/baidu_ky" => "similarities#baidu_ky"
-  match "/search_ky" => "similarities#kaoyan_search4"
+  match "/search_ky" => "similarities#search_ky"
   match "/qq_ky" => "similarities#qq_ky"
   match "/renren_ky" => "similarities#renren_ky"
   match "/sina_ky" => "similarities#sina_ky"

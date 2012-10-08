@@ -23,7 +23,7 @@ $(function(){
 
 //提示框样式设定
 function generate_flash_div(style) {
-    $(".tishi_tab")..css('display','none');
+    $(".tishi_tab").css('display','none');
     var scolltop = document.body.scrollTop|document.documentElement.scrollTop;
     var win_height = document.documentElement.clientHeight;//jQuery(document).height();
     var win_width = jQuery(window).width();

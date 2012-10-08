@@ -2,15 +2,8 @@
   <script type="text/javascript" src="/assets/renren.js"></script>
   <div class="wrap renren_border">
     <div class="main_Div">
-      <img style="height:600px;" src="/assets/login_ky.png" />
-      <script type="text/javascript">
-        $(function(){
-          setTimeout(function(){
-            window.location.href = "/similarities?category=<%= Category::KAO_YAN %>&web=renren&appid=<%=@client_id %>";
-          },1500)
-        })
-      </script>
-<%# end %>
+      <img style="height:600px;" src="/assets/login_ky.jpg"
+           onclick=' window.location.href = "/similarities?category=<%= Category::KAO_YAN %>&web=renren&appid=<%=@client_id %>";' />
     </div>
     <div class="foot">Powered by 赶考网 &copy; 2010-2012</div>
   </div>

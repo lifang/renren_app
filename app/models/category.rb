@@ -16,4 +16,5 @@ class Category < ActiveRecord::Base
   LEVEL_SIX = 3
   KAO_YAN = 4
   NAME ={"2"=>"四级","3"=>"六级"}
+  CET={2=>"(2006.12-2012.6)",3=>"(2006.12-2012.6)",4=>"(2008.12-2012.6)"}
 end
