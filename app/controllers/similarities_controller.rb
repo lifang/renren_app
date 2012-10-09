@@ -229,14 +229,15 @@ class SimilaritiesController < ApplicationController
   #四级
   def sina_cet4
     #上线
-    @app_key = "2422557611"
-    @app_secret = "141eb2a5ded8ff672fb05e87769d3ecb"
+    @app_key = "1197301971"
+    @app_secret = "87c8f740f56f33bd41c250a0095611c4"
 
-    #    本地测试
-    #    @app_key = "4140866006"
-    #    @app_secret = "2367900785a62214eeb4afa02b3cd672"
+    #        本地测试
+    #        @app_key = "4140866006"
+    #        @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
+<<<<<<< HEAD
     #    @login = false
     #    signed_request = params[:signed_request]
     #    if signed_request
@@ -266,13 +267,28 @@ class SimilaritiesController < ApplicationController
     #        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
     #      end
     #    end
+=======
+        @login = false
+        signed_request = params[:signed_request]
+        if signed_request
+          list = signed_request.split(".")
+          encoded_sig,pay_load =list[0],list[1]
+          base_str = Base64.decode64(pay_load)
+          base_str = base_str.split(",\"referer\"")[0]
+          base_str = base_str[-1]=="}" ? base_str : "{base_str}}"
+          @data = JSON (base_str)
+          if @data["user_id"] && @data["oauth_token"]
+            @login = true
+          end
+        end
+>>>>>>> 20a4524ef7642b13c274b343043ddff5f644b9f0
   end
   #
   #---------------------------------------------------------------------------------------
   #六级
   def sina_cet6
-    @app_key = "2416971947"
-    @app_secret = "2a9ec8a4c028721eda0e3a0d751d724a"
+    @app_key = "2185008038"
+    @app_secret = "166eb3a17d7998b7c927838293342e57"
     @web = "sina"
     @login = false
     signed_request = params[:signed_request]
@@ -285,21 +301,6 @@ class SimilaritiesController < ApplicationController
       @data = JSON (base_str)
       if @data["user_id"] && @data["oauth_token"]
         @login = true
-        cookies[:access_token] = @data["oauth_token"]
-        response = sina_get_user(cookies[:access_token],@data["user_id"])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
-        if @user
-          ActionLog.login_log(@user.id)
-        else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
-            :username=>response["screen_name"], :from => User::U_FROM[:APP])
-          comment = "我正在使用应用--大学英语六级真题 http://apps.weibo.com/english_vi"
-          sina_send_message(cookies[:access_token],comment)
-        end
-        cookies[:user_id] = @user.id
-        cookies[:user_name] = @user.name
-        cookies.delete(:user_role)
-        user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
       end
     end
   end
@@ -334,7 +335,26 @@ class SimilaritiesController < ApplicationController
   end
 
   def sina_ky
+<<<<<<< HEAD
     @web="sina"
+=======
+     @app_key = "2704860160"
+    @app_secret = "8cdde53c8d0e5e80a38562e0ba501bd2"
+    @web = "sina"
+    @login = false
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str.split(",\"referer\"")[0]
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+      end
+    end
+>>>>>>> 20a4524ef7642b13c274b343043ddff5f644b9f0
   end
   # END 新浪微博相关
 

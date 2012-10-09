@@ -1,17 +1,16 @@
+<% unless @login %>
+  <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/t35/apps/opent/js/frames/client.js"></script>
+  <script type="text/javascript">
+    function authLoad(){
+      App.AuthDialog.show({
+        client_id : "<%= @app_key %>",    //必选，appkey
+        redirect_uri : "http://apps.weibo.com/colenglish",     //必选，授权后的回调地址，例如：http://apps.weibo.com/giftabc
+        height: 120    //可选，默认距顶端120px
+      });
+    }
+  </script>
+<% end %>
 
-<style>
-  body{
-    background: url("/assets/760x628_ky.jpg") no-repeat;
-  }
-</style>
-
-<script type="text/javascript">
-  $(function(){
-    setTimeout(function(){
-      window.location.href = "<%= Constant::SERVER_PATH %>/similarities?category=<%= Category::KAO_YAN %>&web=sina";
-    },1500)
-  })
-</script>
-<body>
-
+<body <% if @login==false %> onload="authLoad();"<% end %>>
+  <img onclick=' window.location.href = "<%= Constant::SERVER_PATH %>/similarities?category=<%= Category::KAO_YAN %>&web=sina";' src="/assets/760x628_ky.jpg" />
 </body>
