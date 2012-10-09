@@ -2,6 +2,7 @@
   <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/t35/apps/opent/js/frames/client.js"></script>
   <script type="text/javascript">
     function authLoad(){
+      alert(1);
       App.AuthDialog.show({
         client_id : "<%= @app_key %>",    //必选，appkey
         redirect_uri : "http://apps.weibo.com/cetenglish",     //必选，授权后的回调地址，例如：http://apps.weibo.com/giftabc

@@ -135,7 +135,7 @@ class SimilaritiesController < ApplicationController
     end
     Collection.update_collection(cookies[:user_id].to_i, this_problem,
       params[:problem_id], this_question, params[:question_id],
-      params[:paper_id], params[:question_answer], params[:question_analysis], 
+      params[:paper_id], params[:question_answer], params[:question_analysis],
       params[:user_answer], params[:category_id].to_i)
 
     CollectionInfo.update_collection_infos(params[:paper_id].to_i, cookies[:user_id].to_i, [params[:question_id]])
@@ -232,9 +232,9 @@ class SimilaritiesController < ApplicationController
     @app_key = "1197301971"
     @app_secret = "87c8f740f56f33bd41c250a0095611c4"
 
-    #        本地测试
-    #        @app_key = "4140866006"
-    #        @app_secret = "2367900785a62214eeb4afa02b3cd672"
+    #    #        本地测试
+    #    @app_key = "2557418426"
+    #    @app_secret = "33eed4562b7573057e881f154068771d"
 
     @web = "sina"
     @login = false
@@ -244,7 +244,7 @@ class SimilaritiesController < ApplicationController
       encoded_sig,pay_load =list[0],list[1]
       base_str = Base64.decode64(pay_load)
       base_str = base_str.split(",\"referer\"")[0]
-      base_str = base_str[-1]=="}" ? base_str : "{base_str}}"
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
       @data = JSON (base_str)
       if @data["user_id"] && @data["oauth_token"]
         @login = true
@@ -632,7 +632,7 @@ class SimilaritiesController < ApplicationController
   #END 百度相关
 
 
-   # START 开心网相关
+  # START 开心网相关
 
   #四级
   def kaixin_cet4
