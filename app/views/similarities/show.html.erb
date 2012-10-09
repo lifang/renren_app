@@ -4,13 +4,28 @@
     $("#load_message").html("SORRY,此份试题好像存在问题，也可能由于您的网速过慢，您可以刷新试试。");
   },20000);
 </script>
-<% category_id = params[:category].nil? ? '2' : params[:category] %>
+<% category_id = params[:category].nil? ? 2 : params[:category].to_i %>
 <% @web = params["web"].nil? ? "renren" : params["web"] unless @web %>
 <!-- 初始化播放器  -->
 <%= render :partial=>"/common/flowplayer" %>
 <div id="log"></div>
 <div class="m_top">
   <h1 class="ex_paper_h"><%= @paper.title %></h1>
+  <% if @web=="renren"
+    case category_id
+    when 2
+      share_url ="http://apps.renren.com/graduate_iv"
+    when 3
+      share_url ="http://apps.renren.com/graduate_vi"
+    when 4
+      share_url="http://apps.renren.com/graduate_ky"
+    end  %>
+    <span class="renren_share"><a name="xn_share" type="button" href="<%= share_url %>">分享</a><%= javascript_include_tag "/assets/exam_user/share.js" %></span>
+<% elsif @web=="sina" %>
+    <html xmlns:wb="http://open.weibo.com/wb" />
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+      <span class="renren_share"><wb:follow-button uid="2359288352" type="red_1" width="67" height="24" /></span>
+<% end %>
   <div class="icon_func">
     <div class="float_right">
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
@@ -35,7 +50,7 @@
       .AD_width { width: 360px;}
     </style>
   <% end %>
-  <%#= render :partial=>"/common/advert",:object=>@web %>
+<%#= render :partial=>"/common/advert",:object=>@web %>
 </div>
 
 <!-- 试题生成入口 generate.js -->

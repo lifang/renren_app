@@ -11,11 +11,11 @@
   <div class="wrap renren_border">
     <div class="main_Div" <% if @web=="baidu" %> style="background: #EFEDE7;" <% end %> >
       <div class="m_box">
-        <h1>新大学英语<%= Category::NAME["#{category_id}"] %>真题<%= Category::CET[category_id.to_i] %></h1>
+        <h1>新大学<%= Category::NAME["#{category_id}"] %>真题<%= Category::CET[category_id.to_i] %></h1>
         <div class="zhenti_list">
           <ul>
             <% if @similarities.blank? %>
-              <p>暂无大学英语<%= Category::NAME["#{category_id}"] %>真题</p>
+              <p>暂无大学<%= Category::NAME["#{category_id}"] %>真题</p>
             <% else %>
               <% @similarities.each do |similarity| %>
                 <li class="similarities_li">
