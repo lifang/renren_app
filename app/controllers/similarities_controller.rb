@@ -218,7 +218,7 @@ class SimilaritiesController < ApplicationController
   #oauth登录(六级登录)
 
   def renren_ky
-   @client_id = @@client_id4
+    @client_id = @@client_id4
   end
 
   #END  人人网相关
@@ -237,51 +237,19 @@ class SimilaritiesController < ApplicationController
     #        @app_secret = "2367900785a62214eeb4afa02b3cd672"
 
     @web = "sina"
-<<<<<<< HEAD
-    #    @login = false
-    #    signed_request = params[:signed_request]
-    #    if signed_request
-    #      list = signed_request.split(".")
-    #      encoded_sig,pay_load =list[0],list[1]
-    #      base_str = Base64.decode64(pay_load)
-    #      base_str = base_str.split(",\"referer\"")[0]
-    #      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
-    #      @data = JSON (base_str)
-    #      if @data["user_id"] && @data["oauth_token"]
-    #        @login = true
-    #        cookies[:access_token] = @data["oauth_token"]
-    #        response = sina_get_user(cookies[:access_token],@data["user_id"])
-    #        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","sina")
-    #        if @user
-    #          ActionLog.login_log(@user.id)
-    #        else
-    #          @user=User.create(:code_id=>@data["user_id"],:code_type=>'sina',:name=>response["screen_name"],
-    #            :username=>response["screen_name"], :from => User::U_FROM[:APP])
-    #          #发送推广微博(审核时隐藏)
-    #          comment = "我正在使用应用--大学英语四级真题  http://apps.weibo.com/english_iv"
-    #          sina_send_message(cookies[:access_token],comment)
-    #        end
-    #        cookies[:user_id] = @user.id
-    #        cookies[:user_name] = @user.name
-    #        cookies.delete(:user_role)
-    #        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-    #      end
-    #    end
-=======
-        @login = false
-        signed_request = params[:signed_request]
-        if signed_request
-          list = signed_request.split(".")
-          encoded_sig,pay_load =list[0],list[1]
-          base_str = Base64.decode64(pay_load)
-          base_str = base_str.split(",\"referer\"")[0]
-          base_str = base_str[-1]=="}" ? base_str : "{base_str}}"
-          @data = JSON (base_str)
-          if @data["user_id"] && @data["oauth_token"]
-            @login = true
-          end
-        end
->>>>>>> 20a4524ef7642b13c274b343043ddff5f644b9f0
+    @login = false
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str.split(",\"referer\"")[0]
+      base_str = base_str[-1]=="}" ? base_str : "{base_str}}"
+      @data = JSON (base_str)
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+      end
+    end
   end
   #
   #---------------------------------------------------------------------------------------
@@ -335,10 +303,8 @@ class SimilaritiesController < ApplicationController
   end
 
   def sina_ky
-<<<<<<< HEAD
-    @web="sina"
-=======
-     @app_key = "2704860160"
+
+    @app_key = "2704860160"
     @app_secret = "8cdde53c8d0e5e80a38562e0ba501bd2"
     @web = "sina"
     @login = false
@@ -354,7 +320,6 @@ class SimilaritiesController < ApplicationController
         @login = true
       end
     end
->>>>>>> 20a4524ef7642b13c274b343043ddff5f644b9f0
   end
   # END 新浪微博相关
 
@@ -665,5 +630,79 @@ class SimilaritiesController < ApplicationController
   end
   
   #END 百度相关
+
+
+   # START 开心网相关
+
+  #四级
+  def kaixin_cet4
+    @app_id = "100028114"
+    @api_key = "937024390647ac79dc37fa68fc8a29fc"
+    @secret_key = "3c41f0ff19ebb1c939ba6984f98f1c95"
+    @web = "kaixin"
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
+      @login = false
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+        cookies[:access_token] = @data["oauth_token"]
+        response = kaixin_get_user(cookies[:access_token])
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        if @user
+          ActionLog.login_log(@user.id)
+        else
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
+            :username=>response["name"], :from => User::U_FROM[:APP])
+        end
+        cookies[:user_id] = @user.id
+        cookies[:user_name] = @user.name
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
+      end
+    end
+  end
+
+  #
+  #---------------------------------------------------------------------------------------
+  #六级
+
+  def kaixin_cet6
+    @app_id = "100028098"
+    @api_key = "533679299063ffcf7f8e683c98cdf443"
+    @secret_key = "6d8bd604523ad6a3b4d89b82d15e9245"
+    @web = "kaixin"
+    signed_request = params[:signed_request]
+    if signed_request
+      list = signed_request.split(".")
+      encoded_sig,pay_load =list[0],list[1]
+      base_str = Base64.decode64(pay_load)
+      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+      @data = JSON (base_str)
+      @login = false
+      if @data["user_id"] && @data["oauth_token"]
+        @login = true
+        cookies[:access_token] = @data["oauth_token"]
+        response = kaixin_get_user(cookies[:access_token])
+        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
+        if @user
+          ActionLog.login_log(@user.id)
+        else
+          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
+            :username=>response["name"], :from => User::U_FROM[:APP])
+        end
+        cookies[:user_id] = @user.id
+        cookies[:user_name] = @user.name
+        cookies.delete(:user_role)
+        user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
+      end
+    end
+  end
+  # END 开心网相关
+
   
 end
