@@ -180,8 +180,9 @@ class SimilaritiesController < ApplicationController
 
 
   #人人四级应用相关信息
-  @@client_id4 = "180526"
-  @@secret_key4 = "d00a8570b9664c25a50941292d12d5b3"
+  @@client_id4 = "213904"
+  @@api_key4= "0b8850488abf43bd896a6646ca48b914"
+  @@secret_key4 = "65db0f2c525c49989ea44336c3a11e88"
 
   #cet_four
   #  @@client_id4 = "166937"
@@ -194,9 +195,9 @@ class SimilaritiesController < ApplicationController
   #---------------------------------------------------------------------------------------
 
   #人人六级应用相关信息
-  @@client_id6 = "180533"
-  @@api_key6= "18037029bfb344349197e7e37c2d72fb"
-  @@secret_key6 = "1442cc144c8d4670ab14b2b0332f2d4f"
+  @@client_id6 = "213916"
+  @@api_key6= "1334a81ffba84e95a6dbad0ec4b679db"
+  @@secret_key6 = "ef95efae291c41bb8bbb24aeca8894ac"
 
   #cet_six
   #  @@client_id6 = "180459"
@@ -486,19 +487,7 @@ class SimilaritiesController < ApplicationController
   def baidu_cet4
     @web = "baidu"
     @api_key = @@baidu_api_key4
-    @redirect_uri = @@baidu_redirect_uri4
-    if params[:bd_user] && params[:bd_user]!="0"
-      @user=User.find_by_code_id_and_code_type(params[:bd_user],"baidu")
-      if @user
-        ActionLog.login_log(@user.id)
-        cookies[:user_id]=@user.id
-        cookies[:user_name]=@user.username
-        cookies.delete(:user_role)
-        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-        redirect_to "/similarities?category=#{Category::LEVEL_FOUR}&web=baidu"
-        return false
-      end
-    end
+   
   end
 
   def baidu_login4
@@ -554,19 +543,6 @@ class SimilaritiesController < ApplicationController
   def baidu_cet6
     @web = "baidu"
     @api_key = @@baidu_api_key6
-    @redirect_uri = @@baidu_redirect_uri6
-    if params[:bd_user] && params[:bd_user]!="0"
-      @user=User.find_by_code_id_and_code_type(params[:bd_user],"baidu")
-      if @user
-        ActionLog.login_log(@user.id)
-        cookies[:user_id]=@user.id
-        cookies[:user_name]=@user.username
-        cookies.delete(:user_role)
-        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-        redirect_to "/similarities?category=#{Category::LEVEL_SIX}&web=baidu"
-        return false
-      end
-    end
   end
 
   def baidu_login6
