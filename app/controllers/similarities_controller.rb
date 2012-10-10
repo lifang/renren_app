@@ -190,10 +190,6 @@ class SimilaritiesController < ApplicationController
   def cet4
     @client_id = @@client_id4
   end
-
-  def cet4_url_generate
-    render :inline=>"<script type='text/javascript'>var p = window.location.href.split('#');var pr = p.length>1 ? p[1] : '';window.location.href = '/similarities/oauth_login_cet4?'+pr;</script>"
-  end
   #
   #---------------------------------------------------------------------------------------
 
@@ -210,15 +206,13 @@ class SimilaritiesController < ApplicationController
   def cet6
     @client_id = @@client_id6
   end
-
-  def cet6_url_generate
-    render :inline=>"<script type='text/javascript'>var p = window.location.href.split('#');var pr = p.length>1 ? p[1] : '';window.location.href = '/similarities/oauth_login_cet6?'+pr;</script>"
-  end
-
-  #oauth登录(六级登录)
+  #人人六级应用相关信息
+  @@client_ky = "213881"
+  @@api_ky= "15dfd46762be4581893bb12ff0381d57"
+  @@secret_ky = "92f5ba66ccbb4307a2285117b746e48e"
 
   def renren_ky
-    @client_id = @@client_id4
+    @client_id = @@client_ky
   end
 
   #END  人人网相关

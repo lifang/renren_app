@@ -1,15 +1,16 @@
-<style>
-  body{
-    background: url("/assets/760x628_ky.jpg") no-repeat;
-  }
-</style>
+<%#*<style>%>
+  <%#*body{%>
+    <%#*background: url("/assets/760x628_ky.jpg") no-repeat;%>
+  <%#*}%>
+<%#*</style>%>
 
 <body>
   <script type="text/javascript">
     $(function(){
-      setTimeout(function(){
-        window.location.href = "<%= Constant::SERVER_PATH %>/similarities?category=<%= Category::KAO_YAN %>&web=sina";
-      },1500)
+       window.location.href = "<%= Constant::SERVER_PATH %>/similarities?category=<%= Category::KAO_YAN %>&web=sina";
+      <%#*setTimeout(function(){%>
+       
+      <%#*},1500)%>
     })
   </script>
 </body>

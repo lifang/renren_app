@@ -4,6 +4,22 @@
     <div class="main_Div">
       <img style="height:598px;" src="/assets/login_pic6.png"
            onclick='window.location.href = "/similarities?category=<%= Category::LEVEL_SIX %>&web=renren&appid=<%=@client_id %>";' />
+           <% unless params[:xn_sig_added]=="1" %>
+        <div id="hidden_iframe" style="display:none;">
+          <script type="text/javascript">
+            var uiOpts = {
+              url : "http://graph.renren.com/oauth/authorize",
+              display : "iframe",
+              params : {"response_type":"token","client_id":"<%= @client_id %>"},
+              onSuccess: function(r){
+                window.location = "/similarities?category=<%= Category::LEVEL_SIX %>&web=renren&appid=<%=@client_id %>"
+              }
+            };
+            var root_flag = 0;
+            Renren.ui(uiOpts);
+          </script>
+        </div>
+      <% end %>
     </div>
     <div class="foot">Powered by赶考网&copy; 2010-2012</div>
   </div>
