@@ -297,7 +297,6 @@ class SimilaritiesController < ApplicationController
   end
 
   def sina_ky
-
     @app_key = "2704860160"
     @app_secret = "8cdde53c8d0e5e80a38562e0ba501bd2"
     @web = "sina"
@@ -634,31 +633,18 @@ class SimilaritiesController < ApplicationController
     @api_key = "937024390647ac79dc37fa68fc8a29fc"
     @secret_key = "3c41f0ff19ebb1c939ba6984f98f1c95"
     @web = "kaixin"
-    signed_request = params[:signed_request]
-    if signed_request
-      list = signed_request.split(".")
-      encoded_sig,pay_load =list[0],list[1]
-      base_str = Base64.decode64(pay_load)
-      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
-      @data = JSON (base_str)
-      @login = false
-      if @data["user_id"] && @data["oauth_token"]
-        @login = true
-        cookies[:access_token] = @data["oauth_token"]
-        response = kaixin_get_user(cookies[:access_token])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
-        if @user
-          ActionLog.login_log(@user.id)
-        else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
-            :username=>response["name"], :from => User::U_FROM[:APP])
-        end
-        cookies[:user_id] = @user.id
-        cookies[:user_name] = @user.name
-        cookies.delete(:user_role)
-        user_order(Category::LEVEL_FOUR, cookies[:user_id].to_i)
-      end
-    end
+#    signed_request = params[:signed_request]
+#    if signed_request
+#      list = signed_request.split(".")
+#      encoded_sig,pay_load =list[0],list[1]
+#      base_str = Base64.decode64(pay_load)
+#      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+#      @data = JSON (base_str)
+#      @login = false
+#      if @data["user_id"] && @data["oauth_token"]
+#        @login = true
+#      end
+#    end
   end
 
   #
@@ -670,31 +656,18 @@ class SimilaritiesController < ApplicationController
     @api_key = "533679299063ffcf7f8e683c98cdf443"
     @secret_key = "6d8bd604523ad6a3b4d89b82d15e9245"
     @web = "kaixin"
-    signed_request = params[:signed_request]
-    if signed_request
-      list = signed_request.split(".")
-      encoded_sig,pay_load =list[0],list[1]
-      base_str = Base64.decode64(pay_load)
-      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
-      @data = JSON (base_str)
-      @login = false
-      if @data["user_id"] && @data["oauth_token"]
-        @login = true
-        cookies[:access_token] = @data["oauth_token"]
-        response = kaixin_get_user(cookies[:access_token])
-        @user=User.find_by_code_id_and_code_type("#{@data["user_id"]}","kaixin")
-        if @user
-          ActionLog.login_log(@user.id)
-        else
-          @user=User.create(:code_id=>@data["user_id"],:code_type=>'kaixin',:name=>response["name"],
-            :username=>response["name"], :from => User::U_FROM[:APP])
-        end
-        cookies[:user_id] = @user.id
-        cookies[:user_name] = @user.name
-        cookies.delete(:user_role)
-        user_order(Category::LEVEL_SIX, cookies[:user_id].to_i)
-      end
-    end
+#    signed_request = params[:signed_request]
+#    if signed_request
+#      list = signed_request.split(".")
+#      encoded_sig,pay_load =list[0],list[1]
+#      base_str = Base64.decode64(pay_load)
+#      base_str = base_str[-1]=="}" ? base_str : "#{base_str}}"
+#      @data = JSON (base_str)
+#      @login = false
+#      if @data["user_id"] && @data["oauth_token"]
+#        @login = true
+#      end
+#    end
   end
   # END 开心网相关
 

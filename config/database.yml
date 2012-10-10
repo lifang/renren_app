@@ -15,7 +15,7 @@ development:
   database: exam_app
   pool: 5
   username: root
-  password: comdo2012
+  password: qianjun
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
