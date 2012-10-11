@@ -1790,8 +1790,8 @@
         'authorize' : {
             display : 'page',
             style : {
-                width : 570,
-                height : 342
+                width : 480,
+                height : 450
             }
         },
         'request' : {
