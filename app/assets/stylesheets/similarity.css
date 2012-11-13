@@ -354,3 +354,7 @@ span.problem_title {font-size: 12px; width: 42px; height: 24px; line-height: 24p
 }
 .login_gankao a { color: #FF9900; font-size: 16px; font-weight: bold;}
 .login_h { height: 50px;}
+
+
+.icon_max a { background: url(/assets/icon_func.png) no-repeat -213px -1px;}
+.icon_max a:hover { background: url(/assets/icon_func.png) no-repeat -213px -30px;}
